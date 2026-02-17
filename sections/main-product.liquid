@@ -1,20 +1,49 @@
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+
 <section class="product-page" style="--product-content-max-width: {{ section.settings.content_max_width }}px;">
   <div class="product-page__container">
     <div class="product-page__gallery">
-      {% if product.featured_image %}
-        <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}">
+      {% if featured_image != blank %}
+        <img src="{{ featured_image | image_url: width: 800 }}" alt="{{ product.title }}">
       {% endif %}
     </div>
+
     <div class="product-page__content">
+      {% if section.settings.eyebrow_text != blank %}
+        <p class="product-eyebrow">{{ section.settings.eyebrow_text }}</p>
+      {% endif %}
+      
       <h1>{{ product.title }}</h1>
       <p>{{ product.price | money }}</p>
       
       {% form 'product', product %}
-        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-        <button type="submit" name="add" class="product-form__submit">Agregar al carrito</button>
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+        
+        {% if product.variants.size > 1 %}
+          <label>{{ section.settings.variant_label }}</label>
+          <select name="id">
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}" {% if variant == current_variant %}selected{% endif %}>
+                {{ variant.title }} - {{ variant.price | money }}
+              </option>
+            {% endfor %}
+          </select>
+        {% endif %}
+
+        <div class="product-qty" style="margin: 20px 0;">
+          <label>{{ section.settings.quantity_label }}</label>
+          <input type="number" name="quantity" value="1" min="1">
+        </div>
+
+        <button type="submit" name="add" class="product-form__submit">
+          {{ section.settings.add_to_cart_text }}
+        </button>
       {% endform %}
       
-      <div class="rte">{{ product.description }}</div>
+      <div class="product-description rte" style="margin-top: 30px;">
+        {{ product.description }}
+      </div>
     </div>
   </div>
 </section>
@@ -23,7 +52,11 @@
 {
   "name": "Producto principal",
   "settings": [
-    { "type": "range", "id": "content_max_width", "label": "Ancho", "min": 800, "max": 1600, "default": 1200 }
+    { "type": "text", "id": "eyebrow_text", "label": "Texto superior", "default": "WF Urban Muscle" },
+    { "type": "text", "id": "variant_label", "label": "Etiqueta variante", "default": "Selecciona tu talla" },
+    { "type": "text", "id": "quantity_label", "label": "Etiqueta cantidad", "default": "Cantidad" },
+    { "type": "text", "id": "add_to_cart_text", "label": "Texto botón", "default": "Añadir al carrito" },
+    { "type": "range", "id": "content_max_width", "label": "Ancho", "min": 800, "max": 1600, "default": 1200, "unit": "px" }
   ]
 }
 {% endschema %}

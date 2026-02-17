@@ -1,5 +1,4 @@
 {% liquid
-  assign sticky = 'always'
   capture logo
     content_for 'block', type: '_header-logo', id: 'header-logo'
   endcapture
@@ -11,55 +10,61 @@
   endcapture
 %}
 
-<header-component id="header-component" class="apple-glass-header" sticky="{{ sticky }}">
-  <div class="header-inner">
-    <div class="header-left">{{ logo }}</div>
-    <div class="header-center mobile-hide">{{ menu }}</div>
-    <div class="header-right">{{ actions }}</div>
+<header-component class="apple-glass">
+  <div class="header-wrapper">
+    <div class="header-item header-item--left">{{ logo }}</div>
+    <div class="header-item header-item--center mobile-hidden">{{ menu }}</div>
+    <div class="header-item header-item--right">{{ actions }}</div>
   </div>
 </header-component>
 
-{% stylesheet %}
-  .apple-glass-header {
+<style>
+  .apple-glass {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 9999;
-    background: rgba(255, 255, 255, 0.75) !important;
+    background: rgba(0, 0, 0, 0.7) !important;
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .header-inner {
+  .header-wrapper {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     height: 70px;
-    padding: 0 5%;
-    max-width: 1400px;
+    padding: 0 4rem;
+    max-width: 1600px;
     margin: 0 auto;
   }
 
-  .header-center { display: flex; justify-content: center; }
-  .header-right { display: flex; justify-content: flex-end; gap: 1.5rem; }
+  .header-item--center { display: flex; justify-content: center; }
+  .header-item--right { display: flex; justify-content: flex-end; gap: 2rem; }
 
   .header-menu .menu-list {
     display: flex;
-    gap: 2.5rem;
+    gap: 3rem;
     list-style: none;
+    padding: 0;
+  }
+
+  .header-menu .menu-list__link {
     text-transform: uppercase;
     font-weight: 800;
-    font-size: 13px;
+    font-size: 12px;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 0.1em;
   }
 
   @media screen and (max-width: 749px) {
-    .header-inner { grid-template-columns: 1fr 1fr; height: 60px; }
-    .mobile-hide { display: none; }
+    .header-wrapper { grid-template-columns: 1fr 1fr; padding: 0 1.5rem; }
+    .mobile-hidden { display: none; }
   }
-{% endstylesheet %}
+</style>
 
 {% schema %}
-{ "name": "Apple Glass Header", "settings": [], "presets": [{"name": "Apple Glass Header"}] }
+{ "name": "Apple Glass Header", "settings": [] }
 {% endschema %}

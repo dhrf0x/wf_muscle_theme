@@ -1,63 +1,95 @@
-/* --- RESET ESTRUCTURAL --- */
-* { box-sizing: border-box; }
-body { margin: 0; padding: 0; background-color: #fff; color: #000; font-family: -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.5; }
-.section { padding: 4rem 2rem; max-width: 1400px; margin: 0 auto; }
+:root {
+  --bg-color: #000000;
+  --text-color: #ffffff;
+  --accent-color: #ff0000;
+  --glass-bg: rgba(0, 0, 0, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
 
-/* --- ESTILO MUSCLE (Gymshark / YoungLA) --- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Inter", "Helvetica Neue", sans-serif;
+  line-height: 1.2;
+  overflow-x: hidden;
+}
+
+.section {
+  padding: 8rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
 h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
-  text-transform: uppercase !important;
-  letter-spacing: 0.1em !important;
-  font-weight: 900 !important;
-  line-height: 1.1 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 900;
+  margin: 0 0 1.5rem 0;
 }
 
 .button, .product-form__submit {
-  border-radius: 0 !important;
-  background: #000 !important;
-  color: #fff !important;
-  text-transform: uppercase !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.15em !important;
-  padding: 1.2rem 3rem !important;
-  border: 2px solid #000 !important;
-  transition: 0.3s ease;
+  border-radius: 0;
+  background: #ffffff;
+  color: #000000;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  padding: 1.5rem 4rem;
+  border: 1px solid #ffffff;
+  transition: all 0.3s ease;
   cursor: pointer;
-  width: 100%;
-}
-.button:hover { background: #fff !important; color: #000 !important; }
-
-/* --- PÁGINA DE PRODUCTO --- */
-.product-page-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-  padding-top: 100px; /* Espacio para el header glass */
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
 }
 
-@media screen and (min-width: 990px) {
-  .product-page-container { grid-template-columns: 1.2fr 0.8fr; }
+.button:hover {
+  background: transparent;
+  color: #ffffff;
 }
 
-.product-info-centered { text-align: center; display: flex; flex-direction: column; gap: 1.5rem; }
-
-/* --- CARRITO --- */
-.cart-items { list-style: none; padding: 0; margin-top: 50px; }
-.cart-item {
-  display: grid;
-  grid-template-columns: 100px 1fr auto;
-  gap: 2rem;
-  padding: 2rem 0;
-  border-bottom: 1px solid #eee;
-  align-items: center;
-}
-.cart-item img { border-radius: 0; width: 100%; aspect-ratio: 2/3; object-fit: cover; }
-
-/* --- GRILLA DE COLECCIÓN --- */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
 }
+
 @media screen and (min-width: 750px) {
-  .product-grid { grid-template-columns: repeat(4, 1fr); }
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem;
+  }
+}
+
+.product-card {
+  background: transparent;
+  text-align: center;
+}
+
+.product-card img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 0;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+.product-card__title {
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  font-weight: 700;
+}
+
+.product-card__price {
+  font-size: 1rem;
+  opacity: 0.7;
+  margin-top: 0.5rem;
 }

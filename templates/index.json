@@ -3,15 +3,20 @@
     "hero": {
       "type": "hero-banner",
       "settings": {
+        "eyebrow": "Mujeres",
         "title": "LO NUEVO EN ROJO",
-        "subtitle": "Tus favoritos de siempre, ahora en rojos en tendencia."
+        "subtitle": "Tus favoritos de siempre, ahora en rojos en tendencia.",
+        "primary_button_label": "Comprar Ahora",
+        "secondary_button_label": "Shop Red"
       }
     },
     "productos_nuevos": {
       "type": "featured-products",
       "settings": {
         "title": "LO NUEVO EN ROJO",
-        "label": "Mujeres"
+        "label": "Mujeres",
+        "products_to_show": 4,
+        "view_all_label": "Ver Todo"
       }
     }
   },

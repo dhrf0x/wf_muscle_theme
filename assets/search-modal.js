@@ -8,6 +8,7 @@
   const results = modal.querySelector('.js-search-results');
   const currency = modal.dataset.currency || 'USD';
   let debounce;
+  let isClosing = false;
 
   const formatMoney = (cents) => {
     if (typeof cents !== 'number') return '';
@@ -16,13 +17,24 @@
 
   const openModal = () => {
     modal.hidden = false;
+    requestAnimationFrame(() => modal.classList.add('is-active'));
     document.body.classList.add('search-modal-open');
     if (openBtn) openBtn.setAttribute('aria-expanded', 'true');
-    setTimeout(() => input && input.focus(), 10);
+    setTimeout(() => input && input.focus(), 220);
   };
 
   const closeModal = () => {
-    modal.hidden = true;
+    if (isClosing || modal.hidden) return;
+    isClosing = true;
+    modal.classList.remove('is-active');
+    modal.classList.add('is-closing');
+
+    window.setTimeout(() => {
+      modal.classList.remove('is-closing');
+      modal.hidden = true;
+      isClosing = false;
+    }, 260);
+
     document.body.classList.remove('search-modal-open');
     if (openBtn) openBtn.setAttribute('aria-expanded', 'false');
   };

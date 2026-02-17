@@ -1,0 +1,65 @@
+{% paginate collection.products by section.settings.products_per_page %}
+  <section class="collection-page">
+    <div class="collection-page__container" style="--collection-content-max-width: {{ section.settings.content_max_width }}px;">
+      <header class="collection-page__header">
+        <p class="collection-page__eyebrow">{{ section.settings.eyebrow_text }}</p>
+        <h1 class="collection-page__title">{{ collection.title }}</h1>
+        {% if collection.description != blank and section.settings.show_description %}
+          <div class="collection-page__description">{{ collection.description }}</div>
+        {% endif %}
+      </header>
+
+      {% if section.settings.show_categories %}
+        <div class="collection-categories">
+          <h2 class="collection-categories__title">{{ section.settings.categories_title }}</h2>
+          <div class="collection-categories__grid">
+            {% for cat in collections %}
+              {% unless cat.handle == 'frontpage' %}
+                <a href="{{ cat.url }}" class="collection-categories__item{% if cat.handle == collection.handle %} is-active{% endif %}">
+                  <span>{{ cat.title }}</span>
+                </a>
+              {% endunless %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="collection-products-grid">
+        {% for product in collection.products %}
+          <a href="{{ product.url | within: collection }}" class="product-card product-card--collection">
+            <div class="product-card-image">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | image_url: width: 720 }}" alt="{{ product.featured_image.alt | escape }}">
+              {% endif %}
+            </div>
+            <div class="product-card-info">
+              <p class="product-title">{{ product.title }}</p>
+              <p class="product-price">{{ product.price | money }}</p>
+            </div>
+          </a>
+        {% else %}
+          <p class="search-empty">{{ section.settings.empty_text }}</p>
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <div class="collection-page__pagination">{{ paginate | default_pagination }}</div>
+      {% endif %}
+    </div>
+  </section>
+{% endpaginate %}
+
+{% schema %}
+{
+  "name": "Colección principal",
+  "settings": [
+    {"type": "text", "id": "eyebrow_text", "label": "Texto superior", "default": "Colecciones"},
+    {"type": "checkbox", "id": "show_description", "label": "Mostrar descripción", "default": true},
+    {"type": "checkbox", "id": "show_categories", "label": "Mostrar categorías", "default": true},
+    {"type": "text", "id": "categories_title", "label": "Título categorías", "default": "Categorías"},
+    {"type": "text", "id": "empty_text", "label": "Texto sin productos", "default": "No hay productos disponibles en esta colección."},
+    {"type": "range", "id": "products_per_page", "label": "Productos por página", "min": 8, "max": 24, "step": 4, "default": 12},
+    {"type": "range", "id": "content_max_width", "label": "Ancho máximo del contenido", "min": 980, "max": 1500, "step": 20, "default": 1250, "unit": "px"}
+  ]
+}
+{% endschema %}

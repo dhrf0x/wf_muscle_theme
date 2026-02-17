@@ -19,18 +19,34 @@
         </div>
       {% endif %}
     </div>
+
     <div class="product-page__content">
       <p class="product-page__eyebrow">{{ section.settings.eyebrow_text }}</p>
       <h1 class="product-page__title">{{ product.title }}</h1>
       <p class="product-page__price">{{ current_variant.price | money }}</p>
+
       <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form">
         <input type="hidden" name="id" value="{{ current_variant.id }}">
+        
+        <div class="product-form__row">
+           <label class="product-form__label">{{ section.settings.variant_label }}</label>
+           <select name="id" class="product-form__select">
+             {% for variant in product.variants %}
+               <option value="{{ variant.id }}" {% if variant == current_variant %}selected="selected"{% endif %}>
+                 {{ variant.title }} - {{ variant.price | money }}
+               </option>
+             {% endfor %}
+           </select>
+        </div>
+
         <div class="product-form__row">
           <label class="product-form__label">{{ section.settings.quantity_label }}</label>
           <input type="number" name="quantity" value="1" min="1" class="product-form__qty">
         </div>
+
         <button type="submit" name="add" class="product-form__submit">{{ section.settings.add_to_cart_text }}</button>
       </form>
+
       <div class="product-page__description rte">{{ product.description }}</div>
     </div>
   </div>
@@ -41,6 +57,7 @@
   "name": "Producto principal",
   "settings": [
     { "type": "text", "id": "eyebrow_text", "label": "Texto superior", "default": "WF Urban Muscle" },
+    { "type": "text", "id": "variant_label", "label": "Etiqueta variante", "default": "Opciones" },
     { "type": "text", "id": "quantity_label", "label": "Etiqueta cantidad", "default": "Cantidad" },
     { "type": "text", "id": "add_to_cart_text", "label": "Botón carrito", "default": "Añadir al carrito" },
     { "type": "range", "id": "content_max_width", "label": "Ancho contenido", "min": 980, "max": 1500, "step": 20, "default": 1250, "unit": "px" }

@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "title": "LO NUEVO EN ROJO",
+        "subtitle": "Tus favoritos de siempre, ahora en rojos en tendencia."
+      }
+    },
+    "productos_nuevos": {
+      "type": "featured-products",
+      "settings": {
+        "title": "LO NUEVO EN ROJO",
+        "label": "Mujeres"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "productos_nuevos"
+  ]
+}

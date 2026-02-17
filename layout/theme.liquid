@@ -8,24 +8,7 @@
     {{ 'application.css' | asset_url | stylesheet_tag }}
 </head>
 <body>
-<header class="header-gym">
-  <nav class="header-nav-left">
-    <a href="/collections/mujeres">Mujer</a>
-    <a href="/collections/hombres">Hombre</a>
-    <a href="/collections/accesorios">Accesorios</a>
-  </nav>
-
-  <div class="header-logo-center">
-    <a href="/">
-      <img src="{{ 'logo.png' | asset_url }}" alt="WF Urban Muscle" loading="eager">
-    </a>
-  </div>
-
-  <div class="header-nav-right">
-    <a href="/search">BUSCAR</a>
-    <a href="/cart">CARRITO ({{ cart.item_count }})</a>
-  </div>
-</header>
+    {% section 'header' %}
 
     <main role="main" class="main-content">
         {{ content_for_layout }}

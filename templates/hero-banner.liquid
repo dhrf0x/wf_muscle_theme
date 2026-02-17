@@ -1,0 +1,23 @@
+<section class="hero-banner">
+    <img src="{{ 'hero-gym-red.jpg' | asset_url }}" class="hero-image">
+    <div class="hero-text-overlay">
+        <p class="heading-bold">Mujeres</p>
+        <h1>{{ section.settings.title }}</h1>
+        <p>{{ section.settings.subtitle }}</p>
+        <div class="cta-group">
+            <a href="/collections/all" class="btn-white">Comprar Ahora</a>
+            <a href="/collections/all" class="btn-white-outline">Shop Red</a>
+        </div>
+    </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "LO NUEVO EN ROJO" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Tus favoritos de siempre." }
+  ],
+  "presets": [{ "name": "Hero Banner" }]
+}
+{% endschema %}

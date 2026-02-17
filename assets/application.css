@@ -159,7 +159,6 @@ body {
   top: 0;
   z-index: 1000;
   box-sizing: border-box;
-  height: auto;
   min-height: 160px;
 }
 
@@ -199,11 +198,6 @@ body {
   margin: 0 auto;
   padding: 5px 0;
   image-rendering: -webkit-optimize-contrast;
-  transition: transform 0.3s ease;
-}
-
-.header-logo-center img:hover {
-  transform: scale(1.05);
 }
 
 @media (max-width: 768px) {

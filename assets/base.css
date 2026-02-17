@@ -1,0 +1,37 @@
+/* --- ESTILO GYMSHARK / YOUNGLA --- */
+
+/* Tipografía y Encabezados */
+h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
+  text-transform: uppercase !important; /* Fuerza mayúsculas en todo */
+  letter-spacing: 0.05em !important;
+  font-weight: 800 !important;
+}
+
+/* Botones: Menos redondeados y más técnicos */
+.button, .button-secondary {
+  border-radius: 2px !important; /* Elimina el estilo píldora por defecto */
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+/* Grilla de Productos: Limpieza total */
+.product-grid__item {
+  border: none !important; /* Quita bordes de las tarjetas para un look minimalista */
+}
+
+.product-card__content {
+  padding-top: 1.5rem !important; /* Espaciado más amplio bajo la imagen */
+}
+
+/* Badges de Inventario */
+.badge {
+  border-radius: 0 !important;
+  font-size: 1rem !important;
+  font-weight: bold !important;
+}
+
+/* Header: Ajuste de altura para mayor impacto visual */
+.header {
+  --header-height: 80px !important; /* Más alto y robusto */
+}

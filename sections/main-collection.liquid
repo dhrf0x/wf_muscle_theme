@@ -1,74 +1,55 @@
-{% assign current_variant = product.selected_or_first_available_variant %}
-{% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+<section class="collection-page" style="--collection-content-max-width: {{ section.settings.content_max_width }}px;">
+  <div class="collection-page__container">
+    <header class="collection-page__header">
+      <p class="collection-page__eyebrow">{{ section.settings.eyebrow_text }}</p>
+      <h1 class="collection-page__title">{{ collection.title }}</h1>
+      {% if section.settings.show_description and collection.description != blank %}
+        <div class="collection-page__description rte">{{ collection.description }}</div>
+      {% endif %}
+    </header>
 
-<section class="product-page" style="--product-content-max-width: {{ section.settings.content_max_width }}px;">
-  <div class="product-page__container">
-    <div class="product-page__gallery">
-      <div class="product-page__featured">
-        {% if featured_image != blank %}
-          <img src="{{ featured_image | image_url: width: 1200 }}" alt="{{ featured_image.alt | escape }}" id="ProductPhotoImg">
-        {% endif %}
-      </div>
-
-      {% if product.images.size > 1 %}
-        <div class="product-page__thumbs">
-          {% for image in product.images %}
-            <a href="{{ image | image_url: width: 1200 }}" class="product-page__thumb" aria-label="Ver imagen {{ forloop.index }}">
-              <img src="{{ image | image_url: width: 260 }}" alt="{{ image.alt | escape }}">
+    {% paginate collection.products by section.settings.products_per_page %}
+      {% if collection.products_count > 0 %}
+        <div class="collection-page__grid">
+          {% for product in collection.products %}
+            <a href="{{ product.url }}" class="product-card">
+              <div class="product-card-image">
+                {% if product.featured_image %}
+                  <img src="{{ product.featured_image | image_url: width: 900, height: 1100, crop: 'center' }}" alt="{{ product.title | escape }}">
+                {% endif %}
+              </div>
+              <div class="product-card-info">
+                <p class="product-title">{{ product.title }}</p>
+                <p class="product-price">{{ product.price | money }}</p>
+              </div>
             </a>
           {% endfor %}
         </div>
-      {% endif %}
-    </div>
 
-    <div class="product-page__content">
-      <p class="product-page__eyebrow">{{ section.settings.eyebrow_text }}</p>
-      <h1 class="product-page__title">{{ product.title }}</h1>
-      <p class="product-page__price">{{ current_variant.price | money }}</p>
-
-      <form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartForm" class="product-form">
-        {% if product.variants.size > 1 %}
-          <label for="productSelect" class="product-form__label">{{ section.settings.variant_label }}</label>
-          <select name="id" id="productSelect" class="product-form__select">
-            {% for variant in product.variants %}
-              {% if variant.available %}
-                <option value="{{ variant.id }}" {% if variant.id == current_variant.id %}selected{% endif %}>
-                  {{ variant.title }} - {{ variant.price | money_with_currency }}
-                </option>
-              {% else %}
-                <option disabled="disabled">{{ variant.title }} - Agotado</option>
-              {% endif %}
-            {% endfor %}
-          </select>
-        {% else %}
-          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {% if paginate.pages > 1 %}
+          <nav class="collection-page__pagination" aria-label="Paginación colección">
+            {{ paginate | default_pagination }}
+          </nav>
         {% endif %}
-
-        <div class="product-form__row">
-          <label for="Quantity" class="product-form__label">{{ section.settings.quantity_label }}</label>
-          <input type="number" id="Quantity" name="quantity" value="1" min="1" class="product-form__qty">
-        </div>
-
-        <button type="submit" name="add" id="AddToCart" class="product-form__submit">{{ section.settings.add_to_cart_text }}</button>
-      </form>
-
-      <div class="product-page__description rte">{{ product.description }}</div>
-    </div>
+      {% else %}
+        <p class="collection-page__empty">{{ section.settings.empty_text }}</p>
+      {% endif %}
+    {% endpaginate %}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Producto principal",
+  "name": "Colección principal",
   "settings": [
-    { "type": "text", "id": "eyebrow_text", "label": "Texto superior", "default": "WF Urban Muscle" },
-    { "type": "text", "id": "variant_label", "label": "Etiqueta de variantes", "default": "Selecciona tu talla" },
-    { "type": "text", "id": "quantity_label", "label": "Etiqueta de cantidad", "default": "Cantidad" },
-    { "type": "text", "id": "add_to_cart_text", "label": "Texto botón carrito", "default": "Añadir al carrito" },
+    { "type": "text", "id": "eyebrow_text", "label": "Texto superior", "default": "Colección" },
+    { "type": "checkbox", "id": "show_description", "label": "Mostrar descripción", "default": true },
+    { "type": "text", "id": "empty_text", "label": "Texto sin productos", "default": "No hay productos disponibles en esta colección." },
+    { "type": "range", "id": "products_per_page", "label": "Productos por página", "min": 4, "max": 24, "step": 2, "default": 12 },
     { "type": "range", "id": "content_max_width", "label": "Ancho contenido", "min": 980, "max": 1500, "step": 20, "default": 1250, "unit": "px" }
   ],
   "presets": [
-    { "name": "Sección principal" }
+    { "name": "Colección principal" }
   ]
 }
 {% endschema %}

@@ -729,3 +729,124 @@ a, button, input, select {
   border-color: rgba(255, 255, 255, 0.28);
   color: #f4f4f4;
 }
+
+.collection-page__container,
+.page-default,
+.main-404,
+.blog-page,
+.article-page,
+.list-collections-page,
+.search-page__container {
+  width: min(var(--collection-content-max-width, 1250px), calc(100% - 32px));
+  margin: 32px auto 60px;
+}
+
+.collection-page__grid,
+.list-collections-grid,
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+@media (min-width: 990px) {
+  .collection-page__grid,
+  .list-collections-grid,
+  .blog-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.header-mobile-toggle-wrap,
+.header-mobile-toggle,
+.mobile-menu {
+  display: none;
+}
+
+.header-mobile-toggle {
+  border: 0;
+  background: transparent;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.header-mobile-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--header-link-color, #000);
+  margin: 4px 0;
+}
+
+@media (max-width: 768px) {
+  .header-mobile-toggle-wrap,
+  .header-mobile-toggle,
+  .mobile-menu {
+    display: block;
+  }
+
+  .header-nav-left {
+    display: none;
+  }
+
+  .header-gym {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .theme-toggle__label {
+    display: none;
+  }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+  }
+
+  .mobile-menu__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  .mobile-menu__panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: min(85vw, 340px);
+    background: #fff;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .mobile-menu__close {
+    border: 0;
+    background: transparent;
+    font-size: 28px;
+    float: right;
+  }
+
+  .mobile-menu__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  .mobile-menu__link {
+    text-decoration: none;
+    color: #111;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: 12px;
+  }
+
+  body.mobile-menu-open {
+    overflow: hidden;
+  }
+}

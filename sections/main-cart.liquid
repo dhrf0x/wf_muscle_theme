@@ -11,14 +11,15 @@
         <div class="cart-items">
           {% for item in cart.items %}
             <article class="cart-item">
-              <a class="cart-item__image" href="{{ item.url }}">
+              {% assign product_link = item.product.url | default: item.url %}
+              <a class="cart-item__image" href="{{ product_link }}">
                 {% if item.image != blank %}
                   <img src="{{ item.image | image_url: width: 360 }}" alt="{{ item.title | escape }}">
                 {% endif %}
               </a>
 
               <div class="cart-item__content">
-                <a class="cart-item__title" href="{{ item.url }}">{{ item.product.title }}</a>
+                <a class="cart-item__title" href="{{ product_link }}">{{ item.product.title }}</a>
                 {% unless item.variant.title == 'Default Title' %}
                   <p class="cart-item__variant">{{ item.variant.title }}</p>
                 {% endunless %}

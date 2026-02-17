@@ -45,4 +45,41 @@
       saveMode(currentMode === 'dark' ? 'light' : 'dark');
     });
   }
+
+  const mobileMenu = document.getElementById('mobile-menu-drawer');
+  const menuToggle = document.querySelector('[data-mobile-menu-toggle]');
+  const menuCloseButtons = document.querySelectorAll('[data-mobile-menu-close]');
+
+  const closeMenu = () => {
+    if (!mobileMenu || !menuToggle) return;
+    mobileMenu.hidden = true;
+    document.body.classList.remove('mobile-menu-open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+  };
+
+  const openMenu = () => {
+    if (!mobileMenu || !menuToggle) return;
+    mobileMenu.hidden = false;
+    document.body.classList.add('mobile-menu-open');
+    menuToggle.setAttribute('aria-expanded', 'true');
+  };
+
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+  }
+
+  menuCloseButtons.forEach((button) => button.addEventListener('click', closeMenu));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMenu();
+    }
+  });
 })();

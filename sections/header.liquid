@@ -1,5 +1,11 @@
 <header class="header-gym" style="--header-bg: {{ section.settings.background_color }}; --header-link-color: {{ section.settings.link_color }}; --header-border: {{ section.settings.border_color }};">
-  <nav class="header-nav-left">
+  <div class="header-mobile-toggle-wrap">
+    <button type="button" class="header-mobile-toggle" data-mobile-menu-toggle aria-expanded="false" aria-controls="mobile-menu-drawer" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="header-nav-left" aria-label="Navegación principal">
     <div class="header-custom-links">
       {% for block in section.blocks %}
         {% if block.type == 'custom_link' %}
@@ -8,6 +14,12 @@
           </a>
         {% endif %}
       {% endfor %}
+
+      {% if section.settings.menu != blank %}
+        {% for link in linklists[section.settings.menu].links %}
+          <a href="{{ link.url }}" class="header-custom-link">{{ link.title }}</a>
+        {% endfor %}
+      {% endif %}
     </div>
   </nav>
 
@@ -28,8 +40,7 @@
         <span class="theme-toggle__label">{{ section.settings.theme_toggle_label }}</span>
       </button>
     {% endif %}
-    
-    {%- comment -%} Buscador y Carrito Reintegrados {%- endcomment -%}
+
     <a href="{{ routes.search_url }}" class="js-open-search">
       {{ 'general.search.search' | t | default: 'Buscar' }}
     </a>
@@ -39,6 +50,32 @@
   </div>
 </header>
 
+<aside id="mobile-menu-drawer" class="mobile-menu" hidden>
+  <div class="mobile-menu__overlay" data-mobile-menu-close></div>
+  <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-label="Menú móvil">
+    <button type="button" class="mobile-menu__close" data-mobile-menu-close aria-label="Cerrar menú">×</button>
+
+    <nav class="mobile-menu__nav">
+      {% for block in section.blocks %}
+        {% if block.type == 'custom_link' %}
+          <a href="{{ block.settings.url | default: '#' }}" class="mobile-menu__link" {{ block.shopify_attributes }}>
+            {{ block.settings.title }}
+          </a>
+        {% endif %}
+      {% endfor %}
+
+      {% if section.settings.menu != blank %}
+        {% for link in linklists[section.settings.menu].links %}
+          <a href="{{ link.url }}" class="mobile-menu__link">{{ link.title }}</a>
+        {% endfor %}
+      {% endif %}
+
+      <a href="{{ routes.search_url }}" class="mobile-menu__link js-open-search" data-mobile-menu-close>{{ 'general.search.search' | t | default: 'Buscar' }}</a>
+      <a href="{{ routes.cart_url }}" class="mobile-menu__link">{{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})</a>
+    </nav>
+  </div>
+</aside>
+
 {% render 'search-modal' %}
 
 {% schema %}
@@ -47,6 +84,7 @@
   "settings": [
     { "type": "header", "content": "Identidad y Colores" },
     { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Menú principal" },
     { "type": "color", "id": "background_color", "label": "Color de fondo", "default": "#ffffff" },
     { "type": "color", "id": "link_color", "label": "Color de enlaces", "default": "#000000" },
     { "type": "color", "id": "border_color", "label": "Color del borde", "default": "#eeeeee" },

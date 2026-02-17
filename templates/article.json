@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "settings": {
+        "content_max_width": 900
+      }
+    }
+  },
+  "order": ["main"]
+}

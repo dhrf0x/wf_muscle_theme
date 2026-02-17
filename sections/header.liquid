@@ -1,9 +1,9 @@
-<header class="header-gym" style="--header-bg: {{ section.settings.background_color }}; --header-link-color: {{ section.settings.link_color }};">
+<header class="header-gym" style="--header-bg: {{ section.settings.background_color }}; --header-link-color: {{ section.settings.link_color }}; --header-border: {{ section.settings.border_color }};">
   <nav class="header-nav-left">
     <div class="header-custom-links">
       {% for block in section.blocks %}
         {% if block.type == 'custom_link' %}
-          <a href="{{ block.settings.url }}" class="header-custom-link" {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.url | default: '#' }}" class="header-custom-link" {{ block.shopify_attributes }}>
             {{ block.settings.title }}
           </a>
         {% endif %}
@@ -14,23 +14,28 @@
   <div class="header-logo-center">
     <a href="{{ routes.root_url }}">
       {% if section.settings.logo != blank %}
-        {{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name }}
+        {{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, loading: 'eager' }}
       {% else %}
-        <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}">
+        <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" loading="eager">
       {% endif %}
     </a>
   </div>
 
   <div class="header-nav-right">
     {% if section.settings.show_theme_toggle %}
-      <button type="button" class="theme-toggle" data-theme-toggle>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="{{ section.settings.theme_toggle_label }}">
         <span class="theme-toggle__icon">🌙</span>
         <span class="theme-toggle__label">{{ section.settings.theme_toggle_label }}</span>
       </button>
     {% endif %}
     
-    <a href="{{ routes.search_url }}" class="js-open-search">Buscar</a>
-    <a href="{{ routes.cart_url }}">Carrito ({{ cart.item_count }})</a>
+    {%- comment -%} Buscador y Carrito Reintegrados {%- endcomment -%}
+    <a href="{{ routes.search_url }}" class="js-open-search">
+      {{ 'general.search.search' | t | default: 'Buscar' }}
+    </a>
+    <a href="{{ routes.cart_url }}">
+      {{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})
+    </a>
   </div>
 </header>
 
@@ -40,60 +45,22 @@
 {
   "name": "Encabezado",
   "settings": [
-    {
-      "type": "header",
-      "content": "Configuración Visual"
-    },
-    {
-      "type": "image_picker",
-      "id": "logo",
-      "label": "Logo de la tienda"
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Color de fondo",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "link_color",
-      "label": "Color de los enlaces",
-      "default": "#000000"
-    },
-    {
-      "type": "header",
-      "content": "Modo Oscuro/Claro"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_theme_toggle",
-      "label": "Mostrar selector de tema",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "theme_toggle_label",
-      "label": "Etiqueta del botón de tema",
-      "default": "Tema"
-    }
+    { "type": "header", "content": "Identidad y Colores" },
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "color", "id": "background_color", "label": "Color de fondo", "default": "#ffffff" },
+    { "type": "color", "id": "link_color", "label": "Color de enlaces", "default": "#000000" },
+    { "type": "color", "id": "border_color", "label": "Color del borde", "default": "#eeeeee" },
+    { "type": "header", "content": "Opciones de Interfaz" },
+    { "type": "checkbox", "id": "show_theme_toggle", "label": "Habilitar botón de tema", "default": true },
+    { "type": "text", "id": "theme_toggle_label", "label": "Etiqueta del botón de tema", "default": "Tema" }
   ],
   "blocks": [
     {
       "type": "custom_link",
-      "name": "Enlace a la izquierda",
+      "name": "Enlace Izquierdo",
       "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Texto del enlace",
-          "default": "Nuevo Enlace"
-        },
-        {
-          "type": "url",
-          "id": "url",
-          "label": "Destino (Link)"
-        }
+        { "type": "text", "id": "title", "label": "Texto", "default": "Nuevo enlace" },
+        { "type": "url", "id": "url", "label": "Link" }
       ]
     }
   ]

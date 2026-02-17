@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "eyebrow_text": "Colecciones",
+        "show_description": true,
+        "show_categories": true,
+        "categories_title": "Categorías",
+        "empty_text": "No hay productos disponibles en esta colección.",
+        "products_per_page": 12,
+        "content_max_width": 1250
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

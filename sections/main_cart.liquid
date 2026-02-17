@@ -1,0 +1,78 @@
+<section class="cart-page">
+  <div class="cart-page__container" style="--cart-content-max-width: {{ section.settings.content_max_width }}px;">
+    <header class="cart-page__header">
+      <p class="collection-page__eyebrow">{{ section.settings.eyebrow_text }}</p>
+      <h1 class="cart-page__title">{{ section.settings.title_text }}</h1>
+      <p class="cart-page__subtitle">{{ section.settings.subtitle_text }}</p>
+    </header>
+
+    {% if cart.item_count > 0 %}
+      <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-layout">
+        <div class="cart-items">
+          {% for item in cart.items %}
+            <article class="cart-item">
+              <a class="cart-item__image" href="{{ item.url }}">
+                <img src="{{ item.image | image_url: width: 360 }}" alt="{{ item.title | escape }}">
+              </a>
+
+              <div class="cart-item__content">
+                <a class="cart-item__title" href="{{ item.url }}">{{ item.product.title }}</a>
+                {% unless item.variant.title == 'Default Title' %}
+                  <p class="cart-item__variant">{{ item.variant.title }}</p>
+                {% endunless %}
+
+                <div class="cart-item__meta">
+                  <p class="cart-item__price">{{ item.final_price | money }}</p>
+                  <p class="cart-item__line">{{ section.settings.line_total_label }} {{ item.final_line_price | money }}</p>
+                </div>
+
+                <div class="cart-item__actions">
+                  <label for="updates_{{ item.key }}">{{ section.settings.quantity_label }}</label>
+                  <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0">
+                  <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="cart-item__remove">{{ section.settings.remove_label }}</a>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        <aside class="cart-summary">
+          <p class="cart-summary__label">{{ section.settings.subtotal_label }}</p>
+          <p class="cart-summary__total">{{ cart.total_price | money }}</p>
+          <p class="cart-summary__note">{{ section.settings.note_text }}</p>
+          <div class="cart-summary__buttons">
+            <button type="submit" name="update" class="btn-white-outline">{{ section.settings.update_button_text }}</button>
+            <button type="submit" name="checkout" class="btn-white">{{ section.settings.checkout_button_text }}</button>
+          </div>
+        </aside>
+      </form>
+    {% else %}
+      <div class="cart-page__empty">
+        <p class="search-empty">{{ section.settings.empty_text }}</p>
+        <a href="{{ section.settings.empty_button_url | default: '/collections/all' }}" class="btn-white">{{ section.settings.empty_button_text }}</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Carrito principal",
+  "settings": [
+    {"type": "text", "id": "eyebrow_text", "label": "Texto superior", "default": "Resumen"},
+    {"type": "text", "id": "title_text", "label": "Título", "default": "Carrito"},
+    {"type": "text", "id": "subtitle_text", "label": "Subtítulo", "default": "Revisa tus productos antes de finalizar tu compra."},
+    {"type": "text", "id": "subtotal_label", "label": "Etiqueta subtotal", "default": "Subtotal"},
+    {"type": "text", "id": "note_text", "label": "Nota", "default": "Impuestos y envío se calculan al finalizar compra."},
+    {"type": "text", "id": "line_total_label", "label": "Etiqueta total por línea", "default": "Total:"},
+    {"type": "text", "id": "quantity_label", "label": "Etiqueta cantidad", "default": "Cantidad"},
+    {"type": "text", "id": "remove_label", "label": "Texto eliminar", "default": "Eliminar"},
+    {"type": "text", "id": "update_button_text", "label": "Texto botón actualizar", "default": "Actualizar"},
+    {"type": "text", "id": "checkout_button_text", "label": "Texto botón checkout", "default": "Finalizar compra"},
+    {"type": "text", "id": "empty_text", "label": "Texto carrito vacío", "default": "Tu carrito está vacío."},
+    {"type": "text", "id": "empty_button_text", "label": "Texto botón vacío", "default": "Ver productos"},
+    {"type": "url", "id": "empty_button_url", "label": "URL botón vacío"},
+    {"type": "range", "id": "content_max_width", "label": "Ancho máximo del contenido", "min": 980, "max": 1500, "step": 20, "default": 1200, "unit": "px"}
+  ]
+}
+{% endschema %}

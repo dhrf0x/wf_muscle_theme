@@ -168,7 +168,7 @@ body {
 /* Ajuste del Logo */
 .header-logo-center img {
   /* Reducimos de 140px a 70px para compactar la barra */
-  height: 70px; 
+  height: 120px; 
   width: auto;
   display: block;
   margin: 0 auto;

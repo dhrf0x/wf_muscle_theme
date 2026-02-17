@@ -1,21 +1,155 @@
-<header class="header-gym">
+<header class="header-gym{% unless section.settings.enable_sticky_header %} header-gym--static{% endunless %}" style="--header-link-color: {{ section.settings.link_color }}; --header-bg: {{ section.settings.background_color }}; --header-border: {{ section.settings.border_color }};">
   <nav class="header-nav-left">
-    {% for link in section.settings.menu.links %}
-      <a href="{{ link.url }}">{{ link.title }}</a>
-    {% endfor %}
+    {% if section.settings.menu != blank %}
+      {% for link in section.settings.menu.links %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {% endfor %}
+    {% endif %}
   </nav>
 
   <div class="header-logo-center">
-    <a href="/">
-      <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" loading="eager">
+    <a href="{{ routes.root_url }}">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, loading: 'eager' }}
+      {% else %}
+        <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" loading="eager">
+      {% endif %}
     </a>
   </div>
 
   <div class="header-nav-right">
-    <a href="/search">BUSCAR</a>
-    <a href="/cart">CARRITO ({{ cart.item_count }})</a>
+    <button type="button" class="header-link-button js-open-search" aria-haspopup="dialog" aria-controls="search-modal" aria-expanded="false">
+      {{ 'general.search.search' | t | default: 'Buscar' }}
+    </button>
+    <a href="{{ routes.cart_url }}">{{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})</a>
   </div>
 </header>
+
+<div id="search-modal" class="search-modal" hidden>
+  <div class="search-modal__overlay js-close-search" aria-hidden="true"></div>
+  <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-label="{{ 'general.search.search' | t | default: 'Buscar' }}">
+    <div class="search-modal__header">
+      <h3>{{ 'general.search.search' | t | default: 'Buscar' }}</h3>
+      <button type="button" class="search-modal__close js-close-search" aria-label="Cerrar">×</button>
+    </div>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-modal__form">
+      <input
+        type="search"
+        name="q"
+        value=""
+        placeholder="Escribe para buscar..."
+        class="search-modal__input js-search-input"
+        autocomplete="off"
+      >
+      <input type="hidden" name="type" value="product">
+      <button type="submit" class="search-modal__submit">Buscar</button>
+    </form>
+
+    <div class="search-modal__results js-search-results"></div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const modal = document.getElementById('search-modal');
+    if (!modal) return;
+
+    const openBtn = document.querySelector('.js-open-search');
+    const closeBtns = modal.querySelectorAll('.js-close-search');
+    const input = modal.querySelector('.js-search-input');
+    const results = modal.querySelector('.js-search-results');
+    let debounce;
+
+    const formatMoney = (cents) => {
+      if (typeof cents !== 'number') return '';
+      return (cents / 100).toLocaleString('es-MX', { style: 'currency', currency: '{{ cart.currency.iso_code | default: shop.currency }}' });
+    };
+
+    const openModal = () => {
+      modal.hidden = false;
+      document.body.classList.add('search-modal-open');
+      if (openBtn) openBtn.setAttribute('aria-expanded', 'true');
+      setTimeout(() => input && input.focus(), 10);
+    };
+
+    const closeModal = () => {
+      modal.hidden = true;
+      document.body.classList.remove('search-modal-open');
+      if (openBtn) openBtn.setAttribute('aria-expanded', 'false');
+    };
+
+    const renderResults = (products = []) => {
+      if (!input.value.trim()) {
+        results.innerHTML = '';
+        return;
+      }
+
+      if (!products.length) {
+        results.innerHTML = '<p class="search-empty">Sin resultados</p>';
+        return;
+      }
+
+      results.innerHTML = products.map((product) => {
+        const image = product.featured_image?.url || product.image || '';
+        const price = formatMoney(product.price);
+
+        return `
+          <a class="search-item" href="${product.url}">
+            <div class="search-item__image-wrap">
+              ${image ? `<img src="${image}" alt="${product.title}" class="search-item__image">` : ''}
+            </div>
+            <div class="search-item__info">
+              <p class="search-item__title">${product.title}</p>
+              <p class="search-item__price">${price}</p>
+            </div>
+          </a>
+        `;
+      }).join('');
+    };
+
+    const fetchSuggestions = async (query) => {
+      const endpoint = `/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=6`;
+      const response = await fetch(endpoint);
+      if (!response.ok) throw new Error('No se pudo buscar');
+      const data = await response.json();
+      const products = data?.resources?.results?.products || [];
+      renderResults(products);
+    };
+
+    if (openBtn) {
+      openBtn.addEventListener('click', openModal);
+    }
+
+    closeBtns.forEach((btn) => btn.addEventListener('click', closeModal));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !modal.hidden) {
+        closeModal();
+      }
+    });
+
+    if (input) {
+      input.addEventListener('input', () => {
+        const query = input.value.trim();
+        clearTimeout(debounce);
+
+        if (!query) {
+          results.innerHTML = '';
+          return;
+        }
+
+        debounce = setTimeout(async () => {
+          try {
+            await fetchSuggestions(query);
+          } catch (error) {
+            results.innerHTML = '<p class="search-empty">No fue posible cargar resultados</p>';
+          }
+        }, 250);
+      });
+    }
+  })();
+</script>
 
 {% schema %}
 {
@@ -26,6 +160,35 @@
       "id": "menu",
       "label": "Menú principal",
       "default": "main-menu"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "label": "Encabezado fijo (sticky)",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Color de fondo",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Color del borde inferior",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Color de enlaces",
+      "default": "#000000"
     }
   ]
 }

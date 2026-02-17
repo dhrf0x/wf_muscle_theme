@@ -4,21 +4,36 @@
             <p class="heading-bold label-small">{{ section.settings.label }}</p>
             <h2 class="section-title">{{ section.settings.title }}</h2>
         </div>
-        <a href="/collections/all" class="view-all-link">Ver Todo</a>
+        <a href="{{ section.settings.view_all_link | default: '/collections/all' }}" class="view-all-link">{{ section.settings.view_all_label }}</a>
     </div>
 
+    {% assign source_collection = collections[section.settings.collection] %}
     <div class="product-grid">
-        {% for product in collections.all.products limit: 4 %}
-            <a href="{{ product.url }}" class="product-card">
-                <div class="product-card-image">
-                    <img src="{{ product.featured_image | img_url: '800x1000', crop: 'center' }}" alt="{{ product.title }}">
-                </div>
-                <div class="product-card-info">
-                    <p class="product-title">{{ product.title }}</p>
-                    <p class="product-price">{{ product.price | money }}</p>
-                </div>
-            </a>
-        {% endfor %}
+        {% if source_collection != blank and source_collection.products_count > 0 %}
+          {% for product in source_collection.products limit: section.settings.products_to_show %}
+              <a href="{{ product.url }}" class="product-card">
+                  <div class="product-card-image">
+                      <img src="{{ product.featured_image | image_url: width: 800, height: 1000, crop: 'center' }}" alt="{{ product.title }}">
+                  </div>
+                  <div class="product-card-info">
+                      <p class="product-title">{{ product.title }}</p>
+                      <p class="product-price">{{ product.price | money }}</p>
+                  </div>
+              </a>
+          {% endfor %}
+        {% else %}
+          {% for product in collections.all.products limit: section.settings.products_to_show %}
+              <a href="{{ product.url }}" class="product-card">
+                  <div class="product-card-image">
+                      <img src="{{ product.featured_image | image_url: width: 800, height: 1000, crop: 'center' }}" alt="{{ product.title }}">
+                  </div>
+                  <div class="product-card-info">
+                      <p class="product-title">{{ product.title }}</p>
+                      <p class="product-price">{{ product.price | money }}</p>
+                  </div>
+              </a>
+          {% endfor %}
+        {% endif %}
     </div>
 </section>
 
@@ -26,8 +41,12 @@
 {
   "name": "Featured Products",
   "settings": [
-    { "type": "text", "id": "title", "label": "Título" },
-    { "type": "text", "id": "label", "label": "Etiqueta" }
+    { "type": "text", "id": "title", "label": "Título", "default": "LO NUEVO EN ROJO" },
+    { "type": "text", "id": "label", "label": "Etiqueta", "default": "Mujeres" },
+    { "type": "collection", "id": "collection", "label": "Colección" },
+    { "type": "range", "id": "products_to_show", "label": "Productos a mostrar", "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "text", "id": "view_all_label", "label": "Texto de Ver Todo", "default": "Ver Todo" },
+    { "type": "url", "id": "view_all_link", "label": "Enlace de Ver Todo" }
   ],
   "presets": [
     {

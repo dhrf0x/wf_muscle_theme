@@ -1,0 +1,29 @@
+<div class="section">
+  <h1 class="h1" style="font-size: 1.5rem;">MI CARRITO</h1>
+  {% if cart.item_count > 0 %}
+    <form action="{{ routes.cart_url }}" method="post" style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
+      <div class="cart-items-list">
+        {% for item in cart.items %}
+          <div style="display: grid; grid-template-columns: 60px 1fr auto; gap: 1rem; align-items: center; border-bottom: 1px solid #1a1a1a; padding: 1rem 0;">
+            <img src="{{ item.image | image_url: width: 120 }}" style="width: 100%; aspect-ratio: 2/3; object-fit: cover;">
+            <div style="text-align: left;">
+              <h4 style="margin: 0; font-size: 0.8rem; font-weight: 700;">{{ item.product.title | upcase }}</h4>
+              <p style="margin: 2px 0; font-size: 0.7rem; opacity: 0.4;">{{ item.variant.title }}</p>
+              <a href="{{ item.url_to_remove }}" style="color: #666; font-size: 0.6rem; text-transform: uppercase; text-decoration: underline;">Quitar</a>
+            </div>
+            <div style="font-weight: 700; font-size: 0.85rem;">{{ item.final_line_price | money }}</div>
+          </div>
+        {% endfor %}
+      </div>
+      <div style="text-align: right; border-top: 1px solid #333; padding-top: 2rem;">
+        <h2 style="font-size: 1.2rem; font-weight: 900;">SUBTOTAL: {{ cart.total_price | money }}</h2>
+        <button type="submit" name="checkout" class="button" style="margin-top: 1rem; width: 100%; max-width: 350px;">PROCESAR PAGO</button>
+      </div>
+    </form>
+  {% else %}
+    <div style="text-align: center; padding: 4rem 0;">
+      <p style="opacity: 0.5; font-size: 0.9rem;">TU CARRITO ESTÁ VACÍO</p>
+      <a href="/collections/all" class="button" style="margin-top: 1.5rem;">VER PRODUCTOS</a>
+    </div>
+  {% endif %}
+</div>

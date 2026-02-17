@@ -1,8 +1,8 @@
 <div class="product-card">
   <a href="{{ product.url }}" style="text-decoration: none; color: inherit;">
-    <div class="product-card__image-container">
+    <div class="product-card__image">
       {% if product.featured_image %}
-        {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+        {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy' }}
       {% else %}
         {{ 'product-1' | placeholder_svg_tag }}
       {% endif %}

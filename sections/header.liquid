@@ -1,8 +1,61 @@
 <header class="header-gym{% unless section.settings.enable_sticky_header %} header-gym--static{% endunless %}" style="--header-link-color: {{ section.settings.link_color }}; --header-bg: {{ section.settings.background_color }}; --header-border: {{ section.settings.border_color }};">
-  <nav class="header-nav-left">
+  <nav class="header-nav-left" aria-label="Navegación principal">
+    {% for block in section.blocks %}
+      {% if block.type == 'custom_link' %}
+        <a href="{{ block.settings.url | default: '#' }}" class="header-custom-link" {{ block.shopify_attributes }}>{{ block.settings.title }}</a>
+      {% endif %}
+    {% endfor %}
+
     {% if section.settings.menu != blank %}
       {% for link in section.settings.menu.links %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
+        <div class="header-menu-item{% if link.links != blank %} has-mega-menu{% endif %}">
+          <a href="{{ link.url }}" class="header-menu-item__trigger">{{ link.title }}</a>
+
+          {% if link.links != blank %}
+            <div class="header-mega-menu" role="region" aria-label="Submenú {{ link.title }}">
+              <div class="header-mega-menu__inner">
+                <div class="header-mega-menu__columns">
+                  {% for child in link.links %}
+                    <div class="header-mega-menu__col">
+                      <a href="{{ child.url }}" class="header-mega-menu__heading">{{ child.title }}</a>
+                      {% if child.links != blank %}
+                        <ul class="header-mega-menu__list" role="list">
+                          {% for grandchild in child.links %}
+                            <li><a href="{{ grandchild.url }}">{{ grandchild.title }}</a></li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+                </div>
+
+                {% assign has_featured_card = false %}
+                {% for block in section.blocks %}
+                  {% if block.type == 'featured_card' and block.settings.title != blank %}
+                    {% assign has_featured_card = true %}
+                  {% endif %}
+                {% endfor %}
+
+                {% if has_featured_card %}
+                  <div class="header-mega-menu__featured">
+                    {% for block in section.blocks %}
+                      {% if block.type == 'featured_card' and block.settings.title != blank %}
+                        <a href="{{ block.settings.url | default: '#' }}" class="header-featured-card" {{ block.shopify_attributes }}>
+                          {% if block.settings.image != blank %}
+                            {{ block.settings.image | image_url: width: 480 | image_tag: alt: block.settings.title, loading: 'lazy' }}
+                          {% else %}
+                            <span class="header-featured-card__dummy"></span>
+                          {% endif %}
+                          <span>{{ block.settings.title }}</span>
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
       {% endfor %}
     {% endif %}
   </nav>
@@ -17,7 +70,7 @@
     </a>
   </div>
 
-  <div class="header-nav-right">
+  <div class="header-nav-right" aria-label="Navegación secundaria">
     <a href="{{ routes.search_url }}" class="js-open-search">{{ 'general.search.search' | t | default: 'Buscar' }}</a>
     <a href="{{ routes.cart_url }}">{{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})</a>
   </div>
@@ -34,6 +87,10 @@
       "id": "menu",
       "label": "Menú principal",
       "default": "main-menu"
+    },
+    {
+      "type": "paragraph",
+      "content": "Para activar el mega menú tipo Gymshark, organiza tu Menú principal en 3 niveles: categoría > columna > enlaces."
     },
     {
       "type": "image_picker",
@@ -63,6 +120,53 @@
       "id": "link_color",
       "label": "Color de enlaces",
       "default": "#000000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "custom_link",
+      "name": "Enlace personalizado",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Texto",
+          "default": "Nuevo enlace"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        }
+      ]
+    },
+    {
+      "type": "featured_card",
+      "name": "Tarjeta destacada mega menú",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Destacado"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Encabezado"
     }
   ]
 }

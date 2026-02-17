@@ -1,7 +1,7 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "WF Muscle Theme",
+    "theme_name": "Horizon",
     "theme_version": "3.3.1",
     "theme_author": "Shopify",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
@@ -95,7 +95,7 @@
             "type": "color",
             "id": "primary_hover",
             "label": "t:settings.primary_hover_color",
-            "default": "#1A1A1A",
+            "default": "#333333",
             "alpha": true
           },
           {
@@ -138,23 +138,27 @@
             "alpha": true
           },
           {
+            "type": "header",
+            "content": "t:names.secondary_button"
+          },
+          {
             "type": "color",
-            "id": "primary_button_hover_background",
-            "label": "t:settings.hover_background",
+            "id": "secondary_button_background",
+            "label": "t:settings.background",
             "default": "#FFFFFF",
             "alpha": true
           },
           {
             "type": "color",
-            "id": "primary_button_hover_text",
-            "label": "t:settings.hover_text",
+            "id": "secondary_button_text",
+            "label": "t:settings.text",
             "default": "#000000",
             "alpha": true
           },
           {
             "type": "color",
-            "id": "primary_button_hover_border",
-            "label": "t:settings.hover_borders",
+            "id": "secondary_button_border",
+            "label": "t:settings.borders",
             "default": "#000000",
             "alpha": true
           }
@@ -166,7 +170,10 @@
           "icons": "foreground",
           "primary_button": "primary_button_background",
           "on_primary_button": "primary_button_text",
-          "primary_button_border": "primary_button_border"
+          "primary_button_border": "primary_button_border",
+          "secondary_button": "secondary_button_background",
+          "on_secondary_button": "secondary_button_text",
+          "secondary_button_border": "secondary_button_border"
         }
       }
     ]
@@ -213,43 +220,25 @@
     ]
   },
   {
-    "name": "t:names.animations",
-    "settings": [
-      {
-        "type": "select",
-        "id": "card_hover_effect",
-        "label": "t:settings.card_hover_effect",
-        "options": [
-          { "value": "none", "label": "None" },
-          { "value": "scale", "label": "Scale" },
-          { "value": "subtle-zoom", "label": "Subtle Zoom" }
-        ],
-        "default": "subtle-zoom"
-      }
-    ]
-  },
-  {
     "name": "t:names.badges",
     "settings": [
       {
         "type": "range",
         "id": "badge_corner_radius",
         "min": 0,
-        "max": 100,
-        "step": 2,
-        "unit": "px",
-        "label": "t:settings.badge_corner_radius",
-        "default": 0
+        "max": 0,
+        "default": 0,
+        "label": "t:settings.badge_corner_radius"
       },
       {
         "type": "select",
         "id": "badge_text_transform",
         "label": "t:settings.text_case",
+        "default": "uppercase",
         "options": [
           { "value": "none", "label": "Default" },
           { "value": "uppercase", "label": "Uppercase" }
-        ],
-        "default": "uppercase"
+        ]
       }
     ]
   },
@@ -258,58 +247,21 @@
     "settings": [
       {
         "type": "range",
-        "id": "primary_button_border_width",
-        "min": 0,
-        "max": 4,
-        "step": 1,
-        "unit": "px",
-        "label": "t:settings.border_width",
-        "default": 2
-      },
-      {
-        "type": "range",
         "id": "button_border_radius_primary",
         "min": 0,
-        "max": 4,
-        "step": 1,
-        "unit": "px",
-        "label": "t:settings.border_radius",
-        "default": 0
-      },
-      {
-        "type": "range",
-        "id": "button_border_radius_secondary",
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "unit": "px",
-        "label": "t:settings.border_radius",
-        "default": 0
+        "max": 0,
+        "default": 0,
+        "label": "t:settings.border_radius"
       },
       {
         "type": "select",
         "id": "button_text_case_primary",
         "label": "t:settings.button_text_case",
+        "default": "uppercase",
         "options": [
           { "value": "default", "label": "Default" },
           { "value": "uppercase", "label": "Uppercase" }
-        ],
-        "default": "uppercase"
-      }
-    ]
-  },
-  {
-    "name": "t:names.input_fields",
-    "settings": [
-      {
-        "type": "range",
-        "id": "inputs_border_radius",
-        "min": 0,
-        "max": 32,
-        "step": 1,
-        "unit": "px",
-        "label": "t:settings.border_radius",
-        "default": 0
+        ]
       }
     ]
   },
@@ -320,36 +272,9 @@
         "type": "range",
         "id": "product_corner_radius",
         "min": 0,
-        "max": 32,
-        "step": 1,
-        "unit": "px",
-        "label": "t:settings.product_corner_radius",
-        "default": 0
-      },
-      {
-        "type": "select",
-        "id": "card_title_case",
-        "label": "t:settings.product_and_card_title_case",
-        "options": [
-          { "value": "default", "label": "Default" },
-          { "value": "uppercase", "label": "Uppercase" }
-        ],
-        "default": "uppercase"
-      }
-    ]
-  },
-  {
-    "name": "t:names.variant_pickers",
-    "settings": [
-      {
-        "type": "range",
-        "id": "variant_button_radius",
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "unit": "px",
-        "label": "t:settings.border_radius",
-        "default": 0
+        "max": 0,
+        "default": 0,
+        "label": "t:settings.product_corner_radius"
       }
     ]
   }

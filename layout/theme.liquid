@@ -17,8 +17,8 @@
 
 <div class="header-logo-center">
   <a href="/">
-    {% # Cambiamos el nombre al archivo subido y aumentamos la resolución %}
-    <img src="{{ 'logo.png' | asset_img_url: '600x' }}" alt="{{ shop.name }}">
+    {% # Usamos 'master' para obtener la mejor calidad del archivo original %}
+    <img src="{{ 'logo.jpg' | asset_img_url: 'master' }}" alt="{{ shop.name }}">
   </a>
 </div>
 

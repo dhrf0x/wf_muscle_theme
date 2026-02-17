@@ -109,6 +109,11 @@ body {
 .product-card {
     text-decoration: none;
     color: var(--black);
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
 }
 
 .product-card-image {
@@ -142,7 +147,22 @@ body {
     font-size: 14px;
     margin: 4px 0 0;
 }
-/* Limpieza de enlaces en el header */
+
+.header-gym {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  height: auto;
+  min-height: 160px;
+}
+
 .header-gym a {
   text-decoration: none !important;
   color: #000000 !important;
@@ -153,27 +173,11 @@ body {
   letter-spacing: 0.8px;
 }
 
-/* Contenedor principal */
-.header-gym {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  height: 80px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #eeeeee;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-sizing: border-box;
-}
-
-
-/* Forzar el centro perfecto */
 .header-nav-left, 
 .header-nav-right {
-  flex: 1; /* Esto hace que ambos lados midan lo mismo */
+  flex: 1;
   display: flex;
+  align-items: center;
   gap: 25px;
 }
 
@@ -189,24 +193,26 @@ body {
 }
 
 .header-logo-center img {
-  /* Aumentamos de 30px a 90px para que los detalles sean legibles */
-  height: 90px; 
+  height: 140px;
   width: auto;
   display: block;
   margin: 0 auto;
-  /* Añadimos un pequeño padding para que respire dentro del header */
   padding: 5px 0;
-}
-
-/* Ajustamos la altura del header para que quepa el logo más grande */
-.header-gym {
-  height: 110px; /* Antes era 80px */
-}
-
-/* Mantener el efecto hover en las tarjetas que te gustó */
-.product-card {
+  image-rendering: -webkit-optimize-contrast;
   transition: transform 0.3s ease;
 }
-.product-card:hover {
-  transform: translateY(-5px);
+
+.header-logo-center img:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .header-gym {
+    min-height: 100px;
+    padding: 10px 20px;
+  }
+  
+  .header-logo-center img {
+    height: 80px;
+  }
 }

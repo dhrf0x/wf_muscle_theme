@@ -1,6 +1,6 @@
 <header class="header-gym{% unless section.settings.enable_sticky_header %} header-gym--static{% endunless %}" style="--header-link-color: {{ section.settings.link_color }}; --header-bg: {{ section.settings.background_color }}; --header-border: {{ section.settings.border_color }};">
   <nav class="header-nav-left" aria-label="Navegación principal">
-    <div class="header-custom-links" aria-label="Enlaces personalizados">
+    <div class="header-custom-links" aria-label="Enlaces personalizados izquierdos">
       {% for block in section.blocks %}
         {% if block.type == 'custom_link' and block.settings.title != blank %}
           <a href="{{ block.settings.url | default: '#' }}" class="header-custom-link" {{ block.shopify_attributes }}>{{ block.settings.title }}</a>
@@ -9,9 +9,10 @@
     </div>
 
     {% if section.settings.menu != blank %}
-      {% for link in section.settings.menu.links %}
-        <div class="header-menu-item{% if link.links != blank %} has-mega-menu{% endif %}">
-          <a href="{{ link.url }}" class="header-menu-item__trigger">{{ link.title }}</a>
+      <div class="header-primary-menu" aria-label="Menú principal del header">
+        {% for link in section.settings.menu.links %}
+          <div class="header-menu-item{% if link.links != blank %} has-mega-menu{% endif %}">
+            <a href="{{ link.url }}" class="header-menu-item__trigger">{{ link.title }}</a>
 
           {% if link.links != blank %}
             <div class="header-mega-menu" role="region" aria-label="Submenú {{ link.title }}">
@@ -57,8 +58,9 @@
               </div>
             </div>
           {% endif %}
-        </div>
-      {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
     {% endif %}
   </nav>
 
@@ -73,6 +75,10 @@
   </div>
 
   <div class="header-nav-right" aria-label="Navegación secundaria">
+    <button type="button" class="theme-toggle" data-theme-toggle aria-label="Cambiar a modo oscuro" title="Cambiar tema">
+      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle__label">Tema</span>
+    </button>
     <a href="{{ routes.search_url }}" class="js-open-search">{{ 'general.search.search' | t | default: 'Buscar' }}</a>
     <a href="{{ routes.cart_url }}">{{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})</a>
   </div>

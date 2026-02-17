@@ -1,1 +1,8 @@
-{% section 'homepage' %}
+{%- comment -%}
+  Compatibility fallback template.
+  Online Store 2.0 uses templates/index.json for the homepage,
+  but keeping this file avoids delete/modify merge conflicts with older branches.
+{%- endcomment -%}
+
+{% section 'hero-banner' %}
+{% section 'featured-products' %}

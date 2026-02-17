@@ -1,12 +1,17 @@
 <section class="hero-banner">
-    <img src="{{ 'hero-gym-red.jpg' | asset_url }}" class="hero-image">
+    {% if section.settings.hero_image != blank %}
+      {{ section.settings.hero_image | image_url: width: 2400 | image_tag: class: 'hero-image', alt: section.settings.title, loading: 'eager' }}
+    {% else %}
+      <img src="{{ 'hero-gym-red.jpg' | asset_url }}" class="hero-image" alt="{{ section.settings.title }}">
+    {% endif %}
+
     <div class="hero-text-overlay">
-        <p class="heading-bold">Mujeres</p>
+        <p class="heading-bold">{{ section.settings.eyebrow }}</p>
         <h1>{{ section.settings.title }}</h1>
         <p>{{ section.settings.subtitle }}</p>
         <div class="cta-group">
-            <a href="/collections/all" class="btn-white">Comprar Ahora</a>
-            <a href="/collections/all" class="btn-white-outline">Shop Red</a>
+            <a href="{{ section.settings.primary_button_link | default: '/collections/all' }}" class="btn-white">{{ section.settings.primary_button_label }}</a>
+            <a href="{{ section.settings.secondary_button_link | default: '/collections/all' }}" class="btn-white-outline">{{ section.settings.secondary_button_label }}</a>
         </div>
     </div>
 </section>
@@ -15,9 +20,19 @@
 {
   "name": "Hero Banner",
   "settings": [
+    { "type": "image_picker", "id": "hero_image", "label": "Imagen de fondo" },
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Mujeres" },
     { "type": "text", "id": "title", "label": "Título", "default": "LO NUEVO EN ROJO" },
-    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Tus favoritos de siempre." }],
+    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Tus favoritos de siempre." },
+    { "type": "text", "id": "primary_button_label", "label": "Texto botón principal", "default": "Comprar Ahora" },
+    { "type": "url", "id": "primary_button_link", "label": "Enlace botón principal" },
+    { "type": "text", "id": "secondary_button_label", "label": "Texto botón secundario", "default": "Shop Red" },
+    { "type": "url", "id": "secondary_button_link", "label": "Enlace botón secundario" }
+  ],
   "presets": [
     {
       "name": "Hero Banner"
-    }]}{% endschema %}
+    }
+  ]
+}
+{% endschema %}

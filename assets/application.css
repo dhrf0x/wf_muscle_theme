@@ -142,3 +142,61 @@ body {
     font-size: 14px;
     margin: 4px 0 0;
 }
+/* Limpieza de enlaces en el header */
+.header-gym a {
+  text-decoration: none !important;
+  color: #000000 !important;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* Contenedor principal */
+.header-gym {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 80px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+/* Forzar el centro perfecto */
+.header-nav-left, 
+.header-nav-right {
+  flex: 1; /* Esto hace que ambos lados midan lo mismo */
+  display: flex;
+  gap: 25px;
+}
+
+.header-nav-right {
+  justify-content: flex-end;
+}
+
+.header-logo-center {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-logo-center img {
+  height: 30px; /* Ajusta según el tamaño de tu logo */
+  width: auto;
+  display: block;
+}
+
+/* Mantener el efecto hover en las tarjetas que te gustó */
+.product-card {
+  transition: transform 0.3s ease;
+}
+.product-card:hover {
+  transform: translateY(-5px);
+}

@@ -1,6 +1,57 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "current": "Default",
+  "current": {
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu",
+          "enable_sticky_header": true,
+          "background_color": "#ffffff",
+          "border_color": "#eeeeee",
+          "link_color": "#000000"
+        }
+      },
+      "homepage": {
+        "type": "homepage",
+        "settings": {}
+      },
+      "hero-banner": {
+        "type": "hero-banner",
+        "settings": {
+          "hero_image": "shopify://shop_images/April14_Mac.png",
+          "eyebrow": "DROP 01/",
+          "title": "LO NUEVO EN TENDENCIA",
+          "subtitle": "Tus favoritos de siempre.",
+          "primary_button_label": "Comprar Ahora",
+          "primary_button_link": "",
+          "secondary_button_label": "Shop Red",
+          "secondary_button_link": ""
+        }
+      },
+      "featured-products": {
+        "type": "featured-products",
+        "settings": {
+          "title": "LO NUEVO EN WF",
+          "label": "Hombres",
+          "collection": "",
+          "products_to_show": 4,
+          "view_all_label": "Ver Todo",
+          "view_all_link": ""
+        }
+      }
+    },
+    "content_for_index": []
+  },
   "presets": {
-    "Default": { }
+    "Default": {}
   }
 }

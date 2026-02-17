@@ -22,12 +22,13 @@
 
       {% if product.images.size > 1 %}
         <div class="product-page__thumbs" role="listbox" aria-label="Galería de producto">
-          {% for media in product.images limit: 8 %}
+          {% for media in product.images %}
             <button
               type="button"
               class="product-page__thumb{% if forloop.first %} is-active{% endif %}"
               data-product-thumb
               data-image-url="{{ media | image_url: width: 1200 }}"
+              data-image-alt="{{ media.alt | default: product.title | escape }}"
               aria-label="Ver imagen {{ forloop.index }}"
             >
               <img src="{{ media | image_url: width: 240 }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy">

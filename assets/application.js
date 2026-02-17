@@ -120,6 +120,9 @@
     featuredMedia.style.opacity = '0.25';
     window.setTimeout(() => {
       featuredMedia.src = imageUrl;
+      if (thumb?.dataset.imageAlt) {
+        featuredMedia.alt = thumb.dataset.imageAlt;
+      }
       featuredMedia.style.opacity = '1';
     }, 120);
 
@@ -146,7 +149,8 @@
       }
 
       if (option.dataset.imageUrl) {
-        setFeaturedImage(option.dataset.imageUrl);
+        const matchingThumb = Array.from(thumbs).find((thumb) => thumb.dataset.imageUrl === option.dataset.imageUrl);
+        setFeaturedImage(option.dataset.imageUrl, matchingThumb || null);
       }
     });
   }

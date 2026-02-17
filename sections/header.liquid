@@ -44,7 +44,7 @@
     <a href="{{ routes.search_url }}" class="js-open-search">
       {{ 'general.search.search' | t | default: 'Buscar' }}
     </a>
-    <a href="{{ routes.account_login_url }}">
+    <a href="{{ routes.account_url }}">
       {{ section.settings.login_label }}
     </a>
     <a href="{{ routes.cart_url }}">
@@ -74,7 +74,7 @@
       {% endif %}
 
       <a href="{{ routes.search_url }}" class="mobile-menu__link js-open-search" data-mobile-menu-close>{{ 'general.search.search' | t | default: 'Buscar' }}</a>
-      <a href="{{ routes.account_login_url }}" class="mobile-menu__link" data-mobile-menu-close>{{ section.settings.login_label }}</a>
+      <a href="{{ routes.account_url }}" class="mobile-menu__link" data-mobile-menu-close>{{ section.settings.login_label }}</a>
       <a href="{{ routes.cart_url }}" class="mobile-menu__link" data-mobile-menu-close>{{ 'templates.cart.cart' | t | default: 'Carrito' }} <span class="cart-count-pill">{{ cart.item_count }}</span></a>
     </nav>
   </div>

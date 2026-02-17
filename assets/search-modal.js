@@ -20,7 +20,7 @@
     requestAnimationFrame(() => modal.classList.add('is-active'));
     document.body.classList.add('search-modal-open');
     if (openBtn) openBtn.setAttribute('aria-expanded', 'true');
-    setTimeout(() => input && input.focus(), 220);
+    setTimeout(() => input && input.focus(), 320);
   };
 
   const closeModal = () => {
@@ -33,7 +33,7 @@
       modal.classList.remove('is-closing');
       modal.hidden = true;
       isClosing = false;
-    }, 260);
+    }, 420);
 
     document.body.classList.remove('search-modal-open');
     if (openBtn) openBtn.setAttribute('aria-expanded', 'false');

@@ -466,7 +466,7 @@
   backdrop-filter: blur(1px);
   -webkit-backdrop-filter: blur(1px);
   opacity: 0;
-  transition: opacity .32s cubic-bezier(0.22, 1, 0.36, 1), backdrop-filter .32s ease;
+  transition: opacity .46s cubic-bezier(0.22, 1, 0.36, 1), backdrop-filter .46s ease;
 }
 
 .search-modal__dialog {
@@ -474,7 +474,7 @@
   box-shadow: 0 28px 64px rgba(0, 0, 0, 0.18);
   transform: translateY(16px) scale(0.98);
   opacity: 0;
-  transition: transform .34s cubic-bezier(0.22, 1, 0.36, 1), opacity .28s ease;
+  transition: transform .52s cubic-bezier(0.22, 1, 0.36, 1), opacity .46s ease;
 }
 
 .search-modal.is-active .search-modal__overlay {

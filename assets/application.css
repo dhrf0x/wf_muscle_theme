@@ -605,3 +605,47 @@ a, button, input, select {
     display: none;
   }
 }
+
+/* --- Theme mode (light / dark / system) --- */
+:root[data-theme='dark'] {
+  --black: #f4f4f4;
+  --white: #111111;
+  --gray-bg: #1b1b1b;
+}
+
+:root[data-theme='dark'] body {
+  background: #111;
+  color: #f4f4f4;
+}
+
+:root[data-theme='dark'] .header-gym,
+:root[data-theme='dark'] .search-modal__dialog,
+:root[data-theme='dark'] .cart-item,
+:root[data-theme='dark'] .cart-summary,
+:root[data-theme='dark'] .product-page__featured,
+:root[data-theme='dark'] .collection-categories__item {
+  background: #171717;
+  border-color: #2a2a2a;
+  color: #f4f4f4;
+}
+
+:root[data-theme='dark'] .header-gym a,
+:root[data-theme='dark'] .product-title,
+:root[data-theme='dark'] .product-price,
+:root[data-theme='dark'] .cart-item__title,
+:root[data-theme='dark'] .collection-categories__item {
+  color: #f4f4f4 !important;
+}
+
+:root[data-theme='dark'] .search-modal__input,
+:root[data-theme='dark'] .product-form__select,
+:root[data-theme='dark'] .product-form__qty,
+:root[data-theme='dark'] .cart-item__actions input {
+  background: #101010;
+  border-color: #333;
+  color: #f4f4f4;
+}
+
+.header-custom-link {
+  opacity: 0.9;
+}

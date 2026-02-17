@@ -3,12 +3,12 @@
     <div class="site-footer__newsletter">
       <h3>{{ section.settings.brand_title }}</h3>
       <p>{{ section.settings.brand_text }}</p>
-      <a href="{{ section.settings.newsletter_url | default: routes.root_url }}" class="site-footer__newsletter-cta">Suscríbete y recibe novedades</a>
+      <a href="{{ section.settings.newsletter_url | default: routes.root_url }}" class="site-footer__newsletter-cta">{{ section.settings.newsletter_label }}</a>
     </div>
 
     <div class="site-footer__columns">
       <div>
-        <h4>Comprar</h4>
+        <h4>{{ section.settings.shopping_title }}</h4>
         <div class="site-footer__links">
           {% if section.settings.footer_menu != blank %}
             {% for link in section.settings.footer_menu.links %}
@@ -19,7 +19,7 @@
       </div>
 
       <div>
-        <h4>Compañía</h4>
+        <h4>{{ section.settings.company_title }}</h4>
         <div class="site-footer__links">
           {% if section.settings.company_menu != blank %}
             {% for link in section.settings.company_menu.links %}
@@ -30,17 +30,37 @@
       </div>
 
       <div>
-        <h4>Ayuda</h4>
+        <h4>{{ section.settings.help_title }}</h4>
         <p class="site-footer__contact">{{ section.settings.contact_text }}</p>
       </div>
     </div>
 
-    <div class="site-footer__media-strip" aria-label="Métodos de pago y apps">
-      <span class="site-footer__media-item">VISA</span>
-      <span class="site-footer__media-item">MASTERCARD</span>
-      <span class="site-footer__media-item">PAYPAL</span>
-      <span class="site-footer__media-item">APP STORE</span>
-    </div>
+    {% if section.blocks.size > 0 %}
+      <div class="site-footer__media-strip" aria-label="{{ section.settings.payment_strip_label }}">
+        {% for block in section.blocks %}
+          {% if block.type == 'payment_badge' %}
+            {% assign payment_label = block.settings.label | default: 'Método de pago' %}
+            {% if block.settings.url != blank %}
+              <a href="{{ block.settings.url }}" class="site-footer__media-item" {{ block.shopify_attributes }}>
+                {% if block.settings.image != blank %}
+                  {{ block.settings.image | image_url: width: 180 | image_tag: alt: payment_label, loading: 'lazy' }}
+                {% else %}
+                  <span>{{ payment_label }}</span>
+                {% endif %}
+              </a>
+            {% else %}
+              <div class="site-footer__media-item" {{ block.shopify_attributes }}>
+                {% if block.settings.image != blank %}
+                  {{ block.settings.image | image_url: width: 180 | image_tag: alt: payment_label, loading: 'lazy' }}
+                {% else %}
+                  <span>{{ payment_label }}</span>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
 
     <div class="site-footer__bottom">
       <small>© {{ 'now' | date: '%Y' }} {{ shop.name }}</small>
@@ -55,9 +75,37 @@
     { "type": "text", "id": "brand_title", "label": "Título", "default": "WF Urban Muscle" },
     { "type": "textarea", "id": "brand_text", "label": "Texto", "default": "Ropa deportiva premium para elevar tu rendimiento." },
     { "type": "url", "id": "newsletter_url", "label": "URL de newsletter" },
+    { "type": "text", "id": "newsletter_label", "label": "Texto botón newsletter", "default": "Suscríbete y recibe novedades" },
+    { "type": "text", "id": "shopping_title", "label": "Título columna compras", "default": "Comprar" },
     { "type": "link_list", "id": "footer_menu", "label": "Menú de compras", "default": "main-menu" },
+    { "type": "text", "id": "company_title", "label": "Título columna compañía", "default": "Compañía" },
     { "type": "link_list", "id": "company_menu", "label": "Menú compañía" },
-    { "type": "text", "id": "contact_text", "label": "Texto de contacto", "default": "Contacto: hola@wfurbanmuscle.com" }
+    { "type": "text", "id": "help_title", "label": "Título columna ayuda", "default": "Ayuda" },
+    { "type": "text", "id": "contact_text", "label": "Texto de contacto", "default": "Contacto: hola@wfurbanmuscle.com" },
+    { "type": "text", "id": "payment_strip_label", "label": "Etiqueta accesibilidad métodos de pago", "default": "Métodos de pago" }
+  ],
+  "blocks": [
+    {
+      "type": "payment_badge",
+      "name": "Método de pago",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Etiqueta", "default": "Visa" },
+        { "type": "image_picker", "id": "image", "label": "Imagen" },
+        { "type": "url", "id": "url", "label": "Enlace (opcional)" }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Pie de página",
+      "blocks": [
+        { "type": "payment_badge", "settings": { "label": "Visa" } },
+        { "type": "payment_badge", "settings": { "label": "Mastercard" } },
+        { "type": "payment_badge", "settings": { "label": "PayPal" } },
+        { "type": "payment_badge", "settings": { "label": "App Store" } }
+      ]
+    }
   ]
 }
 {% endschema %}

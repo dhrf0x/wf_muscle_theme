@@ -1,10 +1,5 @@
 {% liquid
   assign sticky = 'always'
-  assign transparent = 'none'
-  if template.name == 'index'
-    assign transparent = 'always'
-  endif
-
   capture logo
     content_for 'block', type: '_header-logo', id: 'header-logo'
   endcapture
@@ -16,40 +11,39 @@
   endcapture
 %}
 
-<header-component id="header-component" class="header-muscle {% if transparent == 'always' %}header--glass{% endif %}">
-  <div class="header__container">
-    <div class="header__col--left">{{ logo }}</div>
-    <div class="header__col--center mobile:hidden">{{ menu }}</div>
-    <div class="header__col--right">{{ actions }}</div>
+<header-component id="header-component" class="apple-glass-header" sticky="{{ sticky }}">
+  <div class="header-inner">
+    <div class="header-left">{{ logo }}</div>
+    <div class="header-center mobile-hide">{{ menu }}</div>
+    <div class="header-right">{{ actions }}</div>
   </div>
 </header-component>
 
 {% stylesheet %}
-  .header-muscle {
-    position: sticky;
+  .apple-glass-header {
+    position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.72) !important;
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
   }
 
-  .header--glass { position: fixed; }
-
-  .header__container {
+  .header-inner {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     height: 70px;
-    padding: 0 4rem;
-    max-width: 1440px;
+    padding: 0 5%;
+    max-width: 1400px;
     margin: 0 auto;
   }
 
-  .header__col--center { display: flex; justify-content: center; }
-  .header__col--right { display: flex; justify-content: flex-end; gap: 1.5rem; }
+  .header-center { display: flex; justify-content: center; }
+  .header-right { display: flex; justify-content: flex-end; gap: 1.5rem; }
 
   .header-menu .menu-list {
     display: flex;
@@ -61,15 +55,11 @@
   }
 
   @media screen and (max-width: 749px) {
-    .header__container { grid-template-columns: 1fr 1fr; padding: 0 1.5rem; }
-    .header__col--center { display: none; }
+    .header-inner { grid-template-columns: 1fr 1fr; height: 60px; }
+    .mobile-hide { display: none; }
   }
 {% endstylesheet %}
 
 {% schema %}
-{
-  "name": "Header Muscle Glass",
-  "settings": [],
-  "presets": [{"name": "Header Muscle Glass"}]
-}
+{ "name": "Apple Glass Header", "settings": [], "presets": [{"name": "Apple Glass Header"}] }
 {% endschema %}

@@ -1,60 +1,45 @@
-/* --- FUNDAMENTOS DE ESTRUCTURA --- */
+/* RESET Y ESTRUCTURA BASE */
 * { box-sizing: border-box; }
-body {
-  margin: 0;
-  color: #000;
-  background-color: #fff;
-  font-family: sans-serif;
-  line-height: 1.5;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-img { max-width: 100%; height: auto; }
-.section { padding: 4rem 2rem; max-width: 1400px; margin: 0 auto; width: 100%; }
+body { margin: 0; padding: 0; background-color: #fff; color: #000; font-family: sans-serif; line-height: 1.4; overflow-x: hidden; }
+.section { padding: 5rem 2rem; max-width: 1400px; margin: 0 auto; }
 
-/* --- ESTILO MUSCLE (Gymshark / YoungLA) --- */
+/* ESTILO MUSCLE (GYMSHARK/YOUNGLA) */
 h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   text-transform: uppercase !important;
   letter-spacing: 0.1em !important;
   font-weight: 900 !important;
-  line-height: 1.1 !important;
+  line-height: 1 !important;
 }
 
-.button, .button-secondary, .product-form__submit {
+.button, .product-form__submit {
   border-radius: 0 !important;
+  background: #000 !important;
+  color: #fff !important;
   text-transform: uppercase !important;
   font-weight: 800 !important;
   letter-spacing: 0.15em !important;
-  padding: 1rem 3rem !important;
+  padding: 1.2rem 3rem !important;
   border: 2px solid #000 !important;
-  background: #000;
-  color: #fff;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
 }
 
-.button:hover { background: #fff; color: #000; }
+.button:hover { background: #fff !important; color: #000 !important; }
 
+/* GRILLA DE PRODUCTOS */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
 }
 
-.product-card, .card__media, .media, .product-card__image-with-placeholder-wrapper {
-  border-radius: 0 !important;
-  border: none !important;
-  overflow: hidden;
+@media screen and (min-width: 750px) {
+  .product-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
-.product-card__content { text-align: center; padding: 1.5rem 0; }
-
-.badge {
-  border-radius: 0 !important;
-  font-weight: 900 !important;
-  text-transform: uppercase !important;
-  padding: 0.4rem 0.8rem !important;
-  background: #000;
-  color: #fff;
-}
+.product-card { border-radius: 0 !important; text-align: center; }
+.product-card img { width: 100%; height: auto; object-fit: cover; aspect-ratio: 2/3; border-radius: 0 !important; }
+.product-card__title { font-weight: 800; font-size: 1.2rem; margin-top: 1rem; }
+.product-card__price { font-size: 1rem; opacity: 0.7; }

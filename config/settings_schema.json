@@ -1,9 +1,5 @@
 [
-  {
-    "name": "theme_info",
-    "theme_name": "Horizon Muscle",
-    "theme_version": "3.3.1"
-  },
+  { "name": "theme_info", "theme_name": "Horizon Muscle", "theme_version": "3.3.1" },
   {
     "name": "Colors",
     "settings": [
@@ -15,15 +11,15 @@
           { "type": "color", "id": "foreground", "label": "Text", "default": "#000000" },
           { "type": "color", "id": "primary", "label": "Primary", "default": "#000000" },
           { "type": "color", "id": "border", "label": "Borders", "default": "#000000" },
-          { "type": "color", "id": "primary_button_background", "label": "Button BG", "default": "#000000" },
-          { "type": "color", "id": "primary_button_text", "label": "Button Text", "default": "#FFFFFF" },
-          { "type": "color", "id": "primary_button_border", "label": "Button Border", "default": "#000000" },
+          { "type": "color", "id": "primary_button_background", "label": "Btn BG", "default": "#000000" },
+          { "type": "color", "id": "primary_button_text", "label": "Btn Text", "default": "#FFFFFF" },
+          { "type": "color", "id": "primary_button_border", "label": "Btn Border", "default": "#000000" },
           { "type": "color", "id": "secondary_button_background", "label": "Sec BG", "default": "#FFFFFF" },
           { "type": "color", "id": "secondary_button_text", "label": "Sec Text", "default": "#000000" },
           { "type": "color", "id": "secondary_button_border", "label": "Sec Border", "default": "#000000" }
         ],
         "role": {
-          "text": "foreground", "background": "background", "links": "primary",
+          "text": "foreground", "background": "background", "links": "primary", "icons": "foreground",
           "primary_button": "primary_button_background", "on_primary_button": "primary_button_text", "primary_button_border": "primary_button_border",
           "secondary_button": "secondary_button_background", "on_secondary_button": "secondary_button_text", "secondary_button_border": "secondary_button_border"
         }

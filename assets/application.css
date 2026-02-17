@@ -192,6 +192,10 @@ body {
   gap: 20px;
 }
 
+.header-nav-left {
+  justify-content: flex-start;
+}
+
 .header-nav-right {
   justify-content: flex-end;
 }

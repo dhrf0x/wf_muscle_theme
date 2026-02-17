@@ -1,25 +1,36 @@
-<header class="header-gym{% unless section.settings.enable_sticky_header %} header-gym--static{% endunless %}" style="--header-link-color: {{ section.settings.link_color }}; --header-bg: {{ section.settings.background_color }}; --header-border: {{ section.settings.border_color }};">
+<header class="header-gym" style="--header-bg: {{ section.settings.background_color }}; --header-link-color: {{ section.settings.link_color }};">
   <nav class="header-nav-left">
-    {% if section.settings.menu != blank %}
-      {% for link in section.settings.menu.links %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
+    <div class="header-custom-links">
+      {% for block in section.blocks %}
+        {% if block.type == 'custom_link' %}
+          <a href="{{ block.settings.url }}" class="header-custom-link" {{ block.shopify_attributes }}>
+            {{ block.settings.title }}
+          </a>
+        {% endif %}
       {% endfor %}
-    {% endif %}
+    </div>
   </nav>
 
   <div class="header-logo-center">
     <a href="{{ routes.root_url }}">
       {% if section.settings.logo != blank %}
-        {{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, loading: 'eager' }}
+        {{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name }}
       {% else %}
-        <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" loading="eager">
+        <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}">
       {% endif %}
     </a>
   </div>
 
   <div class="header-nav-right">
-    <a href="{{ routes.search_url }}" class="js-open-search">{{ 'general.search.search' | t | default: 'Buscar' }}</a>
-    <a href="{{ routes.cart_url }}">{{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})</a>
+    {% if section.settings.show_theme_toggle %}
+      <button type="button" class="theme-toggle" data-theme-toggle>
+        <span class="theme-toggle__icon">🌙</span>
+        <span class="theme-toggle__label">{{ section.settings.theme_toggle_label }}</span>
+      </button>
+    {% endif %}
+    
+    <a href="{{ routes.search_url }}" class="js-open-search">Buscar</a>
+    <a href="{{ routes.cart_url }}">Carrito ({{ cart.item_count }})</a>
   </div>
 </header>
 
@@ -30,21 +41,13 @@
   "name": "Encabezado",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Menú principal",
-      "default": "main-menu"
+      "type": "header",
+      "content": "Configuración Visual"
     },
     {
       "type": "image_picker",
       "id": "logo",
-      "label": "Logo"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_sticky_header",
-      "label": "Encabezado fijo (sticky)",
-      "default": true
+      "label": "Logo de la tienda"
     },
     {
       "type": "color",
@@ -54,15 +57,44 @@
     },
     {
       "type": "color",
-      "id": "border_color",
-      "label": "Color del borde inferior",
-      "default": "#eeeeee"
+      "id": "link_color",
+      "label": "Color de los enlaces",
+      "default": "#000000"
     },
     {
-      "type": "color",
-      "id": "link_color",
-      "label": "Color de enlaces",
-      "default": "#000000"
+      "type": "header",
+      "content": "Modo Oscuro/Claro"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_theme_toggle",
+      "label": "Mostrar selector de tema",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "theme_toggle_label",
+      "label": "Etiqueta del botón de tema",
+      "default": "Tema"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "custom_link",
+      "name": "Enlace a la izquierda",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Texto del enlace",
+          "default": "Nuevo Enlace"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Destino (Link)"
+        }
+      ]
     }
   ]
 }

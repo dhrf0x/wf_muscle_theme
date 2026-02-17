@@ -31,7 +31,11 @@
 
                 <div class="cart-item__actions">
                   <label for="updates_{{ item.key }}">{{ section.settings.quantity_label }}</label>
-                  <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0">
+                  <div class="quantity-stepper quantity-stepper--cart" data-quantity-stepper>
+                    <button type="button" class="quantity-stepper__btn" data-qty-decrease aria-label="Disminuir cantidad">−</button>
+                    <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" class="product-form__qty" inputmode="numeric" pattern="[0-9]*">
+                    <button type="button" class="quantity-stepper__btn" data-qty-increase aria-label="Aumentar cantidad">+</button>
+                  </div>
                   <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="cart-item__remove">{{ section.settings.remove_label }}</a>
                 </div>
               </div>

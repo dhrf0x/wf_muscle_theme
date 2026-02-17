@@ -16,8 +16,8 @@
         <h1>{{ section.settings.title }}</h1>
         <p>{{ section.settings.subtitle }}</p>
         <div class="cta-group">
-            <a href="{{ section.settings.primary_button_link | default: '/collections/all' }}" class="btn-white">{{ section.settings.primary_button_label }}</a>
-            <a href="{{ section.settings.secondary_button_link | default: '/collections/all' }}" class="btn-white-outline">{{ section.settings.secondary_button_label }}</a>
+            <a href="{{ section.settings.primary_button_link | default: routes.all_products_collection_url }}" class="btn-white">{{ section.settings.primary_button_label }}</a>
+            <a href="{{ section.settings.secondary_button_link | default: routes.all_products_collection_url }}" class="btn-white-outline">{{ section.settings.secondary_button_label }}</a>
         </div>
     </div>
 </section>

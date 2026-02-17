@@ -16,7 +16,7 @@
       {% endfor %}
 
       {% if section.settings.menu != blank %}
-        {% for link in linklists[section.settings.menu].links %}
+        {% for link in section.settings.menu.links %}
           <a href="{{ link.url }}" class="header-custom-link">{{ link.title }}</a>
         {% endfor %}
       {% endif %}
@@ -44,8 +44,11 @@
     <a href="{{ routes.search_url }}" class="js-open-search">
       {{ 'general.search.search' | t | default: 'Buscar' }}
     </a>
+    <a href="{{ routes.account_login_url }}">
+      {{ section.settings.login_label }}
+    </a>
     <a href="{{ routes.cart_url }}">
-      {{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})
+      {{ 'templates.cart.cart' | t | default: 'Carrito' }} <span class="cart-count-pill">{{ cart.item_count }}</span>
     </a>
   </div>
 </header>
@@ -65,13 +68,14 @@
       {% endfor %}
 
       {% if section.settings.menu != blank %}
-        {% for link in linklists[section.settings.menu].links %}
-          <a href="{{ link.url }}" class="mobile-menu__link">{{ link.title }}</a>
+        {% for link in section.settings.menu.links %}
+          <a href="{{ link.url }}" class="mobile-menu__link" data-mobile-menu-close>{{ link.title }}</a>
         {% endfor %}
       {% endif %}
 
       <a href="{{ routes.search_url }}" class="mobile-menu__link js-open-search" data-mobile-menu-close>{{ 'general.search.search' | t | default: 'Buscar' }}</a>
-      <a href="{{ routes.cart_url }}" class="mobile-menu__link">{{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})</a>
+      <a href="{{ routes.account_login_url }}" class="mobile-menu__link" data-mobile-menu-close>{{ section.settings.login_label }}</a>
+      <a href="{{ routes.cart_url }}" class="mobile-menu__link" data-mobile-menu-close>{{ 'templates.cart.cart' | t | default: 'Carrito' }} <span class="cart-count-pill">{{ cart.item_count }}</span></a>
     </nav>
   </div>
 </aside>
@@ -90,7 +94,8 @@
     { "type": "color", "id": "border_color", "label": "Color del borde", "default": "#eeeeee" },
     { "type": "header", "content": "Opciones de Interfaz" },
     { "type": "checkbox", "id": "show_theme_toggle", "label": "Habilitar botón de tema", "default": true },
-    { "type": "text", "id": "theme_toggle_label", "label": "Etiqueta del botón de tema", "default": "Tema" }
+    { "type": "text", "id": "theme_toggle_label", "label": "Etiqueta del botón de tema", "default": "Tema" },
+    { "type": "text", "id": "login_label", "label": "Texto de iniciar sesión", "default": "Iniciar sesión" }
   ],
   "blocks": [
     {

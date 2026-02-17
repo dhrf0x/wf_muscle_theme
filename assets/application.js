@@ -64,22 +64,90 @@
     menuToggle.setAttribute('aria-expanded', 'true');
   };
 
-  if (menuToggle) {
+  if (menuToggle && mobileMenu) {
     menuToggle.addEventListener('click', () => {
       const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
-      if (isOpen) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
+      if (isOpen) closeMenu();
+      else openMenu();
     });
   }
 
   menuCloseButtons.forEach((button) => button.addEventListener('click', closeMenu));
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      closeMenu();
-    }
+    if (event.key === 'Escape') closeMenu();
   });
+
+  const animateQty = (input) => {
+    input.classList.remove('is-updated');
+    void input.offsetWidth;
+    input.classList.add('is-updated');
+  };
+
+  document.querySelectorAll('[data-quantity-stepper]').forEach((stepper) => {
+    const input = stepper.querySelector('input[type="number"]');
+    const increaseBtn = stepper.querySelector('[data-qty-increase]');
+    const decreaseBtn = stepper.querySelector('[data-qty-decrease]');
+
+    if (!input) return;
+
+    const updateValue = (delta) => {
+      const current = Number(input.value || 0);
+      const min = Number(input.min || 0);
+      const max = input.max ? Number(input.max) : null;
+      let next = current + delta;
+
+      if (next < min) next = min;
+      if (max !== null && next > max) next = max;
+
+      input.value = String(next);
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      animateQty(input);
+    };
+
+    increaseBtn?.addEventListener('click', () => updateValue(1));
+    decreaseBtn?.addEventListener('click', () => updateValue(-1));
+  });
+
+  const featuredMedia = document.querySelector('[data-featured-media]');
+  const thumbs = document.querySelectorAll('[data-product-thumb]');
+  const variantSelect = document.querySelector('[data-variant-select]');
+  const variantIdInput = document.querySelector('[data-variant-id-input]');
+  const productPrice = document.querySelector('[data-product-price]');
+
+  const setFeaturedImage = (imageUrl, thumb = null) => {
+    if (!featuredMedia || !imageUrl) return;
+    featuredMedia.style.opacity = '0.25';
+    window.setTimeout(() => {
+      featuredMedia.src = imageUrl;
+      featuredMedia.style.opacity = '1';
+    }, 120);
+
+    if (thumbs.length > 0) {
+      thumbs.forEach((item) => item.classList.remove('is-active'));
+      thumb?.classList.add('is-active');
+    }
+  };
+
+  thumbs.forEach((thumb) => {
+    thumb.addEventListener('click', () => {
+      setFeaturedImage(thumb.dataset.imageUrl, thumb);
+    });
+  });
+
+  if (variantSelect && variantIdInput) {
+    variantSelect.addEventListener('change', (event) => {
+      const option = event.target.selectedOptions[0];
+      if (!option) return;
+      variantIdInput.value = option.value;
+
+      if (productPrice && option.dataset.price) {
+        productPrice.textContent = option.dataset.price;
+      }
+
+      if (option.dataset.imageUrl) {
+        setFeaturedImage(option.dataset.imageUrl);
+      }
+    });
+  }
 })();

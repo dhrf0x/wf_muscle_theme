@@ -206,16 +206,6 @@
           { "value": "none", "label": "None" },
           { "value": "uppercase", "label": "Uppercase" }
         ]
-      },
-      {
-        "type": "select",
-        "id": "type_case_h2",
-        "label": "Uppercase",
-        "default": "uppercase",
-        "options": [
-          { "value": "none", "label": "None" },
-          { "value": "uppercase", "label": "Uppercase" }
-        ]
       }
     ]
   },
@@ -226,7 +216,9 @@
         "type": "range",
         "id": "badge_corner_radius",
         "min": 0,
-        "max": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
         "default": 0,
         "label": "t:settings.badge_corner_radius"
       },
@@ -249,7 +241,9 @@
         "type": "range",
         "id": "button_border_radius_primary",
         "min": 0,
-        "max": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
         "default": 0,
         "label": "t:settings.border_radius"
       },
@@ -272,7 +266,9 @@
         "type": "range",
         "id": "product_corner_radius",
         "min": 0,
-        "max": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
         "default": 0,
         "label": "t:settings.product_corner_radius"
       }

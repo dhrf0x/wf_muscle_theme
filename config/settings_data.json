@@ -27,7 +27,8 @@
       "hero-banner": {
         "type": "hero-banner",
         "settings": {
-          "eyebrow": "HOMBRES",
+          "hero_image": "shopify://shop_images/April14_Mac.png",
+          "eyebrow": "DROP 01/",
           "title": "LO NUEVO EN TENDENCIA",
           "subtitle": "Tus favoritos de siempre.",
           "primary_button_label": "Comprar Ahora",
@@ -39,8 +40,8 @@
       "featured-products": {
         "type": "featured-products",
         "settings": {
-          "title": "LO NUEVO EN ROJO",
-          "label": "Mujeres",
+          "title": "LO NUEVO EN WF",
+          "label": "Hombres",
           "collection": "",
           "products_to_show": 4,
           "view_all_label": "Ver Todo",

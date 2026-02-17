@@ -12,6 +12,9 @@
     "404": {
       "title": "404 - Página no encontrada",
       "subtext_html": "Lo sentimos, la página que buscas no existe. <a href=\"/\">Haz clic aquí</a> para volver al inicio."
+    },
+    "search": {
+      "search": "Buscar"
     }
   },
   "cart": {
@@ -19,5 +22,10 @@
     "checkout": "Finalizar pedido",
     "update": "Actualizar",
     "remove": "Eliminar"
+  },
+  "templates": {
+    "cart": {
+      "cart": "Carrito"
+    }
   }
 }

@@ -1,29 +1,30 @@
-<div class="section" style="padding-top: 120px;">
-  <h1 class="h1" style="font-weight: 900; border-bottom: 2px solid #fff; padding-bottom: 1rem;">CARRITO</h1>
+<div class="section">
+  <h1 class="h1" style="border-bottom: 1px solid #333; padding-bottom: 2rem;">TU CARRITO</h1>
   {% if cart.item_count > 0 %}
     <form action="{{ routes.cart_url }}" method="post">
-      <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 2rem;">
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem;">
         {% for item in cart.items %}
-          <div style="display: grid; grid-template-columns: 80px 1fr auto; gap: 1.5rem; align-items: center; border-bottom: 1px solid #333; padding-bottom: 1.5rem;">
-            <img src="{{ item.image | image_url: width: 160 }}" style="width: 100%; aspect-ratio: 2/3; object-fit: cover;">
+          <div style="display: grid; grid-template-columns: 70px 1fr auto; gap: 1.5rem; align-items: center; border-bottom: 1px solid #222; padding-bottom: 1.5rem;">
+            <img src="{{ item.image | image_url: width: 140 }}" style="width: 100%; aspect-ratio: 2/3; object-fit: cover;">
             <div>
-              <h4 style="margin: 0; font-size: 1rem;">{{ item.product.title | upcase }}</h4>
-              <p style="margin: 5px 0; font-size: 0.8rem; opacity: 0.5;">{{ item.variant.title }}</p>
-              <a href="{{ item.url_to_remove }}" style="color: #ff0000; font-size: 0.7rem; text-transform: uppercase;">Eliminar</a>
+              <h4 style="margin: 0; font-size: 0.9rem; font-weight: 800;">{{ item.product.title | upcase }}</h4>
+              <p style="margin: 3px 0; font-size: 0.75rem; opacity: 0.5;">{{ item.variant.title }}</p>
+              <a href="{{ item.url_to_remove }}" style="color: #ff4444; font-size: 0.65rem; text-transform: uppercase; font-weight: 800; text-decoration: none;">Eliminar</a>
             </div>
-            <div style="font-weight: 800;">{{ item.final_line_price | money }}</div>
+            <div style="font-weight: 900; font-size: 0.9rem;">{{ item.final_line_price | money }}</div>
           </div>
         {% endfor %}
       </div>
-      <div style="text-align: right; margin-top: 4rem;">
-        <h2 style="font-size: 1.5rem;">TOTAL: {{ cart.total_price | money }}</h2>
-        <button type="submit" name="checkout" class="button" style="width: 100%; max-width: 400px;">FINALIZAR PEDIDO</button>
+      <div style="text-align: right; margin-top: 3rem;">
+        <p style="opacity: 0.5; font-size: 0.8rem;">Impuestos y envío calculados al finalizar.</p>
+        <h2 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 2rem;">TOTAL: {{ cart.total_price | money }}</h2>
+        <button type="submit" name="checkout" class="button" style="width: 100%; max-width: 450px;">FINALIZAR PEDIDO</button>
       </div>
     </form>
   {% else %}
-    <div style="text-align: center; padding: 5rem 0;">
-      <p>Tu carrito está vacío.</p>
-      <a href="/collections/all" class="button">EXPLORAR TIENDA</a>
+    <div style="text-align: center; padding: 6rem 0;">
+      <p style="opacity: 0.6;">Tu carrito está actualmente vacío.</p>
+      <a href="/collections/all" class="button">VOLVER A LA TIENDA</a>
     </div>
   {% endif %}
 </div>

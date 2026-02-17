@@ -1,0 +1,33 @@
+<footer class="site-footer">
+  <div class="site-footer__container">
+    <div class="site-footer__brand">
+      <h3>{{ section.settings.brand_title }}</h3>
+      <p>{{ section.settings.brand_text }}</p>
+    </div>
+
+    <div class="site-footer__links">
+      {% if section.settings.footer_menu != blank %}
+        {% for link in section.settings.footer_menu.links %}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="site-footer__meta">
+      <p>{{ section.settings.contact_text }}</p>
+      <small>© {{ 'now' | date: '%Y' }} {{ shop.name }}</small>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pie de página",
+  "settings": [
+    { "type": "text", "id": "brand_title", "label": "Título", "default": "WF Urban Muscle" },
+    { "type": "textarea", "id": "brand_text", "label": "Texto", "default": "Ropa deportiva premium para elevar tu rendimiento." },
+    { "type": "link_list", "id": "footer_menu", "label": "Menú del footer", "default": "main-menu" },
+    { "type": "text", "id": "contact_text", "label": "Texto de contacto", "default": "Contacto: hola@wfurbanmuscle.com" }
+  ]
+}
+{% endschema %}

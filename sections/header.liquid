@@ -1,21 +1,29 @@
-<header class="header-gym">
+<header class="header-gym{% unless section.settings.enable_sticky_header %} header-gym--static{% endunless %}" style="--header-link-color: {{ section.settings.link_color }}; --header-bg: {{ section.settings.background_color }}; --header-border: {{ section.settings.border_color }};">
   <nav class="header-nav-left">
-    {% for link in section.settings.menu.links %}
-      <a href="{{ link.url }}">{{ link.title }}</a>
-    {% endfor %}
+    {% if section.settings.menu != blank %}
+      {% for link in section.settings.menu.links %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {% endfor %}
+    {% endif %}
   </nav>
 
   <div class="header-logo-center">
-    <a href="/">
-      <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" loading="eager">
+    <a href="{{ routes.root_url }}">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, loading: 'eager' }}
+      {% else %}
+        <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" loading="eager">
+      {% endif %}
     </a>
   </div>
 
   <div class="header-nav-right">
-    <a href="/search">BUSCAR</a>
-    <a href="/cart">CARRITO ({{ cart.item_count }})</a>
+    <a href="{{ routes.search_url }}" class="js-open-search">{{ 'general.search.search' | t | default: 'Buscar' }}</a>
+    <a href="{{ routes.cart_url }}">{{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})</a>
   </div>
 </header>
+
+{% render 'search-modal' %}
 
 {% schema %}
 {
@@ -26,6 +34,35 @@
       "id": "menu",
       "label": "Menú principal",
       "default": "main-menu"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "label": "Encabezado fijo (sticky)",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Color de fondo",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Color del borde inferior",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Color de enlaces",
+      "default": "#000000"
     }
   ]
 }

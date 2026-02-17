@@ -23,12 +23,18 @@ body {
     overflow: hidden;
 }
 
-.hero-image {
+.hero-media {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
+
+.hero-video-embed,
+.hero-video-embed iframe {
+    width: 100%;
+    height: 100%;
+}
 .hero-text-overlay {
     position: absolute;
     bottom: 15%;
@@ -154,8 +160,8 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #eeeeee;
+  background-color: var(--header-bg, #ffffff);
+  border-bottom: 1px solid var(--header-border, #eeeeee);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -193,7 +199,7 @@ body {
 /* Estilo de los enlaces (más pequeños y limpios) */
 .header-gym a {
   text-decoration: none !important;
-  color: #000000 !important;
+  color: var(--header-link-color, #000000) !important;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-weight: 700;
   font-size: 12px; /* Reducimos ligeramente el tamaño de fuente */
@@ -201,6 +207,10 @@ body {
   letter-spacing: 1px;
 }
 
+
+.header-gym--static {
+  position: static;
+}
 /* Ajuste móvil */
 @media (max-width: 768px) {
   .header-gym {

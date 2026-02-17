@@ -1,0 +1,24 @@
+<div id="search-modal" class="search-modal" hidden data-currency="{{ cart.currency.iso_code | default: shop.currency }}">
+  <div class="search-modal__overlay js-close-search" aria-hidden="true"></div>
+  <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-label="{{ 'general.search.search' | t | default: 'Buscar' }}">
+    <div class="search-modal__header">
+      <h3>{{ 'general.search.search' | t | default: 'Buscar' }}</h3>
+      <button type="button" class="search-modal__close js-close-search" aria-label="Cerrar">×</button>
+    </div>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-modal__form">
+      <input
+        type="search"
+        name="q"
+        value=""
+        placeholder="Escribe para buscar..."
+        class="search-modal__input js-search-input"
+        autocomplete="off"
+      >
+      <input type="hidden" name="type" value="product">
+      <button type="submit" class="search-modal__submit">{{ 'general.search.search' | t | default: 'Buscar' }}</button>
+    </form>
+
+    <div class="search-modal__results js-search-results"></div>
+  </div>
+</div>

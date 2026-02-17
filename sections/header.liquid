@@ -1,5 +1,5 @@
 <header class="header-gym{% unless section.settings.enable_sticky_header %} header-gym--static{% endunless %}" style="--header-link-color: {{ section.settings.link_color }}; --header-bg: {{ section.settings.background_color }}; --header-border: {{ section.settings.border_color }};">
-  <nav class="header-nav-left">
+  <nav class="header-nav-left" aria-label="Navegación principal">
     {% if section.settings.menu != blank %}
       {% for link in section.settings.menu.links %}
         <a href="{{ link.url }}">{{ link.title }}</a>
@@ -17,7 +17,12 @@
     </a>
   </div>
 
-  <div class="header-nav-right">
+  <div class="header-nav-right" aria-label="Navegación secundaria">
+    {% for block in section.blocks %}
+      {% if block.type == 'custom_link' %}
+        <a href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.title }}</a>
+      {% endif %}
+    {% endfor %}
     <a href="{{ routes.search_url }}" class="js-open-search">{{ 'general.search.search' | t | default: 'Buscar' }}</a>
     <a href="{{ routes.cart_url }}">{{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})</a>
   </div>
@@ -63,6 +68,31 @@
       "id": "link_color",
       "label": "Color de enlaces",
       "default": "#000000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "custom_link",
+      "name": "Enlace personalizado",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Texto",
+          "default": "Nuevo enlace"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Encabezado"
     }
   ]
 }

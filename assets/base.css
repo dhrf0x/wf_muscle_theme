@@ -1,6 +1,6 @@
 h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   text-transform: uppercase !important;
-  letter-spacing: 0.1em !important;
+  letter-spacing: 0.12em !important;
   font-weight: 900 !important;
   line-height: 1 !important;
 }
@@ -8,49 +8,56 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 .button, .button-secondary, .product-form__submit, .customer-login a {
   border-radius: 0 !important;
   text-transform: uppercase !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.15em !important;
-  padding: 1.2rem 3rem !important;
-  border: 2px solid currentColor !important;
-  transition: all 0.2s ease-in-out;
+  font-weight: 800 !important;
+  letter-spacing: 0.2em !important;
+  padding: 1.5rem 4rem !important;
+  border: 2px solid #000 !important;
+  transition: all 0.3s ease;
+  background-color: #000;
+  color: #fff;
 }
 
 .button:hover {
-  background-color: #000 !important;
-  color: #fff !important;
+  background-color: #fff !important;
+  color: #000 !important;
 }
 
 .product-grid__item {
   border: none !important;
+  margin-bottom: 3rem;
 }
 
 .product-card__content {
   text-align: center !important;
-  padding: 1.5rem 0 !important;
+  padding: 2rem 0 !important;
 }
 
-.product-card__image-with-placeholder-wrapper, .card__media {
+.product-card__image-with-placeholder-wrapper, .card__media, .media {
   border-radius: 0 !important;
 }
 
 .badge {
   border-radius: 0 !important;
-  font-weight: 800 !important;
+  font-weight: 900 !important;
   text-transform: uppercase !important;
-  padding: 0.4rem 0.8rem !important;
+  padding: 0.5rem 1rem !important;
+  border: 1px solid currentColor;
 }
 
 .header {
-  --header-height: 70px !important;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  --header-height: 80px !important;
+  background-color: #fff;
 }
 
 .footer {
   background-color: #000 !important;
   color: #fff !important;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 input, select, textarea {
   border-radius: 0 !important;
-  border: 1px solid #ccc !important;
+  border: 1px solid #000 !important;
+  padding: 1rem !important;
 }

@@ -567,22 +567,16 @@
         ],
         "default": "heading-normal"
       },
-      {
-        "type": "select",
-        "id": "type_case_h1",
-        "label": "uppercase",
-        "options": [
-          {
-            "value": "none",
-            "label": "t:options.default"
-          },
-          {
-            "value": "uppercase",
-            "label": "t:options.uppercase"
-          }
-        ],
-        "default": "none"
-      },
+{
+  "type": "select",
+  "id": "type_case_h1",
+  "label": "Uppercase",
+  "default": "uppercase",
+  "options": [
+    { "value": "none", "label": "None" },
+    { "value": "uppercase", "label": "Uppercase" }
+  ]
+},
       {
         "type": "header",
         "content": "t:options.h2"
@@ -1550,7 +1544,7 @@
         "step": 1,
         "unit": "px",
         "label": "t:settings.border_radius",
-        "default": 100
+        "default": 0
       },
       {
         "type": "select",

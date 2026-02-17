@@ -31,8 +31,10 @@
     assign sticky = 'scroll-up'
   endif
 
-  if transparent and sticky
-    assign transparent = 'not-sticky'
+  assign sticky = 'always'
+  assign transparent = 'none'
+  if template.name == 'index'
+    assign transparent = 'always'
   endif
 
 

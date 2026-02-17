@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "settings": {
+        "eyebrow_text": "Resumen",
+        "title_text": "Carrito",
+        "subtitle_text": "Revisa tus productos antes de finalizar tu compra.",
+        "subtotal_label": "Subtotal",
+        "note_text": "Impuestos y envío se calculan al finalizar compra.",
+        "line_total_label": "Total:",
+        "quantity_label": "Cantidad",
+        "remove_label": "Eliminar",
+        "update_button_text": "Actualizar",
+        "checkout_button_text": "Finalizar compra",
+        "empty_text": "Tu carrito está vacío.",
+        "empty_button_text": "Ver productos",
+        "empty_button_url": "",
+        "content_max_width": 1200
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

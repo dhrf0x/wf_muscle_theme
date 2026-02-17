@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "eyebrow_text": "WF Urban Muscle",
+        "variant_label": "Selecciona tu talla",
+        "quantity_label": "Cantidad",
+        "add_to_cart_text": "Añadir al carrito",
+        "content_max_width": 1250
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

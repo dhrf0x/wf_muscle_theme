@@ -12,7 +12,9 @@
           {% for item in cart.items %}
             <article class="cart-item">
               <a class="cart-item__image" href="{{ item.url }}">
-                <img src="{{ item.image | image_url: width: 360 }}" alt="{{ item.title | escape }}">
+                {% if item.image != blank %}
+                  <img src="{{ item.image | image_url: width: 360 }}" alt="{{ item.title | escape }}">
+                {% endif %}
               </a>
 
               <div class="cart-item__content">
@@ -49,7 +51,7 @@
     {% else %}
       <div class="cart-page__empty">
         <p class="search-empty">{{ section.settings.empty_text }}</p>
-        <a href="{{ section.settings.empty_button_url }}" class="btn-white">{{ section.settings.empty_button_text }}</a>
+        <a href="{{ section.settings.empty_button_url | default: routes.all_products_collection_url }}" class="btn-white">{{ section.settings.empty_button_text }}</a>
       </div>
     {% endif %}
   </div>
@@ -73,6 +75,11 @@
     {"type": "text", "id": "empty_button_text", "label": "Texto botón vacío", "default": "Ver productos"},
     {"type": "url", "id": "empty_button_url", "label": "URL botón vacío"},
     {"type": "range", "id": "content_max_width", "label": "Ancho máximo del contenido", "min": 980, "max": 1500, "step": 20, "default": 1200, "unit": "px"}
+  ],
+  "presets": [
+    {
+      "name": "Sección principal"
+    }
   ]
 }
 {% endschema %}

@@ -1,0 +1,38 @@
+<section class="search-page">
+  <div class="search-page__container" style="--collection-content-max-width: {{ section.settings.content_max_width }}px;">
+    <h1 class="search-page__title">{{ 'general.search.search' | t | default: 'Buscar' }}</h1>
+    {% if search.performed and search.results_count > 0 %}
+      <p class="search-page__count">{{ search.results_count }} resultados para “{{ search.terms }}”</p>
+      <div class="collection-page__grid">
+        {% for item in search.results %}
+          {% if item.object_type == 'product' %}
+            <a href="{{ item.url }}" class="product-card">
+              <div class="product-card-image">
+                {% if item.featured_image %}
+                  <img src="{{ item.featured_image | image_url: width: 800 }}" alt="{{ item.title | escape }}">
+                {% endif %}
+              </div>
+              <div class="product-card-info">
+                <p class="product-title">{{ item.title }}</p>
+                <p class="product-price">{{ item.price | money }}</p>
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% elsif search.performed %}
+      <p class="search-empty">Sin resultados para “{{ search.terms }}”.</p>
+    {% else %}
+      <p class="search-empty">Usa el buscador del encabezado para encontrar productos.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Búsqueda principal",
+  "settings": [
+    { "type": "range", "id": "content_max_width", "label": "Ancho contenido", "min": 700, "max": 1400, "step": 20, "default": 1200, "unit": "px" }
+  ]
+}
+{% endschema %}

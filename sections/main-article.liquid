@@ -1,0 +1,14 @@
+<section class="article-page" style="--collection-content-max-width: {{ section.settings.content_max_width }}px;">
+  <h1>{{ article.title }}</h1>
+  <p>{{ article.author }} · {{ article.published_at | date: format: 'abbreviated_date' }}</p>
+  <div class="rte">{{ article.content }}</div>
+</section>
+
+{% schema %}
+{
+  "name": "Artículo principal",
+  "settings": [
+    { "type": "range", "id": "content_max_width", "label": "Ancho contenido", "min": 700, "max": 1400, "step": 20, "default": 900, "unit": "px" }
+  ]
+}
+{% endschema %}

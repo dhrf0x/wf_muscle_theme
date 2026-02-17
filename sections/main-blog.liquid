@@ -1,0 +1,25 @@
+<section class="blog-page" style="--collection-content-max-width: {{ section.settings.content_max_width }}px;">
+  <h1>{{ blog.title }}</h1>
+  {% paginate blog.articles by section.settings.posts_per_page %}
+    <div class="blog-grid">
+      {% for article in blog.articles %}
+        <article>
+          <a href="{{ article.url }}"><h3>{{ article.title }}</h3></a>
+          <p>{{ article.published_at | date: format: 'abbreviated_date' }}</p>
+          <p>{{ article.excerpt_or_content | strip_html | truncatewords: 28 }}</p>
+        </article>
+      {% endfor %}
+    </div>
+    {% if paginate.pages > 1 %}{{ paginate | default_pagination }}{% endif %}
+  {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "Blog principal",
+  "settings": [
+    { "type": "range", "id": "posts_per_page", "label": "Entradas por página", "min": 3, "max": 12, "step": 1, "default": 6 },
+    { "type": "range", "id": "content_max_width", "label": "Ancho contenido", "min": 700, "max": 1400, "step": 20, "default": 1100, "unit": "px" }
+  ]
+}
+{% endschema %}

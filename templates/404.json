@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "settings": {
+        "back_home_text": "Volver al inicio",
+        "content_max_width": 900
+      }
+    }
+  },
+  "order": ["main"]
+}

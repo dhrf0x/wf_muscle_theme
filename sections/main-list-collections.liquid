@@ -1,0 +1,32 @@
+<section class="list-collections-page" style="--collection-content-max-width: {{ section.settings.content_max_width }}px;">
+  <h1>{{ section.settings.title | default: 'Colecciones' }}</h1>
+  <div class="list-collections-grid">
+    {% for collection in collections %}
+      {% unless collection.handle == 'frontpage' %}
+        <a href="{{ collection.url }}" class="product-card">
+          <div class="product-card-image">
+            {% if collection.featured_image %}
+              <img src="{{ collection.featured_image | image_url: width: 900 }}" alt="{{ collection.title | escape }}">
+            {% elsif collection.products.first.featured_image %}
+              <img src="{{ collection.products.first.featured_image | image_url: width: 900 }}" alt="{{ collection.title | escape }}">
+            {% endif %}
+          </div>
+          <div class="product-card-info">
+            <p class="product-title">{{ collection.title }}</p>
+            <p class="product-price">{{ collection.products_count }} productos</p>
+          </div>
+        </a>
+      {% endunless %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Listado de colecciones",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Colecciones" },
+    { "type": "range", "id": "content_max_width", "label": "Ancho contenido", "min": 700, "max": 1400, "step": 20, "default": 1200, "unit": "px" }
+  ]
+}
+{% endschema %}

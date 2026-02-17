@@ -1,0 +1,15 @@
+<section class="main-404" style="--collection-content-max-width: {{ section.settings.content_max_width }}px; text-align:center;">
+  <h1>{{ 'general.404.title' | t }}</h1>
+  <p>{{ 'general.404.subtext_html' | t }}</p>
+  <a href="{{ routes.root_url }}" class="btn-white" style="display:inline-block; margin-top:16px;">{{ section.settings.back_home_text }}</a>
+</section>
+
+{% schema %}
+{
+  "name": "404 principal",
+  "settings": [
+    { "type": "text", "id": "back_home_text", "label": "Texto volver inicio", "default": "Volver al inicio" },
+    { "type": "range", "id": "content_max_width", "label": "Ancho contenido", "min": 700, "max": 1400, "step": 20, "default": 900, "unit": "px" }
+  ]
+}
+{% endschema %}

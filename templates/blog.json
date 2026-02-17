@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "posts_per_page": 6,
+        "content_max_width": 1100
+      }
+    }
+  },
+  "order": ["main"]
+}

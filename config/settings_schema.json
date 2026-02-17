@@ -1,36 +1,83 @@
 [
-  { "name": "theme_info", "theme_name": "WF Muscle Glass", "theme_version": "3.3.1" },
   {
-    "name": "Colors",
+    "name": "theme_info",
+    "theme_name": "Skeleton",
+    "theme_version": "0.1.0",
+    "theme_author": "Shopify",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://support.shopify.com/"
+  },
+  {
+    "name": "t:general.typography",
     "settings": [
       {
-        "type": "color_scheme_group",
-        "id": "color_schemes",
-        "definition": [
-          { "type": "color", "id": "background", "label": "BG", "default": "#000000" },
-          { "type": "color", "id": "foreground", "label": "Texto", "default": "#ffffff" },
-          { "type": "color", "id": "primary", "label": "Primario", "default": "#ffffff" },
-          { "type": "color", "id": "border", "label": "Bordes", "default": "#333333" },
-          { "type": "color", "id": "primary_button_background", "label": "Btn BG", "default": "#ffffff" },
-          { "type": "color", "id": "primary_button_text", "label": "Btn Texto", "default": "#000000" },
-          { "type": "color", "id": "primary_button_border", "label": "Btn Borde", "default": "#ffffff" },
-          { "type": "color", "id": "secondary_button_background", "label": "Sec BG", "default": "#000000" },
-          { "type": "color", "id": "secondary_button_text", "label": "Sec Texto", "default": "#ffffff" },
-          { "type": "color", "id": "secondary_button_border", "label": "Sec Borde", "default": "#ffffff" }
-        ],
-        "role": {
-          "text": "foreground", "background": "background", "links": "primary",
-          "primary_button": "primary_button_background", "on_primary_button": "primary_button_text", "primary_button_border": "primary_button_border",
-          "secondary_button": "secondary_button_background", "on_secondary_button": "secondary_button_text", "secondary_button_border": "secondary_button_border"
-        }
+        "type": "header",
+        "content": "t:general.fonts"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_primary_font",
+        "default": "work_sans_n4",
+        "label": "t:general.primary"
       }
     ]
   },
   {
-    "name": "Global Design",
+    "name": "t:general.layout",
     "settings": [
-      { "type": "range", "id": "button_border_radius_primary", "min": 0, "max": 100, "default": 0, "label": "Radio Botones" },
-      { "type": "range", "id": "badge_corner_radius", "min": 0, "max": 100, "default": 0, "label": "Radio Etiquetas" }
+      {
+        "type": "select",
+        "id": "max_page_width",
+        "label": "t:labels.page_width",
+        "options": [
+          {
+            "value": "90rem",
+            "label": "t:options.page_width.narrow"
+          },
+          {
+            "value": "110rem",
+            "label": "t:options.page_width.wide"
+          }
+        ],
+        "default": "90rem"
+      },
+      {
+        "type": "range",
+        "id": "min_page_margin",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:labels.page_margin",
+        "default": 20
+      }
+    ]
+  },
+  {
+    "name": "t:general.colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "background_color",
+        "default": "#FFFFFF",
+        "label": "t:labels.background"
+      },
+      {
+        "type": "color",
+        "id": "foreground_color",
+        "default": "#333333",
+        "label": "t:labels.foreground"
+      },
+      {
+        "type": "range",
+        "id": "input_corner_radius",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "unit": "px",
+        "label": "t:labels.input_corner_radius",
+        "default": 4
+      }
     ]
   }
 ]

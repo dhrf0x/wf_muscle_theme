@@ -18,10 +18,8 @@
   </div>
 
   <div class="header-nav-right">
-    <button type="button" class="header-link-button js-open-search" aria-haspopup="dialog" aria-controls="search-modal" aria-expanded="false">
-      {{ 'general.search.search' | t | default: 'Buscar' }}
-    </button>
-    <a href="{{ routes.cart_url }}">{{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})</a>
+    <a href="{{ routes.search_url }}">{{ 'general.search.search' | t | default: 'BUSCAR' }}</a>
+    <a href="{{ routes.cart_url }}">{{ 'templates.cart.cart' | t | default: 'CARRITO' }} ({{ cart.item_count }})</a>
   </div>
 </header>
 

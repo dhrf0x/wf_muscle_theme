@@ -1,22 +1,28 @@
-<div class="container max-w-screen-sm">
-  <renderless-template-switch
-    v-slot="{ active, show }"
-    initial="login"
-  >
-    <transition-group name="slide-from-left">
-      <div
-        v-show="active === 'login'"
-        key="login"
-      >
-        {% render 'layout-account-login' %}
-      </div>
+<!-- /templates/customers/login.liquid -->
 
-      <div
-        v-show="active === 'forgot-password'"
-        key="forgot-password"
-      >
-        {% render 'layout-account-forgot-password' %}
-      </div>
-    </transition-group>
-  </renderless-template-switch>
-</div>
+<h2>Login</h2>
+{% form 'customer_login' %}
+
+{{ form.errors | default_errors }}
+
+<label for="customer_email">Email Address</label>
+<input type="email" name="customer[email]" />
+
+<label for="customer_password">Password</label>
+<input type="password" name="customer[password]" />
+
+<input type="submit" value="Sign In" />
+
+{% endform %}
+
+<h2>Forgot Password</h2>
+{% form 'recover_customer_password' %}
+
+{{ form.errors | default_errors }}
+
+<label for="customer_email">Email Address</label>
+<input type="email" name="email" />
+
+<input type="submit" value="Submit" />
+
+{% endform %}

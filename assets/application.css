@@ -1,12 +1,122 @@
+:root {
+    --black: #000000;
+    --white: #ffffff;
+    --gray-light: #f5f5f5;
+    --font-heading: 'Helvetica Neue', Arial, sans-serif;
+}
+
 body {
-    background-color: rgb(251, 251, 232);
+    background-color: var(--white);
+    font-family: var(--font-heading);
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
 }
 
-.homepage {
-    text-align: center;
-    padding-top: 10em;
+h1, h2, h3, .heading-bold {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--black);
 }
 
-.logo {
-    width: 25%;
+.main-content {
+    max-width: 100%;
+}
+
+.header-gym {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 15px 40px;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-light);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--black);
+}
+
+.hero-banner {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    background-color: #7a1b21;
+    overflow: hidden;
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-text-overlay {
+    position: absolute;
+    bottom: 20%;
+    left: 5%;
+    color: var(--white);
+    max-width: 500px;
+}
+
+.hero-text-overlay h1 {
+    color: var(--white);
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 20px;
+}
+
+.cta-group {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-white {
+    background: var(--white);
+    color: var(--black);
+    padding: 12px 25px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.product-row {
+    padding: 40px 5%;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.product-card {
+    text-decoration: none;
+    color: var(--black);
+}
+
+.product-card img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    background: var(--gray-light);
+}
+
+.product-info-label {
+    margin-top: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 14px;
 }

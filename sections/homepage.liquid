@@ -1,5 +1,36 @@
-<div class="homepage">
-  <img src="{{ 'weeklyhow-logo.png' | asset_img_url: 'large' }}" class="logo">
-  <h1>Welcome to Shopify Theme Development course!</h1>
-  <p>{% render 'homepage-text' %}</p>
-</div>
+<section class="hero-banner">
+    <img src="{{ 'hero-gym-red.jpg' | asset_url }}" class="hero-image">
+    <div class="hero-text-overlay">
+        <p class="heading-bold" style="margin-bottom: 5px;">Mujeres</p>
+        <h1>LO NUEVO EN ROJO</h1>
+        <p>Tus favoritos de siempre, ahora en rojos en tendencia.</p>
+        <div class="cta-group">
+            <a href="/collections/all" class="btn-white">Comprar Ahora</a>
+            <a href="/collections/red" class="btn-white" style="background: transparent; border: 1px solid white; color: white;">Shop Red</a>
+        </div>
+    </div>
+</section>
+
+<section class="product-row">
+    <div class="row-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
+        <div>
+            <p class="heading-bold" style="font-size: 12px; margin: 0;">Mujeres</p>
+            <h2 style="margin: 0; font-size: 24px;">LO NUEVO EN ROJO</h2>
+        </div>
+        <a href="/collections/all" class="heading-bold" style="font-size: 12px; color: black;">Ver Todo</a>
+    </div>
+
+    <div class="product-grid">
+        {% for product in collections['frontpage'].products limit: 4 %}
+            <a href="{{ product.url }}" class="product-card">
+                <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title }}">
+                <div class="product-info-label">
+                    {{ product.title }}
+                </div>
+                <div style="font-size: 14px; font-weight: 400;">
+                    {{ product.price | money }}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</section>

@@ -1,22 +1,43 @@
-{% paginate search.results by 10 %}
-  <form action="/search" method="get" role="search">
-    <input type="search" name="q" value="{{ search.terms | escape }}">
-    <button type="submit">search</button>
-  </form>
+<section class="search-page">
+  <div class="search-page__container">
+    <h1 class="search-page__title">{{ 'general.search.search' | t | default: 'Buscar' }}</h1>
 
-  {% if search.performed %}
-    {% for item in search.results %}
-      {% if item.featured_image %}
-        <a href="{{ item.url | within: collection }}" title="{{ item.title | escape }}">
-          {{ item.featured_image.src | img_url: 'medium' | img_tag: item.featured_image.alt }}
-        </a>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+      <input type="hidden" name="type" value="product">
+      <input
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="Escribe para buscar productos"
+        class="search-page__input"
+      >
+      <button type="submit" class="search-page__submit">{{ 'general.search.search' | t | default: 'Buscar' }}</button>
+    </form>
+
+    {% if search.performed %}
+      <p class="search-page__count">{{ search.results_count }} resultados</p>
+
+      {% if search.results_count > 0 %}
+        <div class="search-page__grid">
+          {% for item in search.results %}
+            {% if item.object_type == 'product' %}
+              <a href="{{ item.url }}" class="product-card">
+                <div class="product-card-image">
+                  {% if item.featured_image %}
+                    <img src="{{ item.featured_image | image_url: width: 800, height: 1000, crop: 'center' }}" alt="{{ item.title }}">
+                  {% endif %}
+                </div>
+                <div class="product-card-info">
+                  <p class="product-title">{{ item.title }}</p>
+                  <p class="product-price">{{ item.price | money }}</p>
+                </div>
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="search-empty">Sin resultados para “{{ search.terms }}”.</p>
       {% endif %}
-      <h5>{{ item.title | link_to: item.url }}</h5>
-      <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
-    {% else %}
-      no results
-    {% endfor %}
-  {% endif %}
-
-  {% if paginate.pages > 1 %}{{ paginate | default_pagination }}{% endif %}
-{% endpaginate %}
+    {% endif %}
+  </div>
+</section>

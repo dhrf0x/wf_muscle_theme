@@ -18,6 +18,14 @@
   </div>
 
   <div class="header-nav-right">
+
+    <a href="{{ routes.search_url }}" class="js-open-search">{{ 'general.search.search' | t | default: 'Buscar' }}</a>
+    <a href="{{ routes.cart_url }}">{{ 'templates.cart.cart' | t | default: 'Carrito' }} ({{ cart.item_count }})</a>
+  </div>
+</header>
+
+{% render 'search-modal' %}
+
     <a href="{{ routes.search_url }}">{{ 'general.search.search' | t | default: 'BUSCAR' }}</a>
     <a href="{{ routes.cart_url }}">{{ 'templates.cart.cart' | t | default: 'CARRITO' }} ({{ cart.item_count }})</a>
   </div>

@@ -1,14 +1,14 @@
-/* RESET Y ESTRUCTURA BASE */
+/* --- RESET ESTRUCTURAL --- */
 * { box-sizing: border-box; }
-body { margin: 0; padding: 0; background-color: #fff; color: #000; font-family: sans-serif; line-height: 1.4; overflow-x: hidden; }
-.section { padding: 5rem 2rem; max-width: 1400px; margin: 0 auto; }
+body { margin: 0; padding: 0; background-color: #fff; color: #000; font-family: -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.5; }
+.section { padding: 4rem 2rem; max-width: 1400px; margin: 0 auto; }
 
-/* ESTILO MUSCLE (GYMSHARK/YOUNGLA) */
+/* --- ESTILO MUSCLE (Gymshark / YoungLA) --- */
 h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   text-transform: uppercase !important;
   letter-spacing: 0.1em !important;
   font-weight: 900 !important;
-  line-height: 1 !important;
+  line-height: 1.1 !important;
 }
 
 .button, .product-form__submit {
@@ -20,26 +20,44 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   letter-spacing: 0.15em !important;
   padding: 1.2rem 3rem !important;
   border: 2px solid #000 !important;
-  transition: all 0.3s ease;
+  transition: 0.3s ease;
   cursor: pointer;
-  display: inline-block;
-  text-decoration: none;
+  width: 100%;
 }
-
 .button:hover { background: #fff !important; color: #000 !important; }
 
-/* GRILLA DE PRODUCTOS */
+/* --- PÁGINA DE PRODUCTO --- */
+.product-page-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  padding-top: 100px; /* Espacio para el header glass */
+}
+
+@media screen and (min-width: 990px) {
+  .product-page-container { grid-template-columns: 1.2fr 0.8fr; }
+}
+
+.product-info-centered { text-align: center; display: flex; flex-direction: column; gap: 1.5rem; }
+
+/* --- CARRITO --- */
+.cart-items { list-style: none; padding: 0; margin-top: 50px; }
+.cart-item {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 2rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+}
+.cart-item img { border-radius: 0; width: 100%; aspect-ratio: 2/3; object-fit: cover; }
+
+/* --- GRILLA DE COLECCIÓN --- */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
 }
-
 @media screen and (min-width: 750px) {
   .product-grid { grid-template-columns: repeat(4, 1fr); }
 }
-
-.product-card { border-radius: 0 !important; text-align: center; }
-.product-card img { width: 100%; height: auto; object-fit: cover; aspect-ratio: 2/3; border-radius: 0 !important; }
-.product-card__title { font-weight: 800; font-size: 1.2rem; margin-top: 1rem; }
-.product-card__price { font-size: 1rem; opacity: 0.7; }

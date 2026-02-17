@@ -13,18 +13,11 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   padding: 1.5rem 4rem !important;
   border: 2px solid #000 !important;
   transition: all 0.3s ease;
-  background-color: #000;
-  color: #fff;
 }
 
-.button:hover {
-  background-color: #fff !important;
-  color: #000 !important;
-}
-
-.product-grid__item {
+.product-grid__item, .card__media, .media, .product-card__image-with-placeholder-wrapper {
+  border-radius: 0 !important;
   border: none !important;
-  margin-bottom: 3rem;
 }
 
 .product-card__content {
@@ -32,32 +25,19 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   padding: 2rem 0 !important;
 }
 
-.product-card__image-with-placeholder-wrapper, .card__media, .media {
-  border-radius: 0 !important;
-}
-
 .badge {
   border-radius: 0 !important;
   font-weight: 900 !important;
   text-transform: uppercase !important;
   padding: 0.5rem 1rem !important;
-  border: 1px solid currentColor;
-}
-
-.header {
-  --header-height: 80px !important;
-  background-color: #fff;
-}
-
-.footer {
-  background-color: #000 !important;
-  color: #fff !important;
-  padding-top: 5rem;
-  padding-bottom: 5rem;
 }
 
 input, select, textarea {
   border-radius: 0 !important;
   border: 1px solid #000 !important;
-  padding: 1rem !important;
+}
+
+.footer {
+  background-color: #000 !important;
+  color: #fff !important;
 }

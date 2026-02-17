@@ -1,7 +1,7 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Horizon",
+    "theme_name": "WF Muscle Theme",
     "theme_version": "3.3.1",
     "theme_author": "Shopify",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
@@ -95,7 +95,7 @@
             "type": "color",
             "id": "primary_hover",
             "label": "t:settings.primary_hover_color",
-            "default": "#333333",
+            "default": "#1A1A1A",
             "alpha": true
           },
           {
@@ -157,54 +157,17 @@
             "label": "t:settings.hover_borders",
             "default": "#000000",
             "alpha": true
-          },
-          {
-            "type": "header",
-            "content": "t:names.secondary_button"
-          },
-          {
-            "type": "color",
-            "id": "secondary_button_background",
-            "label": "t:settings.background",
-            "default": "#FFFFFF",
-            "alpha": true
-          },
-          {
-            "type": "color",
-            "id": "secondary_button_text",
-            "label": "t:settings.text",
-            "default": "#000000",
-            "alpha": true
-          },
-          {
-            "type": "color",
-            "id": "secondary_button_border",
-            "label": "t:settings.borders",
-            "default": "#000000",
-            "alpha": true
-          },
-          {
-            "type": "color",
-            "id": "secondary_button_hover_background",
-            "label": "t:settings.hover_background",
-            "default": "#000000",
-            "alpha": true
-          },
-          {
-            "type": "color",
-            "id": "secondary_button_hover_text",
-            "label": "t:settings.hover_text",
-            "default": "#FFFFFF",
-            "alpha": true
-          },
-          {
-            "type": "color",
-            "id": "secondary_button_hover_border",
-            "label": "t:settings.hover_borders",
-            "default": "#000000",
-            "alpha": true
           }
-        ]
+        ],
+        "role": {
+          "text": "foreground",
+          "background": "background",
+          "links": "primary",
+          "icons": "foreground",
+          "primary_button": "primary_button_background",
+          "on_primary_button": "primary_button_text",
+          "primary_button_border": "primary_button_border"
+        }
       }
     ]
   },
@@ -223,19 +186,9 @@
       },
       {
         "type": "font_picker",
-        "id": "type_subheading_font",
-        "default": "work_sans_n7",
-        "label": "t:options.subheading"
-      },
-      {
-        "type": "font_picker",
         "id": "type_heading_font",
         "default": "work_sans_n9",
         "label": "t:options.heading"
-      },
-      {
-        "type": "header",
-        "content": "t:options.h1"
       },
       {
         "type": "select",
@@ -246,10 +199,6 @@
           { "value": "none", "label": "None" },
           { "value": "uppercase", "label": "Uppercase" }
         ]
-      },
-      {
-        "type": "header",
-        "content": "t:options.h2"
       },
       {
         "type": "select",
@@ -336,6 +285,16 @@
         "unit": "px",
         "label": "t:settings.border_radius",
         "default": 0
+      },
+      {
+        "type": "select",
+        "id": "button_text_case_primary",
+        "label": "t:settings.button_text_case",
+        "options": [
+          { "value": "default", "label": "Default" },
+          { "value": "uppercase", "label": "Uppercase" }
+        ],
+        "default": "uppercase"
       }
     ]
   },

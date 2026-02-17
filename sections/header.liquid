@@ -1,123 +1,68 @@
 {% liquid
   assign order = 'logo,menu,localization,search,drawer_search,actions'
-  if shop.customer_accounts_enabled
-    assign order = 'drawer_search,logo,menu,localization,search,actions'
-  endif
-
   assign rows = 'top,bottom' | split: ','
-  assign search_style = 'none'
-  if section.settings.show_search
-    assign search_style = 'modal'
-  endif
-
   assign sticky = 'always'
   assign transparent = 'none'
   if template.name == 'index'
     assign transparent = 'always'
   endif
 
-  if transparent
-    assign transparent_color_scheme = section.settings.home_color_scheme
-    if transparent_color_scheme == 'inverse'
-      assign transparent_color_scheme = 'color-' | append: section.settings.color_scheme_transparent
-    else
-      assign transparent_color_scheme = 'color-' | append: section.settings.color_scheme_top
-    endif
-  endif
-
   capture logo
     content_for 'block', type: '_header-logo', id: 'header-logo'
   endcapture
-
   capture menu
     content_for 'block', type: '_header-menu', id: 'header-menu'
   endcapture
-
-  capture drawer_menu
-    content_for 'block', type: '_header-menu', id: 'header-menu', variant: 'mobile'
-  endcapture
-
   capture actions
     render 'header-actions'
   endcapture
-
   capture search
-    render 'search', style: search_style
+    render 'search', style: 'modal'
   endcapture
-
-  assign class = 'header'
-  if transparent_color_scheme
-    assign class = class | append: ' ' | append: transparent_color_scheme
-  endif
 %}
-
-{% capture localization_markup %}
-  {% if section.settings.show_country or section.settings.show_language %}
-    <dropdown-localization-component class="dropdown-localization mobile:hidden">
-      <button type="button" class="button dropdown-localization__button localization-selector link" ref="button" on:click="/toggleSelector">
-        <span class="currency-code">{{ localization.country.currency.iso_code }}</span>
-        <span>/</span>
-        <span>{{ localization.language.iso_code | upcase }}</span>
-        <span class="svg-wrapper icon-caret">{{ 'icon-caret.svg' | inline_asset_content }}</span>
-      </button>
-    </dropdown-localization-component>
-  {% endif %}
-{% endcapture %}
 
 <header-component
   id="header-component"
-  class="{{ class }}"
-  {% if transparent %}transparent="{{ transparent }}"{% endif %}
-  {% if sticky %}sticky="{{ sticky }}"{% endif %}
-  data-skip-node-update
+  class="header {% if transparent == 'always' %}header--transparent{% endif %}"
+  sticky="{{ sticky }}"
 >
-  <div class="header__row header__row--top section section--full-width-margin">
+  <div class="header__row">
     <div class="header__columns">
-      <div class="header__column header__column--left">
-        {{ logo }}
-      </div>
-      <div class="header__column header__column--center mobile:hidden">
-        {{ menu }}
-      </div>
+      <div class="header__column">{{ logo }}</div>
+      <div class="header__column header__column--center">{{ menu }}</div>
       <div class="header__column header__column--right">
         {{ search }}
-        {{ localization_markup }}
         {{ actions }}
       </div>
     </div>
   </div>
 </header-component>
 
-<script src="{{ 'header.js' | asset_url }}" type="module"></script>
-
 {% stylesheet %}
-  :root {
-    --header-height: 70px;
-  }
-
   .header {
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(0, 0, 0, 0.1);
     display: block;
-    width: 100%;
-    z-index: 100;
-  }
-
-  .header[sticky='always'] {
     position: sticky;
     top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: var(--glass-bg) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--glass-border);
   }
 
-  .header[transparent='always'] {
-    position: absolute;
-    background: transparent;
-    border-bottom: none;
+  .header--transparent {
+    position: fixed;
   }
 
   .header__columns {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    height: var(--header-height);
-    padding: 0 2rem;
+    height: 70px;
+    padding: 0 4rem;
   }
 
   .header__column--center {
@@ -128,75 +73,37 @@
   .header__column--right {
     display: flex;
     justify-content: flex-end;
-    gap: 1.5rem;
-  }
-
-  .header-actions__action svg {
-    width: 24px;
-    height: 24px;
+    gap: 2rem;
   }
 
   .header-menu .menu-list {
     display: flex;
-    gap: 2rem;
+    gap: 3rem;
     list-style: none;
+  }
+
+  .header-menu .menu-list__link {
     text-transform: uppercase;
-    font-weight: 700;
+    font-weight: 800;
+    font-size: 13px;
     letter-spacing: 0.1em;
+    text-decoration: none;
+    color: #000;
   }
 
   @media screen and (max-width: 749px) {
     .header__columns {
-      grid-template-columns: 1fr 2fr 1fr;
-      padding: 0 1rem;
+      grid-template-columns: 1fr 1fr;
+      padding: 0 2rem;
     }
+    .header__column--center { display: none; }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "t:names.header",
-  "tag": "header",
-  "class": "header-section",
-  "settings": [
-    {
-      "type": "header",
-      "content": "t:content.appearance"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme_top",
-      "label": "t:settings.default",
-      "default": "scheme-1"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_search",
-      "label": "t:settings.search_icon",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_country",
-      "label": "t:settings.country_region",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_language",
-      "label": "t:settings.language_selector",
-      "default": true
-    },
-    {
-      "type": "select",
-      "id": "home_color_scheme",
-      "label": "t:settings.color_scheme",
-      "options": [
-        { "value": "default", "label": "t:options.default" },
-        { "value": "inverse", "label": "t:options.inverse" }
-      ],
-      "default": "default"
-    }
-  ]
+  "name": "Header Muscle",
+  "settings": [],
+  "presets": [{"name": "Header Muscle"}]
 }
 {% endschema %}

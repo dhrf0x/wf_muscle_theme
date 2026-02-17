@@ -1,0 +1,14 @@
+{
+  "general": {
+    "404": {
+      "title": "404 - Página no encontrada",
+      "subtext_html": "Lo sentimos, la página que buscas no existe. <a href=\"/\">Haz clic aquí</a> para volver al inicio."
+    }
+  },
+  "cart": {
+    "title": "Carrito",
+    "checkout": "Finalizar pedido",
+    "update": "Actualizar",
+    "remove": "Eliminar"
+  }
+}

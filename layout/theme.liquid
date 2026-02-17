@@ -1,46 +1,17 @@
 <!doctype html>
-<html
-  {% if request.design_mode %}
-    class="shopify-design-mode"
-  {% endif %}
-  lang="{{ request.locale.iso_code }}"
->
+<html class="no-js" lang="{{ request.locale.iso_code }}">
   <head>
-    {%- if settings.favicon != blank -%}
-      <link
-        rel="icon"
-        type="image/png"
-        href="{{ settings.favicon | image_url: width: 32, height: 32 }}"
-      >
-    {%- endif -%}
-
-    {% comment %} This a way to wait for main content to load when navigating to a new page so that the view transitions can work consistently {% endcomment %}
-    {% if settings.transition_to_main_product or settings.page_transition_enabled %}
-      <link
-        rel="expect"
-        href="#MainContent"
-        blocking="render"
-        id="view-transition-render-blocker"
-      >
-    {% endif %}
-
-    {%- render 'meta-tags' -%}
-    {%- render 'stylesheets' -%}
-    {%- render 'fonts' -%}
-    {%- render 'scripts' -%}
-    {%- render 'theme-styles-variables' -%}
-    {%- render 'color-schemes' -%}
-
-    {% if request.design_mode %}
-      {%- render 'theme-editor' -%}
-    {% endif %}
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     {{ content_for_header }}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
   </head>
-
-<body class="template-{{ template.name }}">
-  <main class="{% if template.name == 'index' %}index-main{% endif %}">
-    {{ content_for_layout }}
-  </main>
-</body>
+  <body class="template-{{ template.name }}">
+    {% section 'header' %}
+    <main id="MainContent" class="content-for-layout focus-none {% if template.name == 'index' %}index-main{% endif %}" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+    {% section 'footer' %}
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+  </body>
 </html>

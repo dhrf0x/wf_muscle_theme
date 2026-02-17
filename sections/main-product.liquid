@@ -21,19 +21,21 @@
         <input type="hidden" name="id" value="{{ current_variant.id }}">
         
         {% if product.variants.size > 1 %}
-          <label>{{ section.settings.variant_label }}</label>
-          <select name="id">
-            {% for variant in product.variants %}
-              <option value="{{ variant.id }}" {% if variant == current_variant %}selected{% endif %}>
-                {{ variant.title }} - {{ variant.price | money }}
-              </option>
-            {% endfor %}
-          </select>
+          <div class="product-option">
+            <label>{{ section.settings.variant_label }}</label>
+            <select name="id">
+              {% for variant in product.variants %}
+                <option value="{{ variant.id }}" {% if variant == current_variant %}selected{% endif %}>
+                  {{ variant.title }} - {{ variant.price | money }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
         {% endif %}
 
         <div class="product-qty" style="margin: 20px 0;">
           <label>{{ section.settings.quantity_label }}</label>
-          <input type="number" name="quantity" value="1" min="1">
+          <input type="number" name="quantity" value="1" min="1" style="width: 60px;">
         </div>
 
         <button type="submit" name="add" class="product-form__submit">
@@ -52,11 +54,40 @@
 {
   "name": "Producto principal",
   "settings": [
-    { "type": "text", "id": "eyebrow_text", "label": "Texto superior", "default": "WF Urban Muscle" },
-    { "type": "text", "id": "variant_label", "label": "Etiqueta variante", "default": "Selecciona tu talla" },
-    { "type": "text", "id": "quantity_label", "label": "Etiqueta cantidad", "default": "Cantidad" },
-    { "type": "text", "id": "add_to_cart_text", "label": "Texto botón", "default": "Añadir al carrito" },
-    { "type": "range", "id": "content_max_width", "label": "Ancho", "min": 800, "max": 1600, "default": 1200, "unit": "px" }
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Texto superior",
+      "default": "WF Urban Muscle"
+    },
+    {
+      "type": "text",
+      "id": "variant_label",
+      "label": "Etiqueta variante",
+      "default": "Selecciona tu talla"
+    },
+    {
+      "type": "text",
+      "id": "quantity_label",
+      "label": "Etiqueta cantidad",
+      "default": "Cantidad"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "Texto botón",
+      "default": "Añadir al carrito"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Ancho máximo",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "default": 1200,
+      "unit": "px"
+    }
   ]
 }
 {% endschema %}

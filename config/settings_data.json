@@ -13,7 +13,11 @@
       "header": {
         "type": "header",
         "settings": {
-          "menu": "main-menu"
+          "menu": "main-menu",
+          "enable_sticky_header": true,
+          "background_color": "#ffffff",
+          "border_color": "#eeeeee",
+          "link_color": "#000000"
         }
       },
       "homepage": {
@@ -23,7 +27,6 @@
       "hero-banner": {
         "type": "hero-banner",
         "settings": {
-          "hero_image": "shopify://shop_images/rack-of-womens-clothing.jpg",
           "eyebrow": "HOMBRES",
           "title": "LO NUEVO EN TENDENCIA",
           "subtitle": "Tus favoritos de siempre.",

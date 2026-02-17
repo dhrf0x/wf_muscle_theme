@@ -4,7 +4,7 @@
             <p class="heading-bold label-small">{{ section.settings.label }}</p>
             <h2 class="section-title">{{ section.settings.title }}</h2>
         </div>
-        <a href="{{ section.settings.view_all_link | default: '/collections/all' }}" class="view-all-link">{{ section.settings.view_all_label }}</a>
+        <a href="{{ section.settings.view_all_link | default: routes.all_products_collection_url }}" class="view-all-link">{{ section.settings.view_all_label }}</a>
     </div>
 
     {% assign source_collection = collections[section.settings.collection] %}

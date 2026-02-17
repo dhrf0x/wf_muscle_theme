@@ -2,34 +2,84 @@
 
 <section class="product-page" style="--product-content-max-width: {{ section.settings.content_max_width }}px;">
   <div class="product-page__container">
-    <div class="product-page__gallery">
-      {% if product.featured_image %}
-        <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}">
+    <div class="product-page__gallery" data-product-gallery>
+      {% if current_variant.featured_image %}
+        {% assign featured_image = current_variant.featured_image %}
+      {% else %}
+        {% assign featured_image = product.featured_image %}
+      {% endif %}
+
+      {% if featured_image %}
+        <div class="product-page__featured">
+          <img
+            src="{{ featured_image | image_url: width: 1200 }}"
+            alt="{{ featured_image.alt | default: product.title | escape }}"
+            data-featured-media
+            loading="eager"
+          >
+        </div>
+      {% endif %}
+
+      {% if product.images.size > 1 %}
+        <div class="product-page__thumbs" role="listbox" aria-label="Galería de producto">
+          {% for media in product.images limit: 8 %}
+            <button
+              type="button"
+              class="product-page__thumb{% if forloop.first %} is-active{% endif %}"
+              data-product-thumb
+              data-image-url="{{ media | image_url: width: 1200 }}"
+              aria-label="Ver imagen {{ forloop.index }}"
+            >
+              <img src="{{ media | image_url: width: 240 }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy">
+            </button>
+          {% endfor %}
+        </div>
       {% endif %}
     </div>
+
     <div class="product-page__content">
       {% if section.settings.eyebrow_text != blank %}
-        <p class="product-eyebrow">{{ section.settings.eyebrow_text }}</p>
+        <p class="product-page__eyebrow">{{ section.settings.eyebrow_text }}</p>
       {% endif %}
-      
-      <h1>{{ product.title }}</h1>
-      <p>{{ product.price | money }}</p>
-      
-      {% form 'product', product %}
-        <input type="hidden" name="id" value="{{ current_variant.id }}">
-        
-        <div class="product-form__controls">
-          <label>{{ section.settings.variant_label }}</label>
-          <label>{{ section.settings.quantity_label }}</label>
-          <input type="number" name="quantity" value="1" min="1">
+
+      <h1 class="product-page__title">{{ product.title }}</h1>
+      <p class="product-page__price" data-product-price>{{ current_variant.price | money }}</p>
+
+      {% form 'product', product, class: 'product-form', data-product-form: '' %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
+
+        {% if product.variants.size > 1 %}
+          <label class="product-form__label" for="product-variant-select">{{ section.settings.variant_label }}</label>
+          <select id="product-variant-select" class="product-form__select" data-variant-select>
+            {% for variant in product.variants %}
+              <option
+                value="{{ variant.id }}"
+                {% if variant.id == current_variant.id %}selected{% endif %}
+                data-price="{{ variant.price | money | escape }}"
+                {% if variant.featured_image %}data-image-url="{{ variant.featured_image | image_url: width: 1200 }}"{% endif %}
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{ variant.title }}{% unless variant.available %} - Agotado{% endunless %}
+              </option>
+            {% endfor %}
+          </select>
+        {% endif %}
+
+        <div class="product-form__qty-wrap">
+          <label class="product-form__label" for="product-quantity">{{ section.settings.quantity_label }}</label>
+          <div class="quantity-stepper" data-quantity-stepper>
+            <button type="button" class="quantity-stepper__btn" data-qty-decrease aria-label="Disminuir cantidad">−</button>
+            <input id="product-quantity" class="product-form__qty" type="number" name="quantity" value="1" min="1" inputmode="numeric" pattern="[0-9]*">
+            <button type="button" class="quantity-stepper__btn" data-qty-increase aria-label="Aumentar cantidad">+</button>
+          </div>
         </div>
 
         <button type="submit" name="add" class="product-form__submit">
           {{ section.settings.add_to_cart_text | default: 'Añadir al carrito' }}
         </button>
       {% endform %}
-      
-      <div class="rte">{{ product.description }}</div>
+
+      <div class="product-page__description rte">{{ product.description }}</div>
     </div>
   </div>
 </section>

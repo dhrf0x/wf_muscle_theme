@@ -1,6 +1,10 @@
 <section class="cart-page">
   <div class="cart-page__container">
-    <h1 class="cart-page__title">{{ 'templates.cart.cart' | t | default: 'Carrito' }}</h1>
+    <header class="cart-page__header">
+      <p class="collection-page__eyebrow">Resumen</p>
+      <h1 class="cart-page__title">{{ 'templates.cart.cart' | t | default: 'Carrito' }}</h1>
+      <p class="cart-page__subtitle">Revisa tus productos antes de finalizar tu compra.</p>
+    </header>
 
     {% if cart.item_count > 0 %}
       <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-layout">
@@ -8,7 +12,7 @@
           {% for item in cart.items %}
             <article class="cart-item">
               <a class="cart-item__image" href="{{ item.url }}">
-                <img src="{{ item.image | image_url: width: 320 }}" alt="{{ item.title | escape }}">
+                <img src="{{ item.image | image_url: width: 360 }}" alt="{{ item.title | escape }}">
               </a>
 
               <div class="cart-item__content">
@@ -25,7 +29,7 @@
                 <div class="cart-item__actions">
                   <label for="updates_{{ item.key }}">Cantidad</label>
                   <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0">
-                  <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0">Eliminar</a>
+                  <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="cart-item__remove">Eliminar</a>
                 </div>
               </div>
             </article>
@@ -43,8 +47,10 @@
         </aside>
       </form>
     {% else %}
-      <p class="search-empty">Tu carrito está vacío.</p>
-      <a href="/collections/all" class="btn-white">Ver productos</a>
+      <div class="cart-page__empty">
+        <p class="search-empty">Tu carrito está vacío.</p>
+        <a href="/collections/all" class="btn-white">Ver productos</a>
+      </div>
     {% endif %}
   </div>
 </section>

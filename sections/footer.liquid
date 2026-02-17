@@ -1,20 +1,48 @@
 <footer class="site-footer">
   <div class="site-footer__container">
-    <div class="site-footer__brand">
+    <div class="site-footer__newsletter">
       <h3>{{ section.settings.brand_title }}</h3>
       <p>{{ section.settings.brand_text }}</p>
+      <a href="{{ section.settings.newsletter_url | default: routes.root_url }}" class="site-footer__newsletter-cta">Suscríbete y recibe novedades</a>
     </div>
 
-    <div class="site-footer__links">
-      {% if section.settings.footer_menu != blank %}
-        {% for link in section.settings.footer_menu.links %}
-          <a href="{{ link.url }}">{{ link.title }}</a>
-        {% endfor %}
-      {% endif %}
+    <div class="site-footer__columns">
+      <div>
+        <h4>Comprar</h4>
+        <div class="site-footer__links">
+          {% if section.settings.footer_menu != blank %}
+            {% for link in section.settings.footer_menu.links %}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+
+      <div>
+        <h4>Compañía</h4>
+        <div class="site-footer__links">
+          {% if section.settings.company_menu != blank %}
+            {% for link in section.settings.company_menu.links %}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+
+      <div>
+        <h4>Ayuda</h4>
+        <p class="site-footer__contact">{{ section.settings.contact_text }}</p>
+      </div>
     </div>
 
-    <div class="site-footer__meta">
-      <p>{{ section.settings.contact_text }}</p>
+    <div class="site-footer__media-strip" aria-label="Métodos de pago y apps">
+      <span class="site-footer__media-item">VISA</span>
+      <span class="site-footer__media-item">MASTERCARD</span>
+      <span class="site-footer__media-item">PAYPAL</span>
+      <span class="site-footer__media-item">APP STORE</span>
+    </div>
+
+    <div class="site-footer__bottom">
       <small>© {{ 'now' | date: '%Y' }} {{ shop.name }}</small>
     </div>
   </div>
@@ -26,7 +54,9 @@
   "settings": [
     { "type": "text", "id": "brand_title", "label": "Título", "default": "WF Urban Muscle" },
     { "type": "textarea", "id": "brand_text", "label": "Texto", "default": "Ropa deportiva premium para elevar tu rendimiento." },
-    { "type": "link_list", "id": "footer_menu", "label": "Menú del footer", "default": "main-menu" },
+    { "type": "url", "id": "newsletter_url", "label": "URL de newsletter" },
+    { "type": "link_list", "id": "footer_menu", "label": "Menú de compras", "default": "main-menu" },
+    { "type": "link_list", "id": "company_menu", "label": "Menú compañía" },
     { "type": "text", "id": "contact_text", "label": "Texto de contacto", "default": "Contacto: hola@wfurbanmuscle.com" }
   ]
 }

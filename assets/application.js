@@ -49,6 +49,7 @@
   const mobileMenu = document.getElementById('mobile-menu-drawer');
   const menuToggle = document.querySelector('[data-mobile-menu-toggle]');
   const menuCloseButtons = document.querySelectorAll('[data-mobile-menu-close]');
+  const mobileMenuLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
 
   const closeMenu = () => {
     if (!mobileMenu || !menuToggle) return;
@@ -73,6 +74,11 @@
   }
 
   menuCloseButtons.forEach((button) => button.addEventListener('click', closeMenu));
+  mobileMenuLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      closeMenu();
+    });
+  });
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenu();

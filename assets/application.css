@@ -383,7 +383,7 @@ body.mobile-menu-open { overflow: hidden; }
   transition: transform .4s ease;
 }
 .product-page__featured:hover img { transform: scale(1.015); }
-.product-page__featured [data-product-slide][hidden] { display: none !important; }
+/* slides visibility controlled by JS via style.display */
 
 /* Gallery nav arrows */
 .product-page__gallery-nav {

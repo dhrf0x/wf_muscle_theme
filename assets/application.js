@@ -66,6 +66,8 @@
   });
 
   // ─── PRODUCT GALLERY ────────────────────────────────────────────
+  // Uses style.display instead of element.hidden / [hidden] attribute
+  // to avoid CSS specificity fights and cross-browser inconsistencies.
   document.querySelectorAll('[data-product-gallery]').forEach(gallery => {
     const slides   = Array.from(gallery.querySelectorAll('[data-product-slide]'));
     const thumbs   = Array.from(gallery.querySelectorAll('[data-product-thumb]'));
@@ -73,37 +75,53 @@
     const nextBtn  = gallery.querySelector('[data-gallery-next]');
     const section  = gallery.closest('.product-page');
 
-    const variantSelect       = section?.querySelector('[data-variant-select]');
-    const variantIdInput      = section?.querySelector('[data-variant-id-input]');
-    const productPrice        = section?.querySelector('[data-product-price]');
-    const productCompare      = section?.querySelector('.product-page__compare');
-    const inventoryNotice     = section?.querySelector('.product-page__inventory');
+    const variantSelect        = section?.querySelector('[data-variant-select]');
+    const variantIdInput       = section?.querySelector('[data-variant-id-input]');
+    const productPrice         = section?.querySelector('[data-product-price]');
+    const productCompare       = section?.querySelector('.product-page__compare');
+    const inventoryNotice      = section?.querySelector('.product-page__inventory');
     const selectedVariantLabel = section?.querySelector('[data-selected-variant]');
-    const variantPills        = Array.from(section?.querySelectorAll('[data-variant-option]') || []);
+    const variantPills         = Array.from(section?.querySelectorAll('[data-variant-option]') || []);
 
     if (!slides.length) return;
 
-    let currentIndex = Math.max(0, slides.findIndex(s => !s.hidden));
+    // Initialise: use style.display so it overrides any CSS rule.
+    // Remove the HTML [hidden] attribute first so only JS controls visibility.
+    slides.forEach(s => s.removeAttribute('hidden'));
 
+    // Determine start index from data-image-index="0" being visible, else 0
+    let currentIndex = 0;
+    const firstActive = slides.findIndex(s => s.dataset.imageIndex === '0');
+    if (firstActive >= 0) currentIndex = firstActive;
+
+    // Immediately hide all then show the active one
     const setActiveSlide = (next) => {
-      const idx = (next + slides.length) % slides.length;
-      slides.forEach((s, i) => { s.hidden = i !== idx; });
+      const idx = ((next % slides.length) + slides.length) % slides.length;
+      slides.forEach((s, i) => {
+        s.style.display = i === idx ? 'block' : 'none';
+      });
       thumbs.forEach((t, i) => {
         const active = i === idx;
         t.classList.toggle('is-active', active);
-        active ? t.setAttribute('aria-current', 'true') : t.removeAttribute('aria-current');
+        if (active) t.setAttribute('aria-current', 'true');
+        else t.removeAttribute('aria-current');
       });
       currentIndex = idx;
     };
+
+    // Init display
+    setActiveSlide(currentIndex);
 
     thumbs.forEach((t, i) => t.addEventListener('click', () => setActiveSlide(i)));
     prevBtn?.addEventListener('click', () => setActiveSlide(currentIndex - 1));
     nextBtn?.addEventListener('click', () => setActiveSlide(currentIndex + 1));
 
-    // Touch swipe
+    // Touch/swipe
     let touchStartX = null;
-    gallery.addEventListener('touchstart', e => { touchStartX = e.touches[0]?.clientX ?? null; }, { passive: true });
-    gallery.addEventListener('touchend',   e => {
+    gallery.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0]?.clientX ?? null;
+    }, { passive: true });
+    gallery.addEventListener('touchend', e => {
       if (touchStartX === null) return;
       const dx = (e.changedTouches[0]?.clientX ?? touchStartX) - touchStartX;
       if (Math.abs(dx) > 40) setActiveSlide(currentIndex + (dx > 0 ? -1 : 1));
@@ -113,9 +131,9 @@
     // Variant sync
     const syncVariant = (opt) => {
       if (!opt) return;
-      if (productPrice && opt.dataset.price) productPrice.textContent = opt.dataset.price;
+      if (productPrice && opt.dataset.price)    productPrice.textContent = opt.dataset.price;
       if (productCompare) {
-        productCompare.hidden = !opt.dataset.comparePrice;
+        productCompare.style.display = opt.dataset.comparePrice ? '' : 'none';
         if (opt.dataset.comparePrice) productCompare.textContent = opt.dataset.comparePrice;
       }
       if (selectedVariantLabel && opt.dataset.title) {
@@ -124,7 +142,7 @@
       }
       if (inventoryNotice) {
         const inv = Number(opt.dataset.inventory || 0);
-        inventoryNotice.hidden = inv <= 0;
+        inventoryNotice.style.display = (inv > 0 && inv <= 10) ? 'flex' : 'none';
         if (inv > 0) inventoryNotice.textContent = `Quedan ${inv} unidades disponibles.`;
       }
       if (opt.dataset.imageId) {
@@ -132,9 +150,9 @@
         if (idx >= 0) setActiveSlide(idx);
       }
       variantPills.forEach(p => {
-        const a = p.dataset.variantId === opt.value;
-        p.classList.toggle('is-active', a);
-        p.setAttribute('aria-selected', String(a));
+        const active = p.dataset.variantId === opt.value;
+        p.classList.toggle('is-active', active);
+        p.setAttribute('aria-selected', String(active));
       });
     };
 
@@ -157,7 +175,5 @@
 
       syncVariant(variantSelect.selectedOptions[0]);
     }
-
-    setActiveSlide(currentIndex);
   });
 })();

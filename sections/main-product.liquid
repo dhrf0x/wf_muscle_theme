@@ -44,7 +44,7 @@
                 data-product-slide
                 data-image-index="{{ forloop.index0 }}"
                 data-image-id="{{ image.id }}"
-                {% unless forloop.index0 == active_index %}hidden{% endunless %}
+                style="display:none;"
                 loading="{% if forloop.index0 == active_index %}eager{% else %}lazy{% endif %}"
                 width="1400"
               >
@@ -196,7 +196,7 @@
               name="id"
               data-variant-select
               aria-label="{{ section.settings.variant_label }}"
-              style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;opacity:0;pointer-events:none;"
+              style="display:none;"
             >
               {% for variant in product.variants %}
                 <option

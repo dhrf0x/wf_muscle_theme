@@ -7,7 +7,7 @@
         "show_description": true,
         "empty_text": "No hay productos disponibles en esta colección.",
         "products_per_page": 12,
-        "content_max_width": 1250
+        "content_max_width": 1240
       }
     }
   },

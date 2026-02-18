@@ -1,12 +1,15 @@
 {% assign current_variant = product.selected_or_first_available_variant %}
+{% assign product_images = product.media | where: 'media_type', 'image' %}
 
 <section class="product-page" style="--product-content-max-width: {{ section.settings.content_max_width }}px;">
   <div class="product-page__container">
     <div class="product-page__gallery" data-product-gallery>
-      {% if current_variant.featured_image %}
+      {% if current_variant.featured_media and current_variant.featured_media.media_type == 'image' %}
+        {% assign featured_image = current_variant.featured_media.preview_image %}
+      {% elsif current_variant.featured_image %}
         {% assign featured_image = current_variant.featured_image %}
       {% else %}
-        {% assign featured_image = product.featured_image %}
+        {% assign featured_image = product.featured_media.preview_image | default: product.featured_image %}
       {% endif %}
 
       {% if featured_image %}
@@ -20,18 +23,19 @@
         </div>
       {% endif %}
 
-      {% if product.images.size > 1 %}
+      {% if product_images.size > 1 %}
         <div class="product-page__thumbs" role="listbox" aria-label="Galería de producto">
-          {% for media in product.images %}
+          {% for media in product_images %}
+            {% assign thumb_image = media.preview_image %}
             <button
               type="button"
-              class="product-page__thumb{% if forloop.first %} is-active{% endif %}"
+              class="product-page__thumb{% if featured_image and thumb_image.id == featured_image.id %} is-active{% elsif featured_image == blank and forloop.first %} is-active{% endif %}"
               data-product-thumb
-              data-image-url="{{ media | image_url: width: 1200 }}"
+              data-image-url="{{ thumb_image | image_url: width: 1200 }}"
               data-image-alt="{{ media.alt | default: product.title | escape }}"
               aria-label="Ver imagen {{ forloop.index }}"
             >
-              <img src="{{ media | image_url: width: 240 }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy">
+              <img src="{{ thumb_image | image_url: width: 280 }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy">
             </button>
           {% endfor %}
         </div>

@@ -1,28 +1,35 @@
-<!-- /templates/customers/login.liquid -->
+<section class="customer-auth customer-auth--login">
+  <div class="customer-auth__card">
+    <h1 class="customer-auth__title">Iniciar sesión</h1>
 
-<h2>Login</h2>
-{% form 'customer_login' %}
+    {% form 'customer_login', class: 'customer-auth__form' %}
+      {{ form.errors | default_errors }}
 
-{{ form.errors | default_errors }}
+      <div class="customer-auth__field">
+        <label for="customer_email">Correo electrónico</label>
+        <input id="customer_email" type="email" name="customer[email]" autocomplete="email" required>
+      </div>
 
-<label for="customer_email">Email Address</label>
-<input type="email" name="customer[email]" />
+      <div class="customer-auth__field">
+        <label for="customer_password">Contraseña</label>
+        <input id="customer_password" type="password" name="customer[password]" autocomplete="current-password" required>
+      </div>
 
-<label for="customer_password">Password</label>
-<input type="password" name="customer[password]" />
+      <button type="submit" class="customer-auth__submit">Entrar</button>
+    {% endform %}
 
-<input type="submit" value="Sign In" />
+    <details class="customer-auth__recover">
+      <summary>¿Olvidaste tu contraseña?</summary>
+      {% form 'recover_customer_password', class: 'customer-auth__form' %}
+        {{ form.errors | default_errors }}
 
-{% endform %}
+        <div class="customer-auth__field">
+          <label for="recover_email">Correo electrónico</label>
+          <input id="recover_email" type="email" name="email" autocomplete="email" required>
+        </div>
 
-<h2>Forgot Password</h2>
-{% form 'recover_customer_password' %}
-
-{{ form.errors | default_errors }}
-
-<label for="customer_email">Email Address</label>
-<input type="email" name="email" />
-
-<input type="submit" value="Submit" />
-
-{% endform %}
+        <button type="submit" class="customer-auth__submit customer-auth__submit--secondary">Enviar enlace de recuperación</button>
+      {% endform %}
+    </details>
+  </div>
+</section>

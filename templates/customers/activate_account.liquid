@@ -1,17 +1,24 @@
-<!-- /templates/customers/activate_account.liquid -->
-{% form 'activate_customer_password' %}
-{{ form.errors | default_errors }}
-<div class="password">
-  <label for="password">Password</label>
-  <input type="password" name="customer[password]" />
-</div>
-<div class="password_confirm">
-  <label for="password_confirmation">Password Confirmation</label>
-  <input type="password" name="customer[password_confirmation]" />
-</div>
-<div class="action_bottom">
-  <input type="submit" value="Activate Account" />
-  <span>or</span>
-  <input type="submit" name="decline" value="Decline Invitation" />
-</div>
-{% endform %}
+<section class="customer-auth customer-auth--activate">
+  <div class="customer-auth__card">
+    <h1 class="customer-auth__title">Activar cuenta</h1>
+
+    {% form 'activate_customer_password', class: 'customer-auth__form' %}
+      {{ form.errors | default_errors }}
+
+      <div class="customer-auth__field">
+        <label for="activate_password">Contraseña</label>
+        <input id="activate_password" type="password" name="customer[password]" autocomplete="new-password" required>
+      </div>
+
+      <div class="customer-auth__field">
+        <label for="activate_password_confirmation">Confirmar contraseña</label>
+        <input id="activate_password_confirmation" type="password" name="customer[password_confirmation]" autocomplete="new-password" required>
+      </div>
+
+      <div class="customer-auth__actions">
+        <button type="submit" class="customer-auth__submit">Activar cuenta</button>
+        <button type="submit" name="decline" class="customer-auth__submit customer-auth__submit--secondary">Rechazar invitación</button>
+      </div>
+    {% endform %}
+  </div>
+</section>

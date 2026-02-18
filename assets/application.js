@@ -90,9 +90,8 @@
     slides.forEach(s => s.removeAttribute('hidden'));
 
     // Determine start index from data-image-index="0" being visible, else 0
-    let currentIndex = 0;
-    const firstActive = slides.findIndex(s => s.dataset.imageIndex === '0');
-    if (firstActive >= 0) currentIndex = firstActive;
+    let currentIndex = Number(gallery.dataset.initialIndex || 0);
+    if (Number.isNaN(currentIndex)) currentIndex = 0;
 
     // Immediately hide all then show the active one
     const setActiveSlide = (next) => {
@@ -145,8 +144,8 @@
         inventoryNotice.style.display = (inv > 0 && inv <= 10) ? 'flex' : 'none';
         if (inv > 0) inventoryNotice.textContent = `Quedan ${inv} unidades disponibles.`;
       }
-      if (opt.dataset.imageId) {
-        const idx = slides.findIndex(s => s.dataset.imageId === opt.dataset.imageId);
+      if (opt.dataset.mediaId) {
+        const idx = slides.findIndex(s => s.dataset.mediaId === opt.dataset.mediaId);
         if (idx >= 0) setActiveSlide(idx);
       }
       variantPills.forEach(p => {

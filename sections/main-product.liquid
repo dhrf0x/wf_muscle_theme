@@ -6,13 +6,13 @@
 {% endcomment %}
 
 {% assign current_variant = product.selected_or_first_available_variant %}
-{% assign product_images  = product.images %}
+{% assign product_media = product.media %}
 
 {% comment %} Find the active image index for the selected variant {% endcomment %}
 {% assign active_index = 0 %}
-{% if current_variant.featured_image %}
-  {% for img in product_images %}
-    {% if img.id == current_variant.featured_image.id %}
+{% if current_variant.featured_media %}
+  {% for media in product_media %}
+    {% if media.id == current_variant.featured_media.id %}
       {% assign active_index = forloop.index0 %}
       {% break %}
     {% endif %}
@@ -31,23 +31,35 @@
     Layout: [main image + arrows] → [thumb strip]
     ═══════════════════════════════════════════════
     {%- endcomment -%}
-    <div class="product-page__gallery" data-product-gallery>
+    <div class="product-page__gallery" data-product-gallery data-initial-index="{{ active_index }}">
 
       <div class="product-page__featured-wrap">
 
         <div class="product-page__featured">
-          {% if product_images.size > 0 %}
-            {% for image in product_images %}
-              <img
-                src="{{ image | image_url: width: 1400 }}"
-                alt="{{ image.alt | default: product.title | escape }}"
-                data-product-slide
-                data-image-index="{{ forloop.index0 }}"
-                data-image-id="{{ image.id }}"
-                style="display:none;"
-                loading="{% if forloop.index0 == active_index %}eager{% else %}lazy{% endif %}"
-                width="1400"
-              >
+          {% if product_media.size > 0 %}
+            {% for media in product_media %}
+              {% if media.media_type == 'image' %}
+                <img
+                  src="{{ media | image_url: width: 1400 }}"
+                  alt="{{ media.alt | default: product.title | escape }}"
+                  data-product-slide
+                  data-image-index="{{ forloop.index0 }}"
+                  data-media-id="{{ media.id }}"
+                  style="display:none;"
+                  loading="{% if forloop.index0 == active_index %}eager{% else %}lazy{% endif %}"
+                  width="1400"
+                >
+              {% else %}
+                <div
+                  data-product-slide
+                  data-image-index="{{ forloop.index0 }}"
+                  data-media-id="{{ media.id }}"
+                  class="product-page__rich-media"
+                  style="display:none;"
+                >
+                  {{ media | media_tag: image_size: '1400x', controls: true, preload: 'metadata' }}
+                </div>
+              {% endif %}
             {% endfor %}
           {% else %}
             {% comment %} Placeholder if no images uploaded yet {% endcomment %}
@@ -57,7 +69,7 @@
           {% endif %}
         </div>
 
-        {% if product_images.size > 1 %}
+        {% if product_media.size > 1 %}
           <button
             type="button"
             class="product-page__gallery-nav product-page__gallery-nav--prev"
@@ -75,23 +87,25 @@
       </div>
 
       {% comment %} Thumbnail strip — only renders when >1 image {% endcomment %}
-      {% if product_images.size > 1 %}
+      {% if product_media.size > 1 %}
         <div class="product-page__thumbs">
-          {% for image in product_images %}
+          {% for media in product_media %}
             <button
               type="button"
               class="product-page__thumb{% if forloop.index0 == active_index %} is-active{% endif %}"
               data-product-thumb
               data-image-index="{{ forloop.index0 }}"
-              data-image-id="{{ image.id }}"
-              aria-label="Ver imagen {{ forloop.index }} de {{ product_images.size }}"
+              data-media-id="{{ media.id }}"
+              aria-label="Ver imagen {{ forloop.index }} de {{ product_media.size }}"
               {% if forloop.index0 == active_index %}aria-current="true"{% endif %}
             >
-              <img
-                src="{{ image | image_url: width: 200 }}"
-                alt="{{ image.alt | default: product.title | escape }}"
-                loading="lazy"
-              >
+              {% if media.preview_image %}
+                <img
+                  src="{{ media.preview_image | image_url: width: 200 }}"
+                  alt="{{ media.alt | default: product.title | escape }}"
+                  loading="lazy"
+                >
+              {% endif %}
             </button>
           {% endfor %}
         </div>
@@ -206,7 +220,7 @@
                   data-compare-price="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | escape }}{% endif %}"
                   data-title="{{ variant.title | escape }}"
                   data-inventory="{{ variant.inventory_quantity | default: 0 }}"
-                  {% if variant.featured_image %}data-image-id="{{ variant.featured_image.id }}"{% endif %}
+                  {% if variant.featured_media %}data-media-id="{{ variant.featured_media.id }}"{% endif %}
                   {% unless variant.available %}disabled{% endunless %}
                 >
                   {{ variant.title }}{% unless variant.available %} – Agotado{% endunless %}
@@ -226,7 +240,7 @@
                   class="product-form__variant-pill{% if variant.id == current_variant.id %} is-active{% endif %}{% unless variant.available %} is-disabled{% endunless %}"
                   data-variant-option
                   data-variant-id="{{ variant.id }}"
-                  {% if variant.featured_image %}data-image-id="{{ variant.featured_image.id }}"{% endif %}
+                  {% if variant.featured_media %}data-media-id="{{ variant.featured_media.id }}"{% endif %}
                   {% unless variant.available %}disabled aria-disabled="true"{% endunless %}
                   role="option"
                   aria-selected="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"

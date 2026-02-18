@@ -1,21 +1,33 @@
-<!-- /templates/customers/register.liquid -->
+<section class="customer-auth customer-auth--register">
+  <div class="customer-auth__card">
+    <h1 class="customer-auth__title">Crear cuenta</h1>
 
-{% form 'create_customer' %}
+    {% form 'create_customer', class: 'customer-auth__form' %}
+      {{ form.errors | default_errors }}
 
-{{ form.errors | default_errors }}
+      <div class="customer-auth__grid">
+        <div class="customer-auth__field">
+          <label for="first_name">Nombre</label>
+          <input id="first_name" type="text" name="customer[first_name]" autocomplete="given-name">
+        </div>
 
-<label for="first_name">First Name</label>
-<input type="text" value="" name="customer[first_name]" size="30" />
+        <div class="customer-auth__field">
+          <label for="last_name">Apellido</label>
+          <input id="last_name" type="text" name="customer[last_name]" autocomplete="family-name">
+        </div>
+      </div>
 
-<label for="last_name">Last Name</label>
-<input type="text" value="" name="customer[last_name]" size="30" />
+      <div class="customer-auth__field">
+        <label for="register_email">Correo electrónico</label>
+        <input id="register_email" type="email" name="customer[email]" autocomplete="email" required>
+      </div>
 
-<label for="email">Email Address</label>
-<input type="email" value="" name="customer[email]" size="30" />
+      <div class="customer-auth__field">
+        <label for="register_password">Contraseña</label>
+        <input id="register_password" type="password" name="customer[password]" autocomplete="new-password" required>
+      </div>
 
-<label for="password">Password</label>
-<input type="password" value="" name="customer[password]" size="30" />
-
-<input type="submit" value="Create" />
-
-{% endform %}
+      <button type="submit" class="customer-auth__submit">Crear cuenta</button>
+    {% endform %}
+  </div>
+</section>

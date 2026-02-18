@@ -1,4 +1,5 @@
 (() => {
+  // ─── THEME TOGGLE ───────────────────────────────────────────────
   const STORAGE_KEY = 'wf_theme_mode';
   const root = document.documentElement;
   const supportedModes = ['light', 'dark'];
@@ -11,22 +12,14 @@
       const label = mode === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
       toggleButton.setAttribute('aria-label', label);
       toggleButton.setAttribute('title', label);
-
-      if (icon) {
-        icon.textContent = mode === 'dark' ? '☀️' : '🌙';
-      }
+      if (icon) icon.textContent = mode === 'dark' ? '☀️' : '🌙';
     }
   };
 
   const normalizeMode = (value) => {
     const raw = (value || '').toString().trim().toLowerCase();
-
     if (raw === 'claro' || raw === 'light') return 'light';
     if (raw === 'oscuro' || raw === 'dark') return 'dark';
-    if (raw === 'sistema' || raw === 'system' || raw === 'predeterminado') {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   };
 
@@ -36,33 +29,56 @@
     applyMode(safeMode);
   };
 
-  const savedMode = normalizeMode(localStorage.getItem(STORAGE_KEY));
-  saveMode(savedMode);
+  saveMode(normalizeMode(localStorage.getItem(STORAGE_KEY)));
 
   if (toggleButton) {
     toggleButton.addEventListener('click', () => {
-      const currentMode = normalizeMode(localStorage.getItem(STORAGE_KEY));
-      saveMode(currentMode === 'dark' ? 'light' : 'dark');
+      saveMode(normalizeMode(localStorage.getItem(STORAGE_KEY)) === 'dark' ? 'light' : 'dark');
     });
   }
 
+  // ─── MOBILE MENU ────────────────────────────────────────────────
+  // FIX: We use an `is-open` CSS class for the slide animation instead of
+  // relying on the [hidden] attribute for transitions.
+  //
+  // WHY: If we set `display: block` in CSS to override [hidden] for animation,
+  // the invisible menu (opacity:0 / position:fixed inset:0) blocks ALL touch
+  // events on mobile — making the page feel completely unresponsive.
+  //
+  // The pattern:
+  //   OPEN  → remove [hidden] → rAF → add .is-open (triggers CSS transition)
+  //   CLOSE → remove .is-open → wait for transition → add [hidden]
   const mobileMenu = document.getElementById('mobile-menu-drawer');
   const menuToggle = document.querySelector('[data-mobile-menu-toggle]');
   const menuCloseButtons = document.querySelectorAll('[data-mobile-menu-close]');
-  const mobileMenuLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
-
-  const closeMenu = () => {
-    if (!mobileMenu || !menuToggle) return;
-    mobileMenu.hidden = true;
-    document.body.classList.remove('mobile-menu-open');
-    menuToggle.setAttribute('aria-expanded', 'false');
-  };
+  const MENU_TRANSITION_MS = 340;
 
   const openMenu = () => {
     if (!mobileMenu || !menuToggle) return;
+    // 1. Remove [hidden] so the element enters the DOM (display:block via :not([hidden]) CSS rule)
     mobileMenu.hidden = false;
     document.body.classList.add('mobile-menu-open');
     menuToggle.setAttribute('aria-expanded', 'true');
+    // 2. Force two animation frames so the browser paints the element before
+    //    adding .is-open, allowing CSS transitions to fire properly.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        mobileMenu.classList.add('is-open');
+      });
+    });
+  };
+
+  const closeMenu = () => {
+    if (!mobileMenu || !menuToggle) return;
+    // 1. Remove .is-open → triggers the slide-out / fade-out CSS transitions
+    mobileMenu.classList.remove('is-open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    // 2. After the transition finishes, add [hidden] back so the element is
+    //    fully removed from layout and cannot intercept any pointer events.
+    window.setTimeout(() => {
+      mobileMenu.hidden = true;
+      document.body.classList.remove('mobile-menu-open');
+    }, MENU_TRANSITION_MS);
   };
 
   if (menuToggle && mobileMenu) {
@@ -73,20 +89,16 @@
     });
   }
 
-  menuCloseButtons.forEach((button) => button.addEventListener('click', closeMenu));
-  mobileMenuLinks.forEach((link) => {
-    link.addEventListener('click', () => {
-      closeMenu();
-    });
+  menuCloseButtons.forEach((btn) => btn.addEventListener('click', closeMenu));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeMenu();
-  });
-
+  // ─── QUANTITY STEPPER ───────────────────────────────────────────
   const animateQty = (input) => {
     input.classList.remove('is-updated');
-    void input.offsetWidth;
+    void input.offsetWidth; // force reflow
     input.classList.add('is-updated');
   };
 
@@ -94,7 +106,6 @@
     const input = stepper.querySelector('input[type="number"]');
     const increaseBtn = stepper.querySelector('[data-qty-increase]');
     const decreaseBtn = stepper.querySelector('[data-qty-decrease]');
-
     if (!input) return;
 
     const updateValue = (delta) => {
@@ -102,10 +113,8 @@
       const min = Number(input.min || 0);
       const max = input.max ? Number(input.max) : null;
       let next = current + delta;
-
       if (next < min) next = min;
       if (max !== null && next > max) next = max;
-
       input.value = String(next);
       input.dispatchEvent(new Event('change', { bubbles: true }));
       animateQty(input);
@@ -115,6 +124,7 @@
     decreaseBtn?.addEventListener('click', () => updateValue(-1));
   });
 
+  // ─── PRODUCT GALLERY ────────────────────────────────────────────
   document.querySelectorAll('[data-product-gallery]').forEach((gallery) => {
     const slides = Array.from(gallery.querySelectorAll('[data-product-slide]'));
     const thumbs = Array.from(gallery.querySelectorAll('[data-product-thumb]'));
@@ -131,112 +141,78 @@
 
     if (slides.length === 0) return;
 
-    let currentIndex = slides.findIndex((slide) => !slide.hidden);
+    let currentIndex = slides.findIndex((s) => !s.hidden);
     if (currentIndex < 0) currentIndex = 0;
 
     const setActiveSlide = (nextIndex) => {
-      if (slides.length === 0) return;
-
       const index = (nextIndex + slides.length) % slides.length;
-      slides.forEach((slide, slideIndex) => {
-        const isActive = slideIndex === index;
-        slide.hidden = !isActive;
-      });
-
-      thumbs.forEach((thumb, thumbIndex) => {
-        const isActive = thumbIndex === index;
-        thumb.classList.toggle('is-active', isActive);
-        if (isActive) thumb.setAttribute('aria-current', 'true');
+      slides.forEach((slide, i) => { slide.hidden = i !== index; });
+      thumbs.forEach((thumb, i) => {
+        const active = i === index;
+        thumb.classList.toggle('is-active', active);
+        if (active) thumb.setAttribute('aria-current', 'true');
         else thumb.removeAttribute('aria-current');
       });
-
       currentIndex = index;
     };
 
-    thumbs.forEach((thumb, index) => {
-      thumb.addEventListener('click', () => {
-        setActiveSlide(index);
-      });
-    });
-
+    thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => setActiveSlide(i)));
     prevBtn?.addEventListener('click', () => setActiveSlide(currentIndex - 1));
     nextBtn?.addEventListener('click', () => setActiveSlide(currentIndex + 1));
 
+    // Touch swipe
     let touchStartX = null;
-    gallery.addEventListener('touchstart', (event) => {
-      touchStartX = event.touches[0]?.clientX ?? null;
+    gallery.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0]?.clientX ?? null;
     }, { passive: true });
-
-    gallery.addEventListener('touchend', (event) => {
+    gallery.addEventListener('touchend', (e) => {
       if (touchStartX === null) return;
-      const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX;
-      const deltaX = touchEndX - touchStartX;
-
-      if (Math.abs(deltaX) > 40) {
-        if (deltaX > 0) setActiveSlide(currentIndex - 1);
-        else setActiveSlide(currentIndex + 1);
-      }
-
+      const dx = (e.changedTouches[0]?.clientX ?? touchStartX) - touchStartX;
+      if (Math.abs(dx) > 40) setActiveSlide(currentIndex + (dx > 0 ? -1 : 1));
       touchStartX = null;
     }, { passive: true });
 
+    // Variant sync
     const syncVariantVisuals = (option) => {
       if (!option) return;
-
-      if (productPrice && option.dataset.price) {
-        productPrice.textContent = option.dataset.price;
-      }
-
+      if (productPrice && option.dataset.price) productPrice.textContent = option.dataset.price;
       if (productCompare) {
-        if (option.dataset.comparePrice) {
-          productCompare.hidden = false;
-          productCompare.textContent = option.dataset.comparePrice;
-        } else {
-          productCompare.hidden = true;
-        }
+        productCompare.hidden = !option.dataset.comparePrice;
+        if (option.dataset.comparePrice) productCompare.textContent = option.dataset.comparePrice;
       }
-
       if (selectedVariantLabel && option.dataset.title) {
-        const label = selectedVariantLabel.textContent.split(':')[0] || 'Seleccionado';
-        selectedVariantLabel.textContent = `${label}: ${option.dataset.title}`;
+        const prefix = selectedVariantLabel.textContent.split(':')[0] || 'Seleccionado';
+        selectedVariantLabel.textContent = `${prefix}: ${option.dataset.title}`;
       }
-
       if (inventoryNotice) {
-        const inventory = Number(option.dataset.inventory || 0);
-        if (inventory > 0) {
-          inventoryNotice.hidden = false;
-          inventoryNotice.textContent = `Quedan ${inventory} unidades disponibles.`;
-        } else {
-          inventoryNotice.hidden = true;
-        }
+        const inv = Number(option.dataset.inventory || 0);
+        inventoryNotice.hidden = inv <= 0;
+        if (inv > 0) inventoryNotice.textContent = `Quedan ${inv} unidades disponibles.`;
       }
-
       if (option.dataset.imageId) {
-        const imageIndex = slides.findIndex((slide) => slide.dataset.imageId === option.dataset.imageId);
-        if (imageIndex >= 0) setActiveSlide(imageIndex);
+        const idx = slides.findIndex((s) => s.dataset.imageId === option.dataset.imageId);
+        if (idx >= 0) setActiveSlide(idx);
       }
-
       variantPills.forEach((pill) => {
-        const isActive = pill.dataset.variantId === option.value;
-        pill.classList.toggle('is-active', isActive);
-        pill.setAttribute('aria-current', isActive ? 'true' : 'false');
+        const active = pill.dataset.variantId === option.value;
+        pill.classList.toggle('is-active', active);
+        pill.setAttribute('aria-selected', String(active));
       });
     };
 
     if (variantSelect && variantIdInput) {
-      variantSelect.addEventListener('change', (event) => {
-        const option = event.target.selectedOptions[0];
-        if (!option) return;
-        variantIdInput.value = option.value;
-        syncVariantVisuals(option);
+      variantSelect.addEventListener('change', (e) => {
+        const opt = e.target.selectedOptions[0];
+        if (!opt) return;
+        variantIdInput.value = opt.value;
+        syncVariantVisuals(opt);
       });
 
       variantPills.forEach((pill) => {
         pill.addEventListener('click', () => {
-          const matchingOption = Array.from(variantSelect.options).find((option) => option.value === pill.dataset.variantId);
-          if (!matchingOption || matchingOption.disabled) return;
-
-          variantSelect.value = matchingOption.value;
+          const match = Array.from(variantSelect.options).find((o) => o.value === pill.dataset.variantId);
+          if (!match || match.disabled) return;
+          variantSelect.value = match.value;
           variantSelect.dispatchEvent(new Event('change', { bubbles: true }));
         });
       });

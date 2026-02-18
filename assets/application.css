@@ -714,18 +714,29 @@ body.mobile-menu-open { overflow: hidden; }
 }
 
 /* ═══════════════════════════════════════════════════════
-   CUSTOMER PAGES (login, register, account, orders)
-   These pages use the same layout/theme.liquid so our CSS
-   loads automatically. We just need to style the containers.
-   NOTE: The Shopify CHECKOUT (/checkout) is controlled by
-   Shopify and cannot be styled with theme CSS unless you
-   are on Shopify Plus (checkout.liquid / Checkout Extensions).
+   CUSTOMER PAGES — clases faltantes
+   Los templates usan .customer-page__* pero el CSS sólo
+   tenía .customer-form__*. Este bloque agrega TODO lo que
+   faltaba para que login, registro y cuenta funcionen.
+
+   SUBIR A: assets/application.css
+   (Pegar al final de la sección CUSTOMER PAGES existente,
+    reemplazando el bloque completo de customer pages)
    ═══════════════════════════════════════════════════════ */
+
+/* ─── Wrapper principal ─────────────────────────────── */
 .customer-page {
   width: min(480px, calc(100% - 32px));
   margin: 48px auto 80px;
   padding: 0 16px;
 }
+
+/* Modificador cuenta — más ancho para la tabla de pedidos */
+.customer-page--wide {
+  width: min(860px, calc(100% - 32px));
+}
+
+/* ─── Títulos ────────────────────────────────────────── */
 .customer-page__title {
   margin: 0 0 6px;
   font-size: clamp(1.6rem, 3vw, 2rem);
@@ -737,6 +748,194 @@ body.mobile-menu-open { overflow: hidden; }
   color: var(--clr-text-muted);
   font-size: 14px;
 }
+.customer-page__eyebrow {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--clr-text-muted);
+}
+
+/* ─── Card contenedor del formulario ────────────────── */
+.customer-page__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+}
+
+/* ─── Grupos de campo ───────────────────────────────── */
+.customer-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.customer-page__field:last-of-type { margin-bottom: 0; }
+
+.customer-page__label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--clr-text-muted);
+}
+
+.customer-page__input {
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 11px 14px;
+  font-size: 15px;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  width: 100%;
+  outline: none;
+  transition: border-color .18s;
+  font-family: var(--font-base);
+  box-sizing: border-box;
+}
+.customer-page__input:focus { border-color: var(--clr-text); }
+.customer-page__input::placeholder { color: var(--clr-text-muted); }
+
+/* ─── Botón submit ──────────────────────────────────── */
+.customer-page__submit {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--clr-text);
+  color: var(--clr-bg);
+  padding: 14px 20px;
+  min-height: 48px;
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: opacity .2s, transform .2s;
+  font-family: var(--font-base);
+  margin-top: 6px;
+}
+.customer-page__submit:hover { opacity: .85; transform: translateY(-1px); }
+
+/* ─── Botón tipo enlace (crear cuenta, volver, etc.) ── */
+.customer-page__link-btn {
+  display: block;
+  width: 100%;
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--clr-text);
+  padding: 13px 20px;
+  min-height: 48px;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background .18s, border-color .18s;
+  box-sizing: border-box;
+}
+.customer-page__link-btn:hover {
+  background: var(--clr-surface);
+  border-color: var(--clr-text-muted);
+}
+
+/* ─── Divisor "o" entre opciones ────────────────────── */
+.customer-page__divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  color: var(--clr-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+.customer-page__divider::before,
+.customer-page__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--clr-border);
+}
+
+/* ─── Errores de formulario ─────────────────────────── */
+.customer-page .errors,
+.customer-page__errors {
+  background: rgba(192, 57, 43, .08);
+  border: 1px solid rgba(192, 57, 43, .3);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--clr-error);
+  margin-bottom: 16px;
+}
+.customer-page .errors ul,
+.customer-page__errors ul { margin: 0; padding: 0 0 0 18px; }
+.customer-page .errors li,
+.customer-page__errors li { margin: 4px 0; }
+
+/* Shopify default_errors genera un div.errors */
+.customer-page .errors h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ─── Tabla de pedidos (account page) ───────────────── */
+.customer-account {
+  width: min(900px, calc(100% - 32px));
+  margin: 32px auto 80px;
+  padding: 0 16px;
+}
+.customer-account__header { margin-bottom: 28px; }
+.customer-account__section {
+  margin-bottom: 32px;
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  background: var(--clr-bg);
+}
+.customer-account__section h2 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.customer-account__section p,
+.customer-account__section address {
+  margin: 0 0 8px;
+  font-style: normal;
+  font-size: 14px;
+  color: var(--clr-text-muted);
+  line-height: 1.6;
+}
+
+.orders-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.orders-table th {
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--clr-text-muted);
+  border-bottom: 1px solid var(--clr-border);
+}
+.orders-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--clr-border);
+  color: var(--clr-text);
+}
+.orders-table tr:last-child td { border-bottom: none; }
+.orders-table a { color: var(--clr-text); font-weight: 700; }
 
 /* Form card */
 .customer-form {

@@ -3,19 +3,23 @@
   WF Urban Muscle — main-product.liquid
   UPLOAD TO: sections/main-product.liquid
 
-  GALLERY: Gymshark-style
-    Desktop → vertical thumbnail strip on LEFT, main image on RIGHT
-    Mobile  → main image on top, horizontal thumbnails below
-
-  MEDIA: Uses product.media (OS2.0 standard) instead of product.images
-    - Supports future videos / 3D models
-    - Uses variant.featured_media.id for image sync (correct OS2.0 API)
-  ═══════════════════════════════════════════════════════════════
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  BUGS CORREGIDOS vs versión anterior:                       ║
+  ║                                                             ║
+  ║  BUG 1 (GALERÍA NO SINCRONIZA CON VARIANTE):               ║
+  ║  Antes: data-image-id  → JS leía dataset.imageId (undefined)║
+  ║  Ahora: data-media-id  → JS lee dataset.mediaId  ✓         ║
+  ║  Afectaba: slides, select options, variant pills            ║
+  ║                                                             ║
+  ║  BUG 2 (ÍNDICE INICIAL INCORRECTO):                        ║
+  ║  Antes: gallery div sin data-initial-index                  ║
+  ║  Ahora: data-initial-index="{{ active_index }}" en el div   ║
+  ║  Arregla: variante preseleccionada vía URL ?variant=xxx     ║
+  ╚══════════════════════════════════════════════════════════════╝
 {% endcomment %}
 
 {% assign current_variant = product.selected_or_first_available_variant %}
 
-{% comment %} Build image-only media array and find active index {% endcomment %}
 {% assign product_media = product.media %}
 {% assign active_index = 0 %}
 {% if current_variant.featured_media %}
@@ -30,28 +34,23 @@
   {% endfor %}
 {% endif %}
 
+{% assign image_count = 0 %}
+{% for media in product_media %}
+  {% if media.media_type == 'image' %}{% assign image_count = image_count | plus: 1 %}{% endif %}
+{% endfor %}
+
 <section
   class="product-page"
   style="--product-content-max-width: {{ section.settings.content_max_width }}px;"
 >
   <div class="product-page__container">
 
-    {%- comment -%}
-    ═══════════════════════════════════════════════
-    GALLERY — left column
-    Gymshark layout: thumbs LEFT (desktop), below (mobile)
-    ═══════════════════════════════════════════════
-    {%- endcomment -%}
-    <div class="product-page__gallery" data-product-gallery>
-
-      {%- comment -%}
-        Vertical thumbnail strip — left side on desktop, bottom on mobile.
-        Only rendered when there is more than 1 image.
-      {%- endcomment -%}
-      {% assign image_count = 0 %}
-      {% for media in product_media %}
-        {% if media.media_type == 'image' %}{% assign image_count = image_count | plus: 1 %}{% endif %}
-      {% endfor %}
+    <!-- ════ GALERÍA ════ -->
+    <div
+      class="product-page__gallery"
+      data-product-gallery
+      data-initial-index="{{ active_index }}"
+    >
 
       {% if image_count > 1 %}
         <div class="product-page__thumbs-sidebar">
@@ -63,7 +62,7 @@
                 class="product-page__thumb{% if img_idx == active_index %} is-active{% endif %}"
                 data-product-thumb
                 data-image-index="{{ img_idx }}"
-                data-image-id="{{ media.id }}"
+                data-media-id="{{ media.id }}"
                 aria-label="Ver imagen {{ img_idx | plus: 1 }} de {{ image_count }}"
                 {% if img_idx == active_index %}aria-current="true"{% endif %}
               >
@@ -80,9 +79,7 @@
         </div>
       {% endif %}
 
-      {%- comment -%} Main image area {%- endcomment -%}
       <div class="product-page__featured-wrap">
-
         <div class="product-page__featured">
           {% if image_count > 0 %}
             {% assign img_idx = 0 %}
@@ -93,7 +90,7 @@
                   alt="{{ media.alt | default: product.title | escape }}"
                   data-product-slide
                   data-image-index="{{ img_idx }}"
-                  data-image-id="{{ media.id }}"
+                  data-media-id="{{ media.id }}"
                   style="display:none;"
                   loading="{% if img_idx == active_index %}eager{% else %}lazy{% endif %}"
                   width="1400"
@@ -109,35 +106,18 @@
         </div>
 
         {% if image_count > 1 %}
-          <button
-            type="button"
-            class="product-page__gallery-nav product-page__gallery-nav--prev"
-            data-gallery-prev
-            aria-label="Imagen anterior"
-          >‹</button>
-          <button
-            type="button"
-            class="product-page__gallery-nav product-page__gallery-nav--next"
-            data-gallery-next
-            aria-label="Imagen siguiente"
-          >›</button>
+          <button type="button" class="product-page__gallery-nav product-page__gallery-nav--prev" data-gallery-prev aria-label="Imagen anterior">‹</button>
+          <button type="button" class="product-page__gallery-nav product-page__gallery-nav--next" data-gallery-next aria-label="Imagen siguiente">›</button>
         {% endif %}
-
       </div>
-      {%- comment -%} end featured-wrap {%- endcomment -%}
 
     </div>
-    {%- comment -%} end gallery {%- endcomment -%}
+    <!-- fin galería -->
 
 
-    {%- comment -%}
-    ═══════════════════════════════════════════════
-    CONTENT PANEL — right column
-    ═══════════════════════════════════════════════
-    {%- endcomment -%}
+    <!-- ════ PANEL DE CONTENIDO ════ -->
     <div class="product-page__content">
 
-      {% comment %} Eyebrow + Badge {% endcomment %}
       <div class="product-page__top-meta">
         {% if section.settings.eyebrow_text != blank %}
           <p class="product-page__eyebrow">{{ section.settings.eyebrow_text }}</p>
@@ -147,10 +127,8 @@
         {% endif %}
       </div>
 
-      {% comment %} Title {% endcomment %}
       <h1 class="product-page__title">{{ product.title }}</h1>
 
-      {% comment %} Star rating {% endcomment %}
       {% if section.settings.show_star_rating %}
         <p class="product-page__rating">
           <span class="product-page__stars">★★★★★</span>
@@ -160,38 +138,22 @@
         </p>
       {% endif %}
 
-      {% comment %} Price {% endcomment %}
       <div class="product-page__price-row">
-        <p class="product-page__price" data-product-price>
-          {{ current_variant.price | money }}
-        </p>
+        <p class="product-page__price" data-product-price>{{ current_variant.price | money }}</p>
         {% if current_variant.compare_at_price > current_variant.price %}
-          <p class="product-page__compare">
-            {{ current_variant.compare_at_price | money }}
-          </p>
+          <p class="product-page__compare">{{ current_variant.compare_at_price | money }}</p>
         {% endif %}
       </div>
 
-      {% comment %} Low-stock notice {% endcomment %}
       {% if section.settings.show_inventory_notice %}
         {% if current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= 10 %}
-          <p class="product-page__inventory">
-            Quedan {{ current_variant.inventory_quantity }} unidades.
-          </p>
+          <p class="product-page__inventory">Quedan {{ current_variant.inventory_quantity }} unidades.</p>
         {% endif %}
       {% endif %}
 
-
-      {% comment %} ═══ FORM ═══ {% endcomment %}
       {% form 'product', product, class: 'product-form' %}
-        <input
-          type="hidden"
-          name="id"
-          value="{{ current_variant.id }}"
-          data-variant-id-input
-        >
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
 
-        {% comment %} ── VARIANT SELECTOR ── {% endcomment %}
         {% if product.variants.size > 1 %}
           <div class="product-form__variants-block">
 
@@ -210,10 +172,7 @@
               {{ section.settings.selected_variant_label }}: {{ current_variant.title }}
             </p>
 
-            {% comment %}
-              HIDDEN native select — drives form submission and JS sync.
-              Inline display:none is highest-specificity, works regardless of CSS.
-            {% endcomment %}
+            <!-- Select oculto — controla el envío del formulario y el JS -->
             <select
               id="product-variant-select"
               name="id"
@@ -229,8 +188,7 @@
                   data-compare-price="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | escape }}{% endif %}"
                   data-title="{{ variant.title | escape }}"
                   data-inventory="{{ variant.inventory_quantity | default: 0 }}"
-                  {% comment %} KEY FIX: use featured_media.id not featured_image.id {% endcomment %}
-                  {% if variant.featured_media %}data-image-id="{{ variant.featured_media.id }}"{% endif %}
+                  {% if variant.featured_media %}data-media-id="{{ variant.featured_media.id }}"{% endif %}
                   {% unless variant.available %}disabled{% endunless %}
                 >
                   {{ variant.title }}{% unless variant.available %} – Agotado{% endunless %}
@@ -238,19 +196,15 @@
               {% endfor %}
             </select>
 
-            {% comment %} Visible pill buttons {% endcomment %}
-            <div
-              class="product-form__variant-grid"
-              role="listbox"
-              aria-label="{{ section.settings.variant_label }}"
-            >
+            <!-- Pills visibles de tallas -->
+            <div class="product-form__variant-grid" role="listbox" aria-label="{{ section.settings.variant_label }}">
               {% for variant in product.variants %}
                 <button
                   type="button"
                   class="product-form__variant-pill{% if variant.id == current_variant.id %} is-active{% endif %}{% unless variant.available %} is-disabled{% endunless %}"
                   data-variant-option
                   data-variant-id="{{ variant.id }}"
-                  {% if variant.featured_media %}data-image-id="{{ variant.featured_media.id }}"{% endif %}
+                  {% if variant.featured_media %}data-media-id="{{ variant.featured_media.id }}"{% endif %}
                   {% unless variant.available %}disabled aria-disabled="true"{% endunless %}
                   role="option"
                   aria-selected="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"
@@ -263,13 +217,9 @@
           </div>
         {% endif %}
 
-        {% comment %} ── BUY ROW ── {% endcomment %}
         <div class="product-form__buy-row">
-
           <div class="product-form__qty-wrap">
-            <label class="product-form__label" for="product-qty">
-              {{ section.settings.quantity_label }}
-            </label>
+            <label class="product-form__label" for="product-qty">{{ section.settings.quantity_label }}</label>
             <div class="quantity-stepper" data-quantity-stepper>
               <button type="button" class="quantity-stepper__btn" data-qty-decrease aria-label="Disminuir">−</button>
               <input
@@ -289,17 +239,13 @@
           <button type="submit" name="add" class="product-form__submit">
             {{ section.settings.add_to_cart_text | default: 'Añadir al carrito' }}
           </button>
-
         </div>
       {% endform %}
 
-
-      {% comment %} Shipping highlight {% endcomment %}
       {% if section.settings.highlight_text != blank %}
         <p class="product-page__highlight">{{ section.settings.highlight_text }}</p>
       {% endif %}
 
-      {% comment %} Feature icon blocks {% endcomment %}
       {% assign feature_blocks = section.blocks | where: 'type', 'feature' %}
       {% if feature_blocks.size > 0 %}
         <div class="product-page__features">
@@ -319,23 +265,15 @@
         </div>
       {% endif %}
 
-      {% comment %} Product description {% endcomment %}
       {% unless product.description == blank %}
-        <div class="product-page__description rte">
-          {{ product.description }}
-        </div>
+        <div class="product-page__description rte">{{ product.description }}</div>
       {% endunless %}
 
-      {% comment %} Collapsible detail blocks {% endcomment %}
       {% assign detail_blocks = section.blocks | where: 'type', 'detail' %}
       {% if detail_blocks.size > 0 %}
         <div class="product-page__details">
           {% for block in detail_blocks %}
-            <details
-              class="product-page__detail"
-              {% if forloop.first %}open{% endif %}
-              {{ block.shopify_attributes }}
-            >
+            <details class="product-page__detail" {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}>
               <summary>{{ block.settings.heading }}</summary>
               <div class="product-page__detail-content rte">{{ block.settings.content }}</div>
             </details>

@@ -109,49 +109,84 @@
     decreaseBtn?.addEventListener('click', () => updateValue(-1));
   });
 
-  const featuredMedia = document.querySelector('[data-featured-media]');
-  const thumbs = document.querySelectorAll('[data-product-thumb]');
-  const variantSelect = document.querySelector('[data-variant-select]');
-  const variantIdInput = document.querySelector('[data-variant-id-input]');
-  const productPrice = document.querySelector('[data-product-price]');
+  document.querySelectorAll('[data-product-gallery]').forEach((gallery) => {
+    const slides = Array.from(gallery.querySelectorAll('[data-product-slide]'));
+    const thumbs = Array.from(gallery.querySelectorAll('[data-product-thumb]'));
+    const prevBtn = gallery.querySelector('[data-gallery-prev]');
+    const nextBtn = gallery.querySelector('[data-gallery-next]');
+    const section = gallery.closest('.product-page');
+    const variantSelect = section?.querySelector('[data-variant-select]');
+    const variantIdInput = section?.querySelector('[data-variant-id-input]');
+    const productPrice = section?.querySelector('[data-product-price]');
 
-  const setFeaturedImage = (imageUrl, thumb = null) => {
-    if (!featuredMedia || !imageUrl) return;
-    featuredMedia.style.opacity = '0.25';
-    window.setTimeout(() => {
-      featuredMedia.src = imageUrl;
-      if (thumb?.dataset.imageAlt) {
-        featuredMedia.alt = thumb.dataset.imageAlt;
+    if (slides.length === 0) return;
+
+    let currentIndex = slides.findIndex((slide) => !slide.hidden);
+    if (currentIndex < 0) currentIndex = 0;
+
+    const setActiveSlide = (nextIndex) => {
+      if (slides.length === 0) return;
+
+      const index = (nextIndex + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => {
+        const isActive = slideIndex === index;
+        slide.hidden = !isActive;
+      });
+
+      thumbs.forEach((thumb, thumbIndex) => {
+        const isActive = thumbIndex === index;
+        thumb.classList.toggle('is-active', isActive);
+        if (isActive) thumb.setAttribute('aria-current', 'true');
+        else thumb.removeAttribute('aria-current');
+      });
+
+      currentIndex = index;
+    };
+
+    thumbs.forEach((thumb, index) => {
+      thumb.addEventListener('click', () => {
+        setActiveSlide(index);
+      });
+    });
+
+    prevBtn?.addEventListener('click', () => setActiveSlide(currentIndex - 1));
+    nextBtn?.addEventListener('click', () => setActiveSlide(currentIndex + 1));
+
+    let touchStartX = null;
+    gallery.addEventListener('touchstart', (event) => {
+      touchStartX = event.touches[0]?.clientX ?? null;
+    }, { passive: true });
+
+    gallery.addEventListener('touchend', (event) => {
+      if (touchStartX === null) return;
+      const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX;
+      const deltaX = touchEndX - touchStartX;
+
+      if (Math.abs(deltaX) > 40) {
+        if (deltaX > 0) setActiveSlide(currentIndex - 1);
+        else setActiveSlide(currentIndex + 1);
       }
-      featuredMedia.style.opacity = '1';
-    }, 120);
 
-    if (thumbs.length > 0) {
-      thumbs.forEach((item) => item.classList.remove('is-active'));
-      thumb?.classList.add('is-active');
+      touchStartX = null;
+    }, { passive: true });
+
+    if (variantSelect && variantIdInput) {
+      variantSelect.addEventListener('change', (event) => {
+        const option = event.target.selectedOptions[0];
+        if (!option) return;
+        variantIdInput.value = option.value;
+
+        if (productPrice && option.dataset.price) {
+          productPrice.textContent = option.dataset.price;
+        }
+
+        if (option.dataset.imageId) {
+          const imageIndex = slides.findIndex((slide) => slide.dataset.imageId === option.dataset.imageId);
+          if (imageIndex >= 0) setActiveSlide(imageIndex);
+        }
+      });
     }
-  };
 
-  thumbs.forEach((thumb) => {
-    thumb.addEventListener('click', () => {
-      setFeaturedImage(thumb.dataset.imageUrl, thumb);
-    });
+    setActiveSlide(currentIndex);
   });
-
-  if (variantSelect && variantIdInput) {
-    variantSelect.addEventListener('change', (event) => {
-      const option = event.target.selectedOptions[0];
-      if (!option) return;
-      variantIdInput.value = option.value;
-
-      if (productPrice && option.dataset.price) {
-        productPrice.textContent = option.dataset.price;
-      }
-
-      if (option.dataset.imageUrl) {
-        const matchingThumb = Array.from(thumbs).find((thumb) => thumb.dataset.imageUrl === option.dataset.imageUrl);
-        setFeaturedImage(option.dataset.imageUrl, matchingThumb || null);
-      }
-    });
-  }
 })();

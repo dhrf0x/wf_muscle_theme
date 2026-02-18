@@ -1,5 +1,5 @@
 {% assign current_variant = product.selected_or_first_available_variant %}
-{% assign product_images = product.media | where: 'media_type', 'image' %}
+{% assign product_images = product.images %}
 
 <section class="product-page" style="--product-content-max-width: {{ section.settings.content_max_width }}px;">
   <div class="product-page__container">
@@ -12,32 +12,58 @@
         {% assign featured_image = product.featured_media.preview_image | default: product.featured_image %}
       {% endif %}
 
+      {% assign active_index = 0 %}
       {% if featured_image %}
-        <div class="product-page__featured">
-          <img
-            src="{{ featured_image | image_url: width: 1200 }}"
-            alt="{{ featured_image.alt | default: product.title | escape }}"
-            data-featured-media
-            loading="eager"
-          >
-        </div>
+        {% for image in product_images %}
+          {% if image.id == featured_image.id %}
+            {% assign active_index = forloop.index0 %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
       {% endif %}
 
-      {% if product_images.size > 1 %}
-        <div class="product-page__thumbs" role="listbox" aria-label="Galería de producto">
-          {% for media in product_images %}
-            {% assign thumb_image = media.preview_image %}
-            <button
-              type="button"
-              class="product-page__thumb{% if featured_image and thumb_image.id == featured_image.id %} is-active{% elsif featured_image == blank and forloop.first %} is-active{% endif %}"
-              data-product-thumb
-              data-image-url="{{ thumb_image | image_url: width: 1200 }}"
-              data-image-alt="{{ media.alt | default: product.title | escape }}"
-              aria-label="Ver imagen {{ forloop.index }}"
-            >
-              <img src="{{ thumb_image | image_url: width: 280 }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy">
-            </button>
-          {% endfor %}
+      {% if product_images.size > 0 %}
+        <div class="product-page__gallery-grid">
+          {% if product_images.size > 1 %}
+            <div class="product-page__thumbs" role="listbox" aria-label="Galería de producto">
+              {% for image in product_images %}
+                <button
+                  type="button"
+                  class="product-page__thumb{% if forloop.index0 == active_index %} is-active{% endif %}"
+                  data-product-thumb
+                  data-image-url="{{ image | image_url: width: 1400 }}"
+                  data-image-alt="{{ image.alt | default: product.title | escape }}"
+                  data-image-index="{{ forloop.index0 }}"
+                  data-image-id="{{ image.id }}"
+                  aria-label="Ver imagen {{ forloop.index }}"
+                  {% if forloop.index0 == active_index %}aria-current="true"{% endif %}
+                >
+                  <img src="{{ image | image_url: width: 280 }}" alt="{{ image.alt | default: product.title | escape }}" loading="lazy">
+                </button>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="product-page__featured-wrap">
+            <div class="product-page__featured" data-product-featured>
+              {% for image in product_images %}
+                <img
+                  src="{{ image | image_url: width: 1400 }}"
+                  alt="{{ image.alt | default: product.title | escape }}"
+                  data-product-slide
+                  data-image-index="{{ forloop.index0 }}"
+                  data-image-id="{{ image.id }}"
+                  {% unless forloop.index0 == active_index %}hidden{% endunless %}
+                  loading="{% if forloop.index0 == active_index %}eager{% else %}lazy{% endif %}"
+                >
+              {% endfor %}
+            </div>
+
+            {% if product_images.size > 1 %}
+              <button type="button" class="product-page__gallery-nav product-page__gallery-nav--prev" data-gallery-prev aria-label="Imagen anterior">‹</button>
+              <button type="button" class="product-page__gallery-nav product-page__gallery-nav--next" data-gallery-next aria-label="Imagen siguiente">›</button>
+            {% endif %}
+          </div>
         </div>
       {% endif %}
     </div>
@@ -61,7 +87,7 @@
                 value="{{ variant.id }}"
                 {% if variant.id == current_variant.id %}selected{% endif %}
                 data-price="{{ variant.price | money | escape }}"
-                {% if variant.featured_image %}data-image-url="{{ variant.featured_image | image_url: width: 1200 }}"{% endif %}
+                {% if variant.featured_image %}data-image-id="{{ variant.featured_image.id }}"{% endif %}
                 {% unless variant.available %}disabled{% endunless %}
               >
                 {{ variant.title }}{% unless variant.available %} - Agotado{% endunless %}

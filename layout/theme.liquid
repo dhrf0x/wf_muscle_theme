@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="es">
 <head>
     <title>{{ page_title }}</title>
     <meta charset="utf-8">
@@ -8,7 +8,13 @@
     {{ 'application.css' | asset_url | stylesheet_tag }}
     {{ 'search-cart.css' | asset_url | stylesheet_tag }}
 </head>
-<body>
+<!--
+  body class = "template-{name}" built from Shopify's {{ template }} object.
+  e.g. product → template-product
+       customers/login → template-customers-login
+  Used by CSS to scope customer-page styles without JS.
+-->
+<body class="template-{{ template | replace: '/', '-' | downcase }}">
     {% section 'announcement-bar' %}
     {% section 'header' %}
 

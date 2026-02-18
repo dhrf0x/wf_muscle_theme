@@ -1,33 +1,79 @@
-<section class="customer-auth customer-auth--register">
-  <div class="customer-auth__card">
-    <h1 class="customer-auth__title">Crear cuenta</h1>
+<!-- /templates/customers/register.liquid -->
+<div class="customer-page">
+  <div class="customer-page__card">
 
-    {% form 'create_customer', class: 'customer-auth__form' %}
+    <p class="customer-page__eyebrow">Mi cuenta</p>
+    <h1 class="customer-page__title">Crear cuenta</h1>
+    <p class="customer-page__subtitle">Regístrate para un acceso más rápido a tus pedidos.</p>
+
+    {% form 'create_customer', class: 'customer-page' %}
       {{ form.errors | default_errors }}
 
-      <div class="customer-auth__grid">
-        <div class="customer-auth__field">
-          <label for="first_name">Nombre</label>
-          <input id="first_name" type="text" name="customer[first_name]" autocomplete="given-name">
-        </div>
-
-        <div class="customer-auth__field">
-          <label for="last_name">Apellido</label>
-          <input id="last_name" type="text" name="customer[last_name]" autocomplete="family-name">
-        </div>
+      <div class="customer-page__field">
+        <label class="customer-page__label" for="FirstName">Nombre</label>
+        <input
+          class="customer-page__input"
+          type="text"
+          name="customer[first_name]"
+          id="FirstName"
+          autocomplete="given-name"
+          autocapitalize="words"
+          placeholder="Tu nombre"
+          value="{{ form.first_name }}"
+        >
       </div>
 
-      <div class="customer-auth__field">
-        <label for="register_email">Correo electrónico</label>
-        <input id="register_email" type="email" name="customer[email]" autocomplete="email" required>
+      <div class="customer-page__field">
+        <label class="customer-page__label" for="LastName">Apellido</label>
+        <input
+          class="customer-page__input"
+          type="text"
+          name="customer[last_name]"
+          id="LastName"
+          autocomplete="family-name"
+          autocapitalize="words"
+          placeholder="Tu apellido"
+          value="{{ form.last_name }}"
+        >
       </div>
 
-      <div class="customer-auth__field">
-        <label for="register_password">Contraseña</label>
-        <input id="register_password" type="password" name="customer[password]" autocomplete="new-password" required>
+      <div class="customer-page__field">
+        <label class="customer-page__label" for="Email">Correo electrónico</label>
+        <input
+          class="customer-page__input"
+          type="email"
+          name="customer[email]"
+          id="Email"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          placeholder="tu@correo.com"
+          value="{{ form.email }}"
+        >
       </div>
 
-      <button type="submit" class="customer-auth__submit">Crear cuenta</button>
+      <div class="customer-page__field">
+        <label class="customer-page__label" for="CreatePassword">Contraseña</label>
+        <input
+          class="customer-page__input"
+          type="password"
+          name="customer[password]"
+          id="CreatePassword"
+          autocomplete="new-password"
+          placeholder="Mínimo 5 caracteres"
+        >
+      </div>
+
+      <button type="submit" class="customer-page__submit">
+        Crear cuenta
+      </button>
     {% endform %}
+
+    <div class="customer-page__divider"><span>o</span></div>
+
+    <a href="{{ routes.account_login_url }}" class="customer-page__link-btn">
+      Ya tengo cuenta — Iniciar sesión
+    </a>
+
   </div>
-</section>
+</div>

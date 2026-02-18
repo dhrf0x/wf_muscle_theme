@@ -1,35 +1,86 @@
-<section class="customer-auth customer-auth--login">
-  <div class="customer-auth__card">
-    <h1 class="customer-auth__title">Iniciar sesión</h1>
+<!-- /templates/customers/login.liquid -->
+<div class="customer-page">
+  <div class="customer-page__card">
 
-    {% form 'customer_login', class: 'customer-auth__form' %}
+    <p class="customer-page__eyebrow">Mi cuenta</p>
+    <h1 class="customer-page__title">Iniciar sesión</h1>
+    <p class="customer-page__subtitle">Accede a tus pedidos y datos personales.</p>
+
+    {% form 'customer_login', class: 'customer-page' %}
       {{ form.errors | default_errors }}
 
-      <div class="customer-auth__field">
-        <label for="customer_email">Correo electrónico</label>
-        <input id="customer_email" type="email" name="customer[email]" autocomplete="email" required>
+      <div class="customer-page__field">
+        <label class="customer-page__label" for="CustomerEmail">Correo electrónico</label>
+        <input
+          class="customer-page__input"
+          type="email"
+          name="customer[email]"
+          id="CustomerEmail"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          placeholder="tu@correo.com"
+          value="{{ form.email }}"
+        >
       </div>
 
-      <div class="customer-auth__field">
-        <label for="customer_password">Contraseña</label>
-        <input id="customer_password" type="password" name="customer[password]" autocomplete="current-password" required>
+      <div class="customer-page__field">
+        <label class="customer-page__label" for="CustomerPassword">Contraseña</label>
+        <input
+          class="customer-page__input"
+          type="password"
+          name="customer[password]"
+          id="CustomerPassword"
+          autocomplete="current-password"
+          placeholder="••••••••"
+        >
       </div>
 
-      <button type="submit" class="customer-auth__submit">Entrar</button>
+      <button type="submit" class="customer-page__submit">
+        Iniciar sesión
+      </button>
     {% endform %}
 
-    <details class="customer-auth__recover">
-      <summary>¿Olvidaste tu contraseña?</summary>
-      {% form 'recover_customer_password', class: 'customer-auth__form' %}
+    <div class="customer-page__divider"><span>o</span></div>
+
+    <a href="{{ routes.account_register_url }}" class="customer-page__link-btn">
+      Crear cuenta nueva
+    </a>
+
+    <p style="margin-top:20px;text-align:center;font-size:13px;color:var(--clr-text-muted);">
+      <a href="#" onclick="document.getElementById('reset-password-form').style.display='block';this.parentNode.style.display='none';" style="color:var(--clr-text-muted);text-decoration:underline;">
+        ¿Olvidaste tu contraseña?
+      </a>
+    </p>
+
+    <div id="reset-password-form" style="display:none;margin-top:24px;padding-top:24px;border-top:1px solid var(--clr-border);">
+      <p class="customer-page__eyebrow" style="margin-bottom:8px;">Recuperar contraseña</p>
+      <p style="font-size:13px;color:var(--clr-text-muted);margin:0 0 16px;">
+        Te enviaremos un correo para restablecer tu contraseña.
+      </p>
+      {% form 'recover_customer_password' %}
         {{ form.errors | default_errors }}
-
-        <div class="customer-auth__field">
-          <label for="recover_email">Correo electrónico</label>
-          <input id="recover_email" type="email" name="email" autocomplete="email" required>
+        {% if form.posted_successfully? %}
+          <p style="color:#27ae60;font-size:14px;font-weight:700;">
+            ✓ Correo enviado. Revisa tu bandeja de entrada.
+          </p>
+        {% endif %}
+        <div class="customer-page__field">
+          <label class="customer-page__label" for="RecoverEmail">Correo electrónico</label>
+          <input
+            class="customer-page__input"
+            type="email"
+            name="email"
+            id="RecoverEmail"
+            autocomplete="email"
+            placeholder="tu@correo.com"
+          >
         </div>
-
-        <button type="submit" class="customer-auth__submit customer-auth__submit--secondary">Enviar enlace de recuperación</button>
+        <button type="submit" class="customer-page__submit">
+          Enviar instrucciones
+        </button>
       {% endform %}
-    </details>
+    </div>
+
   </div>
-</section>
+</div>

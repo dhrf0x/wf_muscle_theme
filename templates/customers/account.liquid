@@ -1,26 +1,63 @@
 <!-- /templates/customers/account.liquid -->
+<div class="customer-page customer-page--wide">
+  <div class="customer-page__card">
 
-{% if customer.default_address %}
-  <h2>Address</h2>
-  <p>{{ customer.default_address.address1 }}</p>
-  {% if customer.default_address.address2 != "" %}
-    <p>{{ customer.default_address.address2 }}</p>
-  {% endif %}
-  <p>{{ customer.default_address.city}}, {% if address.province_code %}{{ customer.default_address.province_code }}, {% endif %}{{ customer.default_address.country }}</p>
-  <p>{{ customer.default_address.zip }}</p>
-  <p>{{ customer.default_address.phone }}</p>
-{% endif %}
+    <p class="customer-page__eyebrow">Mi cuenta</p>
+    <h1 class="customer-page__title">Bienvenido, {{ customer.first_name }}</h1>
+    <p class="customer-page__subtitle">Gestiona tus pedidos y datos de entrega.</p>
 
-<div id="customer_orders">
-  <h2>Orders</h2>
-  {% paginate customer.orders by 10 %}
-  {% if customer.orders.size != 0 %}
-    {% for order in customer.orders %}
-      <!-- order details here -->
-    {% endfor %}
-  {% else %}
-    <p>You haven't placed any orders yet.</p>
-  {% endif %}
-  {{ paginate | default_pagination }}
-  {% endpaginate %}
+    <div style="display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap;">
+      <a href="{{ routes.account_addresses_url }}" class="customer-page__link-btn" style="width:auto;flex:1;min-width:140px;">
+        Mis direcciones
+      </a>
+      <a href="{{ routes.account_logout_url }}" class="customer-page__link-btn" style="width:auto;flex:1;min-width:140px;opacity:.7;">
+        Cerrar sesión
+      </a>
+    </div>
+
+    {% if customer.default_address %}
+      <div style="padding:16px;background:var(--clr-surface);border-radius:var(--radius-md);border:1px solid var(--clr-border);margin-bottom:28px;">
+        <p style="margin:0 0 10px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--clr-text-muted);">Dirección predeterminada</p>
+        <p style="margin:0;font-size:14px;line-height:1.6;color:var(--clr-text);">
+          {{ customer.default_address.name }}<br>
+          {{ customer.default_address.address1 }}
+          {% if customer.default_address.address2 != "" %}<br>{{ customer.default_address.address2 }}{% endif %}<br>
+          {{ customer.default_address.city }}, {{ customer.default_address.country }}<br>
+          {{ customer.default_address.zip }}
+        </p>
+      </div>
+    {% endif %}
+
+    <p style="margin:0 0 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--clr-text-muted);">Historial de pedidos</p>
+
+    {% paginate customer.orders by 10 %}
+      {% if customer.orders.size != 0 %}
+        <div style="display:grid;gap:12px;">
+          {% for order in customer.orders %}
+            <a href="{{ order.customer_url }}" style="text-decoration:none;display:grid;grid-template-columns:1fr auto;gap:12px;padding:14px 16px;border:1px solid var(--clr-border);border-radius:var(--radius-md);color:var(--clr-text);transition:box-shadow .2s,transform .2s;background:var(--clr-bg);"
+              onmouseover="this.style.boxShadow='var(--shadow-md)';this.style.transform='translateY(-1px)'"
+              onmouseout="this.style.boxShadow='';this.style.transform=''">
+              <div>
+                <p style="margin:0;font-weight:700;font-size:14px;">Pedido #{{ order.name }}</p>
+                <p style="margin:4px 0 0;font-size:13px;color:var(--clr-text-muted);">
+                  {{ order.created_at | date: format: 'abbreviated_date' }} · {{ order.line_items.size }} artículo{{ order.line_items.size | pluralize: '', 's' }}
+                </p>
+              </div>
+              <div style="text-align:right;">
+                <p style="margin:0;font-weight:800;font-size:15px;">{{ order.total_price | money }}</p>
+                <p style="margin:4px 0 0;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--clr-text-muted);">{{ order.financial_status_label }}</p>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p style="color:var(--clr-text-muted);font-size:14px;">Aún no has realizado ningún pedido.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="customer-page__submit" style="display:block;text-align:center;text-decoration:none;margin-top:16px;">
+          Ver productos
+        </a>
+      {% endif %}
+      {% if paginate.pages > 1 %}{{ paginate | default_pagination }}{% endif %}
+    {% endpaginate %}
+
+  </div>
 </div>

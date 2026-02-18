@@ -118,6 +118,10 @@
     const variantSelect = section?.querySelector('[data-variant-select]');
     const variantIdInput = section?.querySelector('[data-variant-id-input]');
     const productPrice = section?.querySelector('[data-product-price]');
+    const productCompare = section?.querySelector('.product-page__compare');
+    const inventoryNotice = section?.querySelector('.product-page__inventory');
+    const selectedVariantLabel = section?.querySelector('[data-selected-variant]');
+    const variantPills = Array.from(section?.querySelectorAll('[data-variant-option]') || []);
 
     if (slides.length === 0) return;
 
@@ -170,21 +174,68 @@
       touchStartX = null;
     }, { passive: true });
 
+    const syncVariantVisuals = (option) => {
+      if (!option) return;
+
+      if (productPrice && option.dataset.price) {
+        productPrice.textContent = option.dataset.price;
+      }
+
+      if (productCompare) {
+        if (option.dataset.comparePrice) {
+          productCompare.hidden = false;
+          productCompare.textContent = option.dataset.comparePrice;
+        } else {
+          productCompare.hidden = true;
+        }
+      }
+
+      if (selectedVariantLabel && option.dataset.title) {
+        const label = selectedVariantLabel.textContent.split(':')[0] || 'Seleccionado';
+        selectedVariantLabel.textContent = `${label}: ${option.dataset.title}`;
+      }
+
+      if (inventoryNotice) {
+        const inventory = Number(option.dataset.inventory || 0);
+        if (inventory > 0) {
+          inventoryNotice.hidden = false;
+          inventoryNotice.textContent = `Quedan ${inventory} unidades disponibles.`;
+        } else {
+          inventoryNotice.hidden = true;
+        }
+      }
+
+      if (option.dataset.imageId) {
+        const imageIndex = slides.findIndex((slide) => slide.dataset.imageId === option.dataset.imageId);
+        if (imageIndex >= 0) setActiveSlide(imageIndex);
+      }
+
+      variantPills.forEach((pill) => {
+        const isActive = pill.dataset.variantId === option.value;
+        pill.classList.toggle('is-active', isActive);
+        pill.setAttribute('aria-current', isActive ? 'true' : 'false');
+      });
+    };
+
     if (variantSelect && variantIdInput) {
       variantSelect.addEventListener('change', (event) => {
         const option = event.target.selectedOptions[0];
         if (!option) return;
         variantIdInput.value = option.value;
-
-        if (productPrice && option.dataset.price) {
-          productPrice.textContent = option.dataset.price;
-        }
-
-        if (option.dataset.imageId) {
-          const imageIndex = slides.findIndex((slide) => slide.dataset.imageId === option.dataset.imageId);
-          if (imageIndex >= 0) setActiveSlide(imageIndex);
-        }
+        syncVariantVisuals(option);
       });
+
+      variantPills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          const matchingOption = Array.from(variantSelect.options).find((option) => option.value === pill.dataset.variantId);
+          if (!matchingOption || matchingOption.disabled) return;
+
+          variantSelect.value = matchingOption.value;
+          variantSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      });
+
+      syncVariantVisuals(variantSelect.selectedOptions[0]);
     }
 
     setActiveSlide(currentIndex);

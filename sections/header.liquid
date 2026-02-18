@@ -1,10 +1,22 @@
-<header class="header-gym" style="--header-bg: {{ section.settings.background_color }}; --header-link-color: {{ section.settings.link_color }}; --header-border: {{ section.settings.border_color }};">
+<header
+  class="header-gym"
+  style="--header-bg: {{ section.settings.background_color }}; --header-link-color: {{ section.settings.link_color }}; --header-border: {{ section.settings.border_color }};"
+>
+  {%- comment -%} Mobile hamburger {%- endcomment -%}
   <div class="header-mobile-toggle-wrap">
-    <button type="button" class="header-mobile-toggle" data-mobile-menu-toggle aria-expanded="false" aria-controls="mobile-menu-drawer" aria-label="Abrir menú">
+    <button
+      type="button"
+      class="header-mobile-toggle"
+      data-mobile-menu-toggle
+      aria-expanded="false"
+      aria-controls="mobile-menu-drawer"
+      aria-label="Abrir menú"
+    >
       <span></span><span></span><span></span>
     </button>
   </div>
 
+  {%- comment -%} Left nav (desktop only) {%- endcomment -%}
   <nav class="header-nav-left" aria-label="Navegación principal">
     <div class="header-custom-links">
       {% for block in section.blocks %}
@@ -23,8 +35,9 @@
     </div>
   </nav>
 
+  {%- comment -%} Logo (center) {%- endcomment -%}
   <div class="header-logo-center">
-    <a href="{{ routes.root_url }}">
+    <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
       {% if section.settings.logo != blank %}
         {{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, loading: 'eager' }}
       {% else %}
@@ -33,35 +46,39 @@
     </a>
   </div>
 
+  {%- comment -%} Right nav {%- endcomment -%}
   <div class="header-nav-right">
-    {% if section.settings.show_theme_toggle %}
-      <button type="button" class="theme-toggle" data-theme-toggle aria-label="{{ section.settings.theme_toggle_label }}">
-        <span class="theme-toggle__icon">🌙</span>
-        <span class="theme-toggle__label">{{ section.settings.theme_toggle_label }}</span>
-      </button>
-    {% endif %}
-
-    <a href="{{ routes.search_url }}" class="js-open-search">
+    <a href="{{ routes.search_url }}" class="js-open-search" aria-label="Buscar" aria-expanded="false">
       {{ 'general.search.search' | t | default: 'Buscar' }}
     </a>
-    <a href="{{ routes.account_url }}">
+    <a href="{{ routes.account_url }}" aria-label="{{ section.settings.login_label }}">
       {{ section.settings.login_label }}
     </a>
-    <a href="{{ routes.cart_url }}">
-      {{ 'templates.cart.cart' | t | default: 'Carrito' }} <span class="cart-count-pill">{{ cart.item_count }}</span>
+    <a href="{{ routes.cart_url }}" aria-label="Carrito, {{ cart.item_count }} artículos">
+      {{ 'templates.cart.cart' | t | default: 'Carrito' }}
+      <span class="cart-count-pill" aria-hidden="true">{{ cart.item_count }}</span>
     </a>
   </div>
 </header>
 
+{%- comment -%} Mobile drawer {%- endcomment -%}
 <aside id="mobile-menu-drawer" class="mobile-menu" hidden>
-  <div class="mobile-menu__overlay" data-mobile-menu-close></div>
-  <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-label="Menú móvil">
-    <button type="button" class="mobile-menu__close" data-mobile-menu-close aria-label="Cerrar menú">×</button>
+  <div class="mobile-menu__overlay" data-mobile-menu-close aria-hidden="true"></div>
+  <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-label="Menú">
 
-    <nav class="mobile-menu__nav">
+    <div class="mobile-menu__header">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 200 | image_tag: alt: shop.name, style: 'height:36px;width:auto;object-fit:contain;' }}
+      {% else %}
+        <span style="font-weight:800;font-size:14px;text-transform:uppercase;">{{ shop.name }}</span>
+      {% endif %}
+      <button type="button" class="mobile-menu__close" data-mobile-menu-close aria-label="Cerrar menú">×</button>
+    </div>
+
+    <nav class="mobile-menu__nav" aria-label="Menú móvil">
       {% for block in section.blocks %}
         {% if block.type == 'custom_link' %}
-          <a href="{{ block.settings.url | default: '#' }}" class="mobile-menu__link" {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.url | default: '#' }}" class="mobile-menu__link" data-mobile-menu-close {{ block.shopify_attributes }}>
             {{ block.settings.title }}
           </a>
         {% endif %}
@@ -73,10 +90,18 @@
         {% endfor %}
       {% endif %}
 
-      <a href="{{ routes.search_url }}" class="mobile-menu__link js-open-search" data-mobile-menu-close>{{ 'general.search.search' | t | default: 'Buscar' }}</a>
-      <a href="{{ routes.account_url }}" class="mobile-menu__link" data-mobile-menu-close>{{ section.settings.login_label }}</a>
-      <a href="{{ routes.cart_url }}" class="mobile-menu__link" data-mobile-menu-close>{{ 'templates.cart.cart' | t | default: 'Carrito' }} <span class="cart-count-pill">{{ cart.item_count }}</span></a>
+      <a href="{{ routes.search_url }}" class="mobile-menu__link js-open-search" data-mobile-menu-close>
+        {{ 'general.search.search' | t | default: 'Buscar' }}
+      </a>
+      <a href="{{ routes.account_url }}" class="mobile-menu__link" data-mobile-menu-close>
+        {{ section.settings.login_label }}
+      </a>
+      <a href="{{ routes.cart_url }}" class="mobile-menu__link" data-mobile-menu-close>
+        {{ 'templates.cart.cart' | t | default: 'Carrito' }}
+        <span class="cart-count-pill">{{ cart.item_count }}</span>
+      </a>
     </nav>
+
   </div>
 </aside>
 
@@ -86,16 +111,14 @@
 {
   "name": "Encabezado",
   "settings": [
-    { "type": "header", "content": "Identidad y Colores" },
-    { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "link_list", "id": "menu", "label": "Menú principal" },
-    { "type": "color", "id": "background_color", "label": "Color de fondo", "default": "#ffffff" },
-    { "type": "color", "id": "link_color", "label": "Color de enlaces", "default": "#000000" },
-    { "type": "color", "id": "border_color", "label": "Color del borde", "default": "#eeeeee" },
-    { "type": "header", "content": "Opciones de Interfaz" },
-    { "type": "checkbox", "id": "show_theme_toggle", "label": "Habilitar botón de tema", "default": true },
-    { "type": "text", "id": "theme_toggle_label", "label": "Etiqueta del botón de tema", "default": "Tema" },
-    { "type": "text", "id": "login_label", "label": "Texto de iniciar sesión", "default": "Iniciar sesión" }
+    { "type": "header",       "content": "Identidad y Colores" },
+    { "type": "image_picker", "id": "logo",             "label": "Logo" },
+    { "type": "link_list",    "id": "menu",             "label": "Menú principal" },
+    { "type": "color",        "id": "background_color", "label": "Color de fondo",   "default": "#ffffff" },
+    { "type": "color",        "id": "link_color",       "label": "Color de enlaces", "default": "#000000" },
+    { "type": "color",        "id": "border_color",     "label": "Color del borde",  "default": "#eeeeee" },
+    { "type": "header",       "content": "Textos" },
+    { "type": "text",         "id": "login_label",      "label": "Texto de iniciar sesión", "default": "Iniciar sesión" }
   ],
   "blocks": [
     {
@@ -103,7 +126,7 @@
       "name": "Enlace Izquierdo",
       "settings": [
         { "type": "text", "id": "title", "label": "Texto", "default": "Nuevo enlace" },
-        { "type": "url", "id": "url", "label": "Link" }
+        { "type": "url",  "id": "url",   "label": "Link" }
       ]
     }
   ]
